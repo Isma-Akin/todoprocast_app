@@ -47,6 +47,7 @@ class _TodoState extends State<Todo> {
                     title: Text("Task 1"), tileColor: Colors.purple,
                     subtitle: Text("Your first task"),),
                   ),
+                  Divider(),
                   SizedBox(
                     height: 100,
                     child: ListTile(
@@ -55,6 +56,7 @@ class _TodoState extends State<Todo> {
                     title: Text("Task 2"), tileColor: Colors.blue,
                         subtitle: Text("Your second task") ),
                   ),
+                  Divider(),
                   SizedBox(
                     height: 100,
                     child: ListTile(
@@ -63,6 +65,7 @@ class _TodoState extends State<Todo> {
                     title: Text("Task 3"), tileColor: Colors.green,
                     subtitle: Text("Your third task"),),
                   ),
+                  Divider(),
                   SizedBox(
                     height: 100,
                     child: ListTile(
