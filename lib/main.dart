@@ -36,11 +36,13 @@ class _TodoState extends State<Todo> {
           ),
           body: Column(
             children: [
-              Expanded(child: ListView(shrinkWrap: true,
+              Expanded(
+                  child: ListView(shrinkWrap: true,
                 children: const [
                   SizedBox(
                     height: 100,
                     child: ListTile(
+                      textColor: Colors.white,
                     leading: Icon(Icons.library_books_sharp),
                     title: Text("Task 1"), tileColor: Colors.purple,
                     subtitle: Text("Your first task"),),
@@ -48,18 +50,27 @@ class _TodoState extends State<Todo> {
                   SizedBox(
                     height: 100,
                     child: ListTile(
+                      textColor: Colors.white,
                     leading: Icon(Icons.library_books_sharp),
                     title: Text("Task 2"), tileColor: Colors.blue,
                         subtitle: Text("Your second task") ),
                   ),
-                  ListTile(
-                  leading: Icon(Icons.library_books_sharp),
-                  title: Text("Task 3"), tileColor: Colors.green,
-                  subtitle: Text("Your third task"),),
-                  ListTile(
-                  leading: Icon(Icons.library_books_sharp),
-                  title: Text("Task 4"), tileColor: Colors.orange,
-                  subtitle: Text("Your fourth task"),),
+                  SizedBox(
+                    height: 100,
+                    child: ListTile(
+                      textColor: Colors.white,
+                    leading: Icon(Icons.library_books_sharp),
+                    title: Text("Task 3"), tileColor: Colors.green,
+                    subtitle: Text("Your third task"),),
+                  ),
+                  SizedBox(
+                    height: 100,
+                    child: ListTile(
+                      textColor: Colors.white,
+                    leading: Icon(Icons.library_books_sharp),
+                    title: Text("Task 4"), tileColor: Colors.orange,
+                    subtitle: Text("Your fourth task"),),
+                  ),
                 ],
               ))
             ],
