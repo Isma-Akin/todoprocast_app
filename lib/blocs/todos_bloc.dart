@@ -15,4 +15,24 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       // TODO: implement event handler
     });
   }
+  void _onLoadTodos(
+    LoadTodos event,
+      Emitter<TodosState> emit,
+      ) {
+    emit(TodosLoaded(todos: event.todos));
+  }
+
+  void _onAddTodos(
+      AddTodo event,
+      Emitter<TodosState> emit,
+      ) {
+      final state = this.state;
+      if (state is TodosLoaded) {
+        emit(
+
+        )
+      }
+  }
+
+
 }
