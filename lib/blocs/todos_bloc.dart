@@ -11,10 +11,12 @@ part 'todos_state.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   TodosBloc() : super(TodosInitial()) {
-    on<TodosEvent>((event, emit) {
-      // TODO: implement event handler
-    });
-  }
+    on<LoadTodos>(_onLoadTodos);
+    on<AddTodo>(_onAddTodos);
+    on<UpdateTodo>(_onUpdateTodo);
+    on<RemoveTodo>(_onRemoveTodo);
+    }
+
   void _onLoadTodos(
     LoadTodos event,
       Emitter<TodosState> emit,
