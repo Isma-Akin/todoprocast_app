@@ -29,8 +29,10 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       final state = this.state;
       if (state is TodosLoaded) {
         emit(
-
+        TodosLoaded(
+        todos: List.from(state.todos)..add(event.todo),
         )
+        );
       }
   }
 
