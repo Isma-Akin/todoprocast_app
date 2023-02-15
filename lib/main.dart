@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todoprocast_app/blocs/todos_bloc.dart';
+
+import 'package:todoprocast_app/main_bloc_observer.dart';
+import 'package:todoprocast_app/blocs/todos/todos_bloc.dart';
 import 'package:todoprocast_app/models/todo_models.dart';
 import 'package:todoprocast_app/screens/home_screen.dart';
+import 'package:todoprocast_app/blocs/todos_status/todos_status_bloc.dart';
 
 void main() {
+  Bloc.observer = MainBlocObserver();
   runApp(const TodoApp());
 }
 

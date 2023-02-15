@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'package:equatable/equatable.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc/bloc.dart';
+import 'package:todoprocast_app/blocs/todos/todos_bloc.dart';
+import 'package:todoprocast_app/models/models.dart';
 
-import '/blocs/blocs.dart';
-
-import '/main_bloc_observer.dart';
+part 'todos_status_event.dart';
+part 'todos_status_state.dart';
 
 
 class TodosStatusBloc extends Bloc<TodosStatusEvent, TodosStatusState> {
@@ -26,18 +27,18 @@ class TodosStatusBloc extends Bloc<TodosStatusEvent, TodosStatusState> {
     });
   }
 
-  void_onUpdateTodosStatus(
+  void _onUpdateTodosStatus(
     UpdateTodosStatus event,
     Emitter<TodosStatusState> emit,
   ) {
     List<Todo> pendingTodos = event.todos
-        .where((todo) => todo.isCancelled == false && todo.isCompleted == false)
+        .where((todo) => todo.taskCancelled == false && todo.taskCompleted == false)
         .toList();
     List<Todo> completedTodos = event.todos
-        .where((todo) => todo.isCompleted == true && todo.isCancelled == false)
+        .where((todo) => todo.taskCompleted == true && todo.taskCancelled == false)
         .toList();
     List<Todo> cancelledTodos =
-        event.todos.where((todo) => todo.isCancelled == false).toList();
+        event.todos.where((todo) => todo.taskCancelled == false).toList();
 
     emit(
       TodosStatusLoaded(
