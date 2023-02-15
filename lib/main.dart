@@ -1,105 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoprocast_app/blocs/todos_bloc.dart';
+import 'package:todoprocast_app/models/todo_models.dart';
+import 'package:todoprocast_app/screens/home_screen.dart';
 
 void main() {
-  runApp(const Todo());
+  runApp(const TodoApp());
 }
 
 
-class Todo extends StatefulWidget {
-   const Todo({Key? key}) : super(key: key);
-  @override
-  State<Todo> createState() => _TodoState();
-}
-
-class _TodoState extends State<Todo> {
-
-  final tasks = ["Task 1", "Task 2", "Task 3", "Task 4"];
-  final color = [Colors.blue, Colors.orange, Colors.green, Colors.purple];
-  final taskdetails = ["Your first task", "Your second task", "Your third task", "Your fourth task"];
+class TodoApp extends StatelessWidget {
+  const TodoApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: const Text(
-              "Task list",
-              style: TextStyle(color: Colors.black, fontFamily: "Arial", fontSize: 30,),
-            ),
-            leading: IconButton(
-              tooltip: "Close",
-              icon: const Icon(Icons.close_rounded),
-              color: Colors.black,
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: true,
+    return MultiBlocProvider(providers:[BlocProvider(
+      create: (context) => TodosBloc()
+      ..add(
+        LoadTodos(
+          todos: [
+            Todo(
+          id: '1',
+          task: 'Your first task',
+          description: 'Enter a description',
+        ),
+      ],
+     ),
+    ),
+   ),
+    BlocProvider(
+      create: (context) => TodosStatusBloc(
+        todosBloc: BlocProvider.of<TodosBloc>(context),
+      )..add(UpdateTodosStatus()),
+    ),
+    ],
+        child: MaterialApp(
+          title: 'Todo App',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
           ),
-          body: Container(
-            child: ListView.builder(
-              itemCount: tasks.length,
-            itemBuilder: (context, index){
-                return SizedBox(
-                  height: 100,
-                  child: ListTile(
-                    tileColor: color[index],
-                    title: Text(tasks[index]),
-                    subtitle: Text(taskdetails[index]),
-                    leading: Icon(Icons.add_to_photos_rounded),
-                    trailing: Icon(Icons.close),
-                  ),
-                );
-            },),
-          )
-
-      ),
-    );}
+          home: const HomeScreen(),
+        ));
+  }
 }
-
-// Column(
-// children: [
-// Expanded(
-// child: ListView(shrinkWrap: true,
-// children: const [
-// SizedBox(
-// height: 100,
-// child: ListTile(
-// textColor: Colors.white,
-// leading: Icon(Icons.library_books_sharp),
-// title: Text("Task 1"), tileColor: Colors.purple,
-// subtitle: Text("Your first task"),),
-// ),
-// Divider(),
-// SizedBox(
-// height: 100,
-// child: ListTile(
-// textColor: Colors.white,
-// leading: Icon(Icons.library_books_sharp),
-// title: Text("Task 2"), tileColor: Colors.blue,
-// subtitle: Text("Your second task") ),
-// ),
-// Divider(),
-// SizedBox(
-// height: 100,
-// child: ListTile(
-// textColor: Colors.white,
-// leading: Icon(Icons.library_books_sharp),
-// title: Text("Task 3"), tileColor: Colors.green,
-// subtitle: Text("Your third task"),),
-// ),
-// Divider(),
-// SizedBox(
-// height: 100,
-// child: ListTile(
-// textColor: Colors.white,
-// leading: Icon(Icons.library_books_sharp),
-// title: Text("Task 4"), tileColor: Colors.orange,
-// subtitle: Text("Your fourth task"),),
-// ),
-// ],
-// ))
-// ],
-// )
