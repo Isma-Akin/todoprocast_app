@@ -12,10 +12,10 @@ class TodosInitial extends TodosState {
 class TodosLoaded extends TodosState {
   final List<Todo> todos;
 
- const TodosLoaded({
+ TodosLoaded({
     this.todos = const<Todo>[],
 });
 
  @override
-  List<Object> get props [todos];
+  List<Object> get props => [todos];
 }
