@@ -28,3 +28,25 @@ class AddTodo extends TodosEvent {
   @override
   List<Object> get props => [todo];
 }
+
+class UpdateTodo extends TodosEvent{
+  final Todo todo;
+
+  const UpdateTodo({
+    required this.todo,
+});
+
+  @override
+  List<Object> get props => [todo];
+}
+
+class RemoveTodo extends TodosEvent{
+  final Todo todo;
+
+  const RemoveTodo({
+    required this.todo,
+});
+
+  @override
+  List<Object> get props => [todo];
+}
