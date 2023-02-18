@@ -12,6 +12,25 @@ void main() {
   runApp(const TodoApp());
 }
 
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onEvent(Bloc bloc, Object? event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    print(transition);
+  }
+
+  @override
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    print(error);
+    super.onError(bloc, error, stackTrace);
+  }
+}
 
 class TodoApp extends StatelessWidget {
   const TodoApp({Key? key}) : super(key: key);
@@ -43,7 +62,8 @@ class TodoApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: const HomeScreen(),
+          home: HomeScreen(),
+          debugShowCheckedModeBanner: false,
         ));
   }
 }
