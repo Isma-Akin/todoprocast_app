@@ -7,6 +7,8 @@ import 'package:todoprocast_app/models/todo_models.dart';
 import 'package:todoprocast_app/screens/home_screen.dart';
 import 'package:todoprocast_app/blocs/todos_status/todos_status_bloc.dart';
 
+import 'logic/navigation/navigation_cubit.dart';
+
 void main() {
   Bloc.observer = MainBlocObserver();
   runApp(const TodoApp());
@@ -37,7 +39,8 @@ class TodoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(providers:[BlocProvider(
+    return MultiBlocProvider(providers:[
+      BlocProvider(
       create: (context) => TodosBloc()
       ..add(
         LoadTodos(
@@ -55,6 +58,9 @@ class TodoApp extends StatelessWidget {
       create: (context) => TodosStatusBloc(
         todosBloc: BlocProvider.of<TodosBloc>(context),
       )..add(UpdateTodosStatus()),
+    ),
+    BlocProvider<NavigationCubit>(
+    create: (context) => NavigationCubit(),
     ),
     ],
         child: MaterialApp(
