@@ -24,9 +24,9 @@ class _Add_ToDoState extends State<Add_ToDo> {
         backgroundColor: Colors.blueAccent,
         primary: true,
       ),
-      body: BlocBuilder(
+      body: BlocBuilder<TodosBloc, TodosState>(
         builder: (context, state) {
-          if (state is TodosInitial){
+          if (state is TodosInitial) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -34,24 +34,42 @@ class _Add_ToDoState extends State<Add_ToDo> {
           if (state is TodosLoaded) {
             return Card(
               child: Padding(
-                  padding: EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-
-                ],
-
-              ),),
-            )
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    _inputField('ID', controllerId),
+                    _inputField('Task', controllerTask),
+                    _inputField('Description', controllerDescription),
+                    ElevatedButton(
+                      onPressed: () {
+                        var todo = Todo(
+                          id: controllerId.value.text,
+                          task: controllerTask.value.text,
+                          description: controllerDescription.value.text,
+                        );
+                        context.read<TodosBloc>().add(AddTodo(todo: todo));
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme
+                              .of(context)
+                              .primaryColor),
+                      child: Text("Add todo"),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          } else {
+            return Text("Something went wrong.");
           }
-        }),
+        },
       ),
     );
   }
 
-  Column _inputField(
-      String field,
-      TextEditingController controller,
-      ) {
+  Column _inputField(String field,
+      TextEditingController controller,) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -63,8 +81,13 @@ class _Add_ToDoState extends State<Add_ToDo> {
         ),
         Container(
           height: 50,
+          margin: EdgeInsets.only(bottom: 10),
+          width: double.infinity,
+          child: TextFormField(
+            controller: controller,
+          ),
         )
       ],
-    ),
+    );
   }
 }
