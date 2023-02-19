@@ -4,6 +4,7 @@ import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/logic/navigation/constants/nav_bar_items.dart';
 import 'package:todoprocast_app/logic/navigation/navigation_cubit.dart';
 import 'package:todoprocast_app/screens/home_screen.dart';
+import 'package:todoprocast_app/screens/profile.dart';
 import 'package:todoprocast_app/screens/settings.dart';
 // import 'package:todoprocast_app/screens/profile_screen.dart';
 // import 'package:todoprocast_app/screens/settings_screen.dart';
@@ -34,7 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 currentIndex: state.index,
                 showUnselectedLabels: false,
                 onTap: (index) {
-                  if (index == 0) {
+                  if (index == 0) { Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomeScreen(),
+                    ),
+                  );
+                  BlocProvider.of<NavigationCubit>(context)
+                      .updateNavBarItem(NavBarItem.settings);
                     BlocProvider.of<NavigationCubit>(context)
                         .updateNavBarItem(NavBarItem.home);
                   } else if (index == 1) { Navigator.push(
@@ -45,7 +53,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                     BlocProvider.of<NavigationCubit>(context)
                         .updateNavBarItem(NavBarItem.settings);
-                  } else if (index == 2) {
+                  } else if (index == 2) { Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Profile(),
+                    ),
+                  );
+                  BlocProvider.of<NavigationCubit>(context)
+                      .updateNavBarItem(NavBarItem.settings);
                     BlocProvider.of<NavigationCubit>(context)
                         .updateNavBarItem(NavBarItem.profile);
                   }
@@ -168,15 +183,20 @@ Card _todosCard(
             builder: (context, state) {
               return Row(
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      context.read<TodosBloc>().add(
-                        UpdateTodo(
-                          todo: todo.copyWith(taskCompleted: true),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.add_task),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/todo/${todo.id}');
+              },
+                    child: IconButton(
+                      onPressed: () {
+                        context.read<TodosBloc>().add(
+                          UpdateTodo(
+                            todo: todo.copyWith(taskCompleted: true),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.add_task),
+                    ),
                   ),
                   IconButton(
                     onPressed: () {
