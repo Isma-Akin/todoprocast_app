@@ -10,7 +10,6 @@ class AddTodoScreen extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -21,18 +20,21 @@ class AddTodoScreen extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          Text("Add a new todo", style: TextStyle(fontSize: 24),),
+          Text("Add a new todo",
+            style: TextStyle(
+                fontSize: 24),),
           SizedBox(height: 10,),
           TextField(
             autocorrect: true,
             controller: taskController,
             decoration: InputDecoration(
-              hintText: "Enter a title",
+              hintText: "Enter a todo title",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
           ),
+          SizedBox(height: 20,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -48,7 +50,9 @@ class AddTodoScreen extends StatelessWidget {
                     context.read<TodosBloc>().add(AddTodo(todo: todo));
                     Navigator.pop(context);
                   },
-                  child: Text("Add Todo"))
+                  child: Text("Add Todo",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold),))
             ],
           ),
         ],),
