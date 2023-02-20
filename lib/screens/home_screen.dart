@@ -4,15 +4,17 @@ import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/logic/navigation/constants/nav_bar_items.dart';
 import 'package:todoprocast_app/logic/navigation/navigation_cubit.dart';
 import 'package:todoprocast_app/screens/home_screen.dart';
-import 'package:todoprocast_app/screens/profile.dart';
-import 'package:todoprocast_app/screens/settings.dart';
+import 'package:todoprocast_app/screens/todo_detail_screen.dart';
+import 'package:todoprocast_app/services/profile.dart';
+import 'package:todoprocast_app/services/settings.dart';
 // import 'package:todoprocast_app/screens/profile_screen.dart';
 // import 'package:todoprocast_app/screens/settings_screen.dart';
 
 import '/models/models.dart';
-import '/screens/screens.dart';
+import '../services/screens.dart';
 import '/blocs/blocs.dart';
 import 'add_todo.dart';
+import 'add_todo_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,6 +24,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  void _addTodo(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: const AddTodoScreen(),
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -118,6 +134,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           state.completedTodos,
                           'Completed',
                         ),
+                        if (state.pendingTodos.isEmpty)
+                          Row(mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            FloatingActionButton(
+                            onPressed: () => {
+                              _addTodo(context),
+                            },
+                            child: const Icon(Icons.add),
+                          ),
+                          ],)
                       ],
                     ),
                   );
@@ -161,58 +187,69 @@ Column _todo(List<Todo> todos, String status) {
   );
 }
 
-Card _todosCard(
+GestureDetector _todosCard(
     BuildContext context,
     Todo todo,
     ) {
-  return Card(
-    margin: const EdgeInsets.only(bottom: 8.0),
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            '#${todo.id}: ${todo.task}',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TodoDetailScreen(todo: todo),
+        ),
+      );
+    },
+    child: Card(
+      color: todo.taskCompleted == true ? Colors.orange : Colors.blue,
+      margin: const EdgeInsets.only(bottom: 8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '#${todo.id}: ${todo.task}',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          BlocBuilder<TodosBloc, TodosState>(
-            builder: (context, state) {
-              return Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/todo/${todo.id}');
-              },
-                    child: IconButton(
+            BlocBuilder<TodosBloc, TodosState>(
+              builder: (context, state) {
+                return Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: IconButton(
+                        onPressed: () {
+                          context.read<TodosBloc>().add(
+                            UpdateTodo(
+                              todo: todo.copyWith(taskCompleted: true),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.add_task),
+                      ),
+                    ),
+                    IconButton(
                       onPressed: () {
                         context.read<TodosBloc>().add(
-                          UpdateTodo(
-                            todo: todo.copyWith(taskCompleted: true),
+                          RemoveTodo(
+                            todo: todo.copyWith(taskCancelled: true),
                           ),
                         );
                       },
-                      icon: const Icon(Icons.add_task),
+                      icon: const Icon(Icons.cancel),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      context.read<TodosBloc>().add(
-                        RemoveTodo(
-                          todo: todo.copyWith(taskCancelled: true),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.cancel),
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     ),
   );
