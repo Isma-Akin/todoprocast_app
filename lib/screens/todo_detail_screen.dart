@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:todoprocast_app/models/todo_models.dart';
 
 class TodoDetailScreen extends StatelessWidget {
-  const TodoDetailScreen({Key? key}) : super(key: key);
+  final Todo todo;
+  
+  const TodoDetailScreen({required this.todo});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Todo Details"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+      ),
+    );
   }
 }
