@@ -9,16 +9,17 @@ import 'package:todoprocast_app/services/profile.dart';
 import 'package:todoprocast_app/services/settings.dart';
 // import 'package:todoprocast_app/screens/profile_screen.dart';
 // import 'package:todoprocast_app/screens/settings_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '/models/models.dart';
 import '../services/screens.dart';
 import '/blocs/blocs.dart';
 import 'add_todo.dart';
 import 'add_todo_screen.dart';
+import 'initial_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -45,6 +46,44 @@ class _HomeScreenState extends State<HomeScreen> {
         debugShowCheckedModeBanner: false,
         color: Colors.blue,
         home: Scaffold(
+          drawer: Drawer(
+            child: ListView(
+                children: [
+                  ListTile(
+                    title: const Text("Main page"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MainPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: const Text("Todo list"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Add_ToDo(),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: const Text("Settings"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Settings(),
+                        ),
+                      );
+                    },
+                  ),
+                ]),
+          ),
           bottomNavigationBar: BlocBuilder<NavigationCubit, NavigationState>(
             builder: (context, state) {
               return BottomNavigationBar(
@@ -187,11 +226,12 @@ Column _todo(List<Todo> todos, String status) {
   );
 }
 
-GestureDetector _todosCard(
+InkWell _todosCard(
     BuildContext context,
     Todo todo,
     ) {
-  return GestureDetector(
+  return InkWell(
+    splashColor: Colors.blue.withAlpha(30),
     onTap: () {
       Navigator.push(
         context,
