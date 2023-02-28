@@ -20,6 +20,13 @@ class _MainPageState extends State<MainPage> {
     const Settings(),
   ];
 
+  final List<IconData> _icons = [
+    Icons.home,
+    Icons.add,
+    Icons.person,
+    Icons.settings,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -39,11 +46,19 @@ class _MainPageState extends State<MainPage> {
                     ),
                   );
                 },
-                child: Card(
-                  child: Center(
-                    child: Text(_pages[index].toString()),
-                  ),
-                ),
+                child: Stack(
+                  children: [
+                    Card(
+                     child: Center(
+                      child: Text(_pages[index].toString()),
+                    ),
+                    ),
+                      Positioned(
+                        top: 8.0,
+                        right: 8.0,
+                        child: Icon(_icons[index]),
+                      ),
+                ]),
               );
             }),
       ));
