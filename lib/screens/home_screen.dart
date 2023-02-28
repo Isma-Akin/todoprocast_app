@@ -9,6 +9,7 @@ import 'package:todoprocast_app/services/profile.dart';
 import 'package:todoprocast_app/services/settings.dart';
 // import 'package:todoprocast_app/screens/profile_screen.dart';
 // import 'package:todoprocast_app/screens/settings_screen.dart';
+import 'package:todoprocast_app/screens/initial_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '/models/models.dart';
@@ -93,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (index == 0) { Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const HomeScreen(),
+                      builder: (context) => const MainPage(),
                     ),
                   );
                   BlocProvider.of<NavigationCubit>(context)
