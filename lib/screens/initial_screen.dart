@@ -27,9 +27,16 @@ class _MainPageState extends State<MainPage> {
     Icons.settings,
   ];
 
+  final List<Color> _colors = [
+    Colors.blue,
+    Colors.green,
+    Colors.red,
+    Colors.yellow,
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: GridView.builder(
           shrinkWrap: true,
@@ -48,15 +55,16 @@ class _MainPageState extends State<MainPage> {
                 },
                 child: Stack(
                   children: [
-                    Card(
+                    Card(color: _colors[index],
                      child: Center(
-                      child: Text(_pages[index].toString()),
+                      child: Text(_pages[index].toString(),
+                        style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
                     ),
                     ),
                       Positioned(
                         top: 8.0,
                         right: 8.0,
-                        child: Icon(_icons[index]),
+                        child: Icon(_icons[index], size: 40.0),
                       ),
                 ]),
               );
