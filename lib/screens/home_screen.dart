@@ -47,96 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
         debugShowCheckedModeBanner: false,
         color: Colors.blue,
         home: Scaffold(
-          drawer: Drawer(
-            child: ListView(
-                children: [
-                  ListTile(
-                    title: const Text("Main page"),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MainPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text("Todo list"),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Add_ToDo(),
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: const Text("Settings"),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Settings(),
-                        ),
-                      );
-                    },
-                  ),
-                ]),
-          ),
-          bottomNavigationBar: BlocBuilder<NavigationCubit, NavigationState>(
-            builder: (context, state) {
-              return BottomNavigationBar(
-                currentIndex: state.index,
-                showUnselectedLabels: false,
-                onTap: (index) {
-                  if (index == 0) { Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MainPage(),
-                    ),
-                  );
-                  BlocProvider.of<NavigationCubit>(context)
-                      .updateNavBarItem(NavBarItem.settings);
-                    BlocProvider.of<NavigationCubit>(context)
-                        .updateNavBarItem(NavBarItem.home);
-                  } else if (index == 1) { Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Settings(),
-                    ),
-                  );
-                    BlocProvider.of<NavigationCubit>(context)
-                        .updateNavBarItem(NavBarItem.settings);
-                  } else if (index == 2) { Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Profile(),
-                    ),
-                  );
-                  BlocProvider.of<NavigationCubit>(context)
-                      .updateNavBarItem(NavBarItem.settings);
-                    BlocProvider.of<NavigationCubit>(context)
-                        .updateNavBarItem(NavBarItem.profile);
-                  }
-                },
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
-                    label: 'Settings',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
-                    label: 'Profile',
-                  ),
-                ],
-              );
-            },),
+          drawer: buildDrawer(context),
+          bottomNavigationBar: NavBar(),
             appBar: AppBar(
               backgroundColor: Colors.blueAccent,
               actions: [IconButton(
@@ -164,26 +76,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _todo(
                           state.pendingTodos,
                           'Pending',
                         ),
+                        if (state.pendingTodos.isEmpty)
+                          SizedBox(height: 40,
+                            width: 200,
+                            child: ElevatedButton(onPressed: () => {
+                              _addTodo(context),
+                            }, child: Text("Add todo")),
+                          ),
                         _todo(
                           state.completedTodos,
                           'Completed',
                         ),
-                        if (state.pendingTodos.isEmpty)
-                          Row(mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            FloatingActionButton(
-                            onPressed: () => {
-                              _addTodo(context),
-                            },
-                            child: const Icon(Icons.add),
-                          ),
-                          ],)
                       ],
                     ),
                   );
@@ -193,6 +102,106 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
         ));
+  }
+
+
+  Drawer buildDrawer(BuildContext context) {
+    return Drawer(
+          child: ListView(
+              children: [
+                ListTile(
+                  title: const Text("Main page"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainPage(),
+                      ),
+                    );
+                  },
+                ),
+                Divider(),
+                ListTile(
+                  title: const Text("Todo list"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Add_ToDo(),
+                      ),
+                    );
+                  },
+                ),
+                Divider(),
+                ListTile(
+                  title: const Text("Settings"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Settings(),
+                      ),
+                    );
+                  },
+                ),
+                Divider(),
+              ]),
+        );
+  }
+
+  BlocBuilder<NavigationCubit, NavigationState> NavBar() {
+    return BlocBuilder<NavigationCubit, NavigationState>(
+          builder: (context, state) {
+            return BottomNavigationBar(
+              currentIndex: state.index,
+              showUnselectedLabels: false,
+              onTap: (index) {
+                if (index == 0) { Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainPage(),
+                  ),
+                );
+                BlocProvider.of<NavigationCubit>(context)
+                    .updateNavBarItem(NavBarItem.settings);
+                  BlocProvider.of<NavigationCubit>(context)
+                      .updateNavBarItem(NavBarItem.home);
+                } else if (index == 1) { Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Settings(),
+                  ),
+                );
+                  BlocProvider.of<NavigationCubit>(context)
+                      .updateNavBarItem(NavBarItem.settings);
+                } else if (index == 2) { Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Profile(),
+                  ),
+                );
+                BlocProvider.of<NavigationCubit>(context)
+                    .updateNavBarItem(NavBarItem.settings);
+                  BlocProvider.of<NavigationCubit>(context)
+                      .updateNavBarItem(NavBarItem.profile);
+                }
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings),
+                  label: 'Settings',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
+            );
+          },);
   }
 }
 
