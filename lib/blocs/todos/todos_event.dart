@@ -29,10 +29,37 @@ class AddTodo extends TodosEvent {
   List<Object> get props => [todo];
 }
 
+class EditTask extends TodosEvent {
+  final Todo oldTodo;
+  final Todo newTodo;
+
+  const EditTask({
+    required this.oldTodo,
+    required this.newTodo,
+});
+
+  @override
+  List<Object> get props => [
+    oldTodo,
+    newTodo
+  ];
+}
+
 class UpdateTodo extends TodosEvent{
   final Todo todo;
 
   const UpdateTodo({
+    required this.todo,
+});
+
+  @override
+  List<Object> get props => [todo];
+}
+
+class MarkTodoAsFavOrUnFav extends TodosEvent {
+  final Todo todo;
+
+  const MarkTodoAsFavOrUnFav({
     required this.todo,
 });
 
@@ -50,3 +77,5 @@ class RemoveTodo extends TodosEvent{
   @override
   List<Object> get props => [todo];
 }
+
+class RemoveAllTodos extends TodosEvent{}
