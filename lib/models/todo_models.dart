@@ -6,6 +6,7 @@ class Todo extends Equatable {
   final String description;
   bool? taskCompleted;
   bool? taskCancelled;
+  bool? isFavourite;
 
   Todo({
     required this.id,
@@ -13,9 +14,11 @@ class Todo extends Equatable {
     required this.description,
     this.taskCompleted,
     this.taskCancelled,
+    this.isFavourite,
   }) {
     taskCompleted = taskCompleted ?? false;
     taskCancelled = taskCancelled ?? false;
+    isFavourite = isFavourite ?? false;
   }
 
   Todo copyWith({
@@ -24,6 +27,7 @@ class Todo extends Equatable {
     String? description,
     bool? taskCompleted,
     bool? taskCancelled,
+    bool? isFavourite,
   }) {
     return Todo(
       id: id ?? this.id,
@@ -31,6 +35,7 @@ class Todo extends Equatable {
       description: description ?? this.description,
       taskCompleted: taskCompleted ?? this.taskCompleted,
       taskCancelled: taskCancelled ?? this.taskCancelled,
+      isFavourite: isFavourite ?? this.isFavourite,
     );
   }
 
@@ -41,5 +46,6 @@ class Todo extends Equatable {
         description,
         taskCompleted,
         taskCancelled,
+        isFavourite,
       ];
 }
