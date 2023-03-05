@@ -304,6 +304,15 @@ InkWell _todosCard(
               builder: (context, state) {
                 return Row(
                   children: [
+                    IconButton(
+                      onPressed: () {
+                        context.read<TodosBloc>().add(
+                MarkTodoAsFavOrUnFav(todo: todo));
+                      },
+                      icon: Icon(
+                          todo.isFavourite! ? Icons.star : Icons.star_border),
+                      color: Colors.yellow,
+                    ),
                     InkWell(
                       onTap: () {
                         Navigator.pop(context);
@@ -318,8 +327,7 @@ InkWell _todosCard(
                         },
                         icon: const Icon(Icons.add_task),
                       ),
-                    ),
-                    IconButton(
+                    ),IconButton(
                       onPressed: () {
                         context.read<TodosBloc>().add(
                           RemoveTodo(
