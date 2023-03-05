@@ -12,9 +12,13 @@ class TodosInitial extends TodosState {
 class TodosLoaded extends TodosState {
   final List<Todo> todos;
 
- TodosLoaded({
+ const TodosLoaded({
     this.todos = const<Todo>[],
 });
+
+ List<Todo> getFavouriteTodos() {
+   return todos.where((todo) => todo.isFavourite ?? false).toList();
+ }
 
  @override
   List<Object> get props => [todos];
