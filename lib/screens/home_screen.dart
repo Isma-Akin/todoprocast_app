@@ -10,7 +10,7 @@ import 'package:todoprocast_app/services/settings.dart';
 // import 'package:todoprocast_app/screens/profile_screen.dart';
 // import 'package:todoprocast_app/screens/settings_screen.dart';
 import 'package:todoprocast_app/screens/initial_screen.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 
 import '/models/models.dart';
 import '../services/screens.dart';
@@ -18,6 +18,7 @@ import '/blocs/blocs.dart';
 import 'add_todo.dart';
 import 'add_todo_screen.dart';
 import 'initial_screen.dart';
+import 'main_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -47,23 +48,57 @@ class _HomeScreenState extends State<HomeScreen> {
         debugShowCheckedModeBanner: false,
         color: Colors.blue,
         home: Scaffold(
-          drawer: buildDrawer(context),
-          bottomNavigationBar: NavBar(),
+          floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _addTodo(context);
+          },child: const Icon(Icons.add),elevation: 2,
+        ),
+          // drawer: buildDrawer(context),
+          // bottomNavigationBar: NavBar(),
             appBar: AppBar(
               backgroundColor: Colors.blueAccent,
-              actions: [IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Add_ToDo(),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.add),
-              tooltip: "Click here to add new todo"),],
-              title: const Text("Todo app",
+              actions: [
+                // PopupMenuButton(
+                //     onSelected: (value) {
+                //       switch (value) {
+                //         case 'sort':
+                //           BlocProvider.of<TodosStatusBloc>(context)
+                //               .add(TodosStatusSorted());
+                //           break;
+                //           case 'duplicate':
+                //           BlocProvider.of<TodosStatusBloc>(context)
+                //               .add(TodosStatusDuplicated());
+                //           break;
+                //         case 'delete':
+                //           BlocProvider.of<TodosStatusBloc>(context)
+                //               .add(TodosStatusDeleted());
+                //           break;}
+                //       },
+                //     itemBuilder: (BuildContext context) {
+                //       return [
+                //         PopupMenuItem(
+                //           child: const Text('Sort'),
+                //           value: 'sort',
+                //         ),
+                //         PopupMenuItem(
+                //           child: const Text('Duplicate'),
+                //           value: 'duplicate',
+                //         ),
+                //         PopupMenuItem(
+                //           child: const Text('Delete'),
+                //           value: 'delete',
+                //         ),
+                //       ];
+                //     }),
+              ],
+              title: const Text("Tasks",
               style: TextStyle(fontSize: 30)),
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back),
+              ),
             ),
             body: BlocBuilder<TodosStatusBloc, TodosStatusState>(
               builder: (context, state) {
@@ -159,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (index == 0) { Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MainPage(),
+                    builder: (context) => const MainScreen(),
                   ),
                 );
                 BlocProvider.of<NavigationCubit>(context)
