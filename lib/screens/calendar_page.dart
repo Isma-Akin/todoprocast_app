@@ -38,6 +38,12 @@ class _CalendarPageState extends State<CalendarPage> {
       child: MaterialApp(debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back),
+            ),
             title: const Text('Calendar'),
           ),
           body: BlocBuilder<TimeBloc, DateTime>(
