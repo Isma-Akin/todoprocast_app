@@ -13,6 +13,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     on<AddTodo>(_onAddTodos);
     on<UpdateTodo>(_onUpdateTodo);
     on<RemoveTodo>(_onRemoveTodo);
+    // on<EditTodo>(_onEditTodo);
+    on<MarkTodoAsFavOrUnFav>(_onMarkTodoAsFavOrUnFav);
+    on<RemoveAllTodos>(_onRemoveAllTodos);
     }
 
   void _onLoadTodos(
@@ -62,5 +65,29 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
       emit(TodosLoaded(todos: todos));
     }
+  }
+
+  void _onMarkTodoAsFavOrUnFav(
+      MarkTodoAsFavOrUnFav event,
+      Emitter<TodosState> emit,
+      ) {
+    final state = this.state;
+    if (state is TodosLoaded) {
+      List<Todo> todos = (state.todos.map((todo) {
+        return todo.id == event.todo.id
+            ? event.todo.copyWith(isFavourite: !event.todo.isFavourite!)
+            // ? event.todo.copyWith(isFavourite: true)
+            : todo;
+      })).toList();
+
+      emit(TodosLoaded(todos: todos));
+    }
+  }
+
+  void _onRemoveAllTodos(
+      RemoveAllTodos event,
+      Emitter<TodosState> emit,
+      ) {
+    emit(const TodosLoaded(todos: []));
   }
 }
