@@ -4,12 +4,18 @@ import 'package:todoprocast_app/screens/add_todo_screen.dart';
 import 'package:todoprocast_app/screens/calendar_page.dart';
 import 'package:todoprocast_app/screens/home_screen.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    String? selectedTask;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -48,8 +54,8 @@ class MainScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           Text('Task planner'),
-                          SizedBox(width: 200,),
-                          Icon(Icons.home)
+                          SizedBox(width: 386,),
+                          Icon(Icons.book_online_rounded)
                         ],)
                     )
                   ),
@@ -72,7 +78,8 @@ class MainScreen extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Row(
-                        children: [Text('Your day'),SizedBox(width: 200,),
+                        children: [Text('Your day'),
+                          SizedBox(width: 412,),
                           Icon(Icons.home)],)
                     )
                   ),
@@ -90,13 +97,37 @@ class MainScreen extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Row(
-                        children: [Text('Important tasks'),SizedBox(width: 200,),
-                          Icon(Icons.home)],)
+                        children: [Text('Important tasks'),
+                          SizedBox(width: 366,),
+                          Icon(Icons.lightbulb)],)
                     )
                   ),
                 ),
               ]
             ),
+            Row(
+              children: [
+                Card(
+                  color: Colors.grey,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [Text('Task list'),
+                        SizedBox(width: 413,),
+                        Icon(Icons.lightbulb)],)
+                  ),
+                ),
+              ]
+            ),
+            Divider(height: 50, color: Colors.black,),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              width: screenWidth,
+              height: 300,
+            )
           ],
         )
       ),
