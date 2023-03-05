@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:todoprocast_app/screens/add_todo.dart';
 import 'package:todoprocast_app/screens/add_todo_screen.dart';
 import 'package:todoprocast_app/screens/calendar_page.dart';
+import 'package:todoprocast_app/screens/favourite_tasks_screen.dart';
 import 'package:todoprocast_app/screens/home_screen.dart';
+import 'package:todoprocast_app/services/settings.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -28,7 +30,14 @@ class _MainScreenState extends State<MainScreen> {
               },
               icon: const Icon(Icons.search),
             ),
-          IconButton(onPressed: () {},
+          IconButton(onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Settings(),
+              ),
+            );
+          },
               icon: Icon(Icons.settings))],
           title: const Text('Main Screen'),
         ),
@@ -91,7 +100,7 @@ class _MainScreenState extends State<MainScreen> {
                 InkWell(onTap: (){
                   Navigator.push(
                       context, MaterialPageRoute(
-                      builder: (context) => const Add_ToDo()));},
+                      builder: (context) => const FavouriteTasksScreen()));},
                   child: Card(
                     color: Colors.grey,
                     child: Padding(
@@ -107,14 +116,20 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Row(
               children: [
-                Card(
-                  color: Colors.grey,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [Text('Task list'),
-                        SizedBox(width: 413,),
-                        Icon(Icons.lightbulb)],)
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(
+                            builder: (context) => const FavouriteTasksScreen()));},
+                  child: Card(
+                    color: Colors.grey,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [Text('Task list'),
+                          SizedBox(width: 413,),
+                          Icon(Icons.lightbulb)],)
+                    ),
                   ),
                 ),
               ]
