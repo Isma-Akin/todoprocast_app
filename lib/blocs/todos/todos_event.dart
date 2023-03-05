@@ -29,11 +29,11 @@ class AddTodo extends TodosEvent {
   List<Object> get props => [todo];
 }
 
-class EditTask extends TodosEvent {
+class EditTodo extends TodosEvent {
   final Todo oldTodo;
   final Todo newTodo;
 
-  const EditTask({
+  const EditTodo({
     required this.oldTodo,
     required this.newTodo,
 });
