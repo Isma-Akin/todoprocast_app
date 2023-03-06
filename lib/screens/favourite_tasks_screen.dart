@@ -13,12 +13,41 @@ class FavouriteTasksScreen extends StatefulWidget {
 }
 
 class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
+
+  final List<String> _sortingOptions = [
+  'Sort by due date',
+  'Sort by date created',
+  'Sort alphabetically',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
+            actions: [
+              PopupMenuButton(itemBuilder: (BuildContext context) {
+                return _sortingOptions.map((String option) {
+                  return PopupMenuItem<String>(
+                    child: Text(option),
+                    value: option,
+                  );
+                }).toList();
+        }, onSelected: (String selectedOption) {
+                switch (selectedOption) {
+                  case 'Due Date':
+                    context.read<TodosBloc>().add(const SortTodosByDateCreated(todos: []));
+                    break;
+                  case 'Date Created':
+                    context.read<TodosBloc>().add(const SortTodosAlphabetically(todos: []));
+                    break;
+                  case 'Alphabetically':
+                    context.read<TodosBloc>().add(const SortTodosByDueDate(todos: []));
+                    break;
+                }
+        },
+              )],
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
