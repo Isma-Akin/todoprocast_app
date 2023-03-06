@@ -15,21 +15,21 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      BlocProvider.of<TimeBloc>(context).add(UpdateTime());
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
+  // Timer? _timer;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  //     BlocProvider.of<TimeBloc>(context).add(UpdateTime());
+  //   });
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   _timer?.cancel();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +50,8 @@ class _CalendarPageState extends State<CalendarPage> {
             builder: (context, state) {
               return Column(
                   children: [
-                    Text(DateFormat('hh:mm:ss').format(DateTime.now()),
-                      style: const TextStyle(fontSize: 30),),
+                    // Text(DateFormat('hh:mm:ss').format(DateTime.now()),
+                    //   style: const TextStyle(fontSize: 30),),
                     Text(DateFormat('EEEE, MMM d').format(DateTime.now()),
                       style: const TextStyle(fontSize: 30),),
                     TableCalendar(
