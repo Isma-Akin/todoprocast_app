@@ -67,6 +67,39 @@ class MarkTodoAsFavOrUnFav extends TodosEvent {
   List<Object> get props => [todo];
 }
 
+class SortTodosByDueDate extends TodosEvent {
+  final List<Todo> todos;
+
+  const SortTodosByDueDate({
+    required this.todos,
+});
+
+  @override
+  List<Object> get props => [todos];
+}
+
+class SortTodosByDateCreated extends TodosEvent {
+  final List<Todo> todos;
+
+  const SortTodosByDateCreated({
+    required this.todos,
+});
+
+  @override
+  List<Object> get props => [todos];
+}
+
+class SortTodosAlphabetically extends TodosEvent {
+  final List<Todo> todos;
+
+  const SortTodosAlphabetically({
+    required this.todos,
+});
+
+  @override
+  List<Object> get props => [todos];
+}
+
 class RemoveTodo extends TodosEvent{
   final Todo todo;
 
