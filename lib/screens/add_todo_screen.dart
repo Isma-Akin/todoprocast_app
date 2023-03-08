@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:bloc/bloc.dart';
 import '../blocs/todos/todos_bloc.dart';
 import '../models/todo_models.dart';
 
@@ -12,7 +11,6 @@ class AddTodoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     TextEditingController taskController = TextEditingController();
     TextEditingController idController = TextEditingController();
 
@@ -46,7 +44,8 @@ class AddTodoScreen extends StatelessWidget {
                     var todo = Todo(
                         id: idController.text,
                         task: taskController.text,
-                        description: "description");
+                        description: "description",
+                        dateCreated: DateTime.now());
                     context.read<TodosBloc>().add(AddTodo(todo: todo));
                     Navigator.pop(context);
                   },
