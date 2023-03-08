@@ -23,3 +23,14 @@ class TodosLoaded extends TodosState {
  @override
   List<Object> get props => [todos];
 }
+
+class TodosSortedByDate extends TodosState {
+  final List<Todo> todos;
+
+ const TodosSortedByDate({
+    this.todos = const<Todo>[],
+});
+
+ @override
+  List<Object> get props => [todos];
+}
