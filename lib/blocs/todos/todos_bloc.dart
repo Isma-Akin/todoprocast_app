@@ -16,6 +16,9 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     // on<EditTodo>(_onEditTodo);
     on<MarkTodoAsFavOrUnFav>(_onMarkTodoAsFavOrUnFav);
     on<RemoveAllTodos>(_onRemoveAllTodos);
+    on<SortTodosByDueDate>(_mapSortTodosByDueDateToState);
+    on<SortTodosByDateCreated>(_mapSortTodosByDateCreatedToState);
+    on<SortTodosAlphabetically>(_mapSortTodosAlphabeticallyToState);
     }
 
   void _onLoadTodos(
@@ -81,6 +84,39 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       })).toList();
 
       emit(TodosLoaded(todos: todos));
+    }
+  }
+
+  void _mapSortTodosByDueDateToState(
+      SortTodosByDueDate event,
+      Emitter<TodosState> emit,
+      ) {
+    final state = this.state;
+    if (state is TodosLoaded) {
+      List<Todo> sortedTodos = List.from(state.todos)..sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
+      emit(TodosLoaded(todos: sortedTodos));
+    }
+  }
+
+  void _mapSortTodosByDateCreatedToState(
+      SortTodosByDateCreated event,
+      Emitter<TodosState> emit,
+      ) {
+    final state = this.state;
+    if (state is TodosLoaded) {
+      List<Todo> sortedTodos = state.todos.toList()..sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
+      emit(TodosLoaded(todos: sortedTodos));
+    }
+  }
+
+  void _mapSortTodosAlphabeticallyToState(
+      SortTodosAlphabetically event,
+      Emitter<TodosState> emit,
+      ) {
+    final state = this.state;
+    if (state is TodosLoaded) {
+      List<Todo> sortedTodos = List.from(state.todos)..sort((a, b) => a.task.compareTo(b.task));
+      emit(TodosLoaded(todos: sortedTodos));
     }
   }
 
