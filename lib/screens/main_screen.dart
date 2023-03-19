@@ -55,18 +55,27 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     );
                   },
-                  child: Card(
-                      elevation: 10,
-                    color: Colors.grey,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text('Task planner'),
-                          SizedBox(width: 386,),
-                          Icon(Icons.book_online_rounded)
-                        ],)
-                    )
+                  child: Container(
+                    padding: const EdgeInsets.all(4.0),
+                    width: screenWidth,
+                    child: Card(shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                      margin: EdgeInsets.only(left: 1, right: 1),
+                      color: Colors.grey,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: screenWidth - 20,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Task planner', style: TextStyle(fontSize: 25),),
+                              // SizedBox(width: MediaQuery.of(context).size.width - 80,),
+                              Icon(Icons.book_online_rounded)
+                            ],),
+                        )
+                      )
+                    ),
                   ),
                 ),
               ]
@@ -82,15 +91,22 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     );
                   },
-                  child: Card(
-                    color: Colors.grey,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [Text('Your day'),
-                          SizedBox(width: 412,),
-                          Icon(Icons.home)],)
-                    )
+                  child: Container(
+                    width: screenWidth,
+                    padding: const EdgeInsets.all(4.0),
+                    child: Card(shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                        margin: EdgeInsets.only(left: 1, right: 1),
+                      color: Colors.grey,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [Text('Your day', style: TextStyle(fontSize: 25),),
+                            // SizedBox(width: 412,),
+                            Icon(Icons.home)],)
+                      )
+                    ),
                   ),
                 ),
               ]
@@ -101,15 +117,22 @@ class _MainScreenState extends State<MainScreen> {
                   Navigator.push(
                       context, MaterialPageRoute(
                       builder: (context) => const FavouriteTasksScreen()));},
-                  child: Card(
-                    color: Colors.grey,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [Text('Important tasks'),
-                          SizedBox(width: 366,),
-                          Icon(Icons.lightbulb)],)
-                    )
+                  child: Container(
+                    width: screenWidth,
+                    padding: const EdgeInsets.all(4.0),
+                    child: Card(shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                      margin: EdgeInsets.only(left: 1, right: 1),
+                      color: Colors.grey,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [Text('Important tasks', style: TextStyle(fontSize: 25),),
+                            // SizedBox(width: 366,),
+                            Icon(Icons.lightbulb)],)
+                      )
+                    ),
                   ),
                 ),
               ]
@@ -121,14 +144,22 @@ class _MainScreenState extends State<MainScreen> {
                     Navigator.push(context,
                         MaterialPageRoute(
                             builder: (context) => const FavouriteTasksScreen()));},
-                  child: Card(
-                    color: Colors.grey,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [Text('Task list'),
-                          SizedBox(width: 413,),
-                          Icon(Icons.lightbulb)],)
+                  child: Container(
+                    width: screenWidth,
+                    padding: const EdgeInsets.all(4.0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
+                      margin: EdgeInsets.only(left: 1, right: 1),
+                      color: Colors.grey,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [Text('Task list', style: TextStyle(fontSize: 25),),
+                            // SizedBox(width: 413,),
+                            Icon(Icons.all_inbox)],)
+                      ),
                     ),
                   ),
                 ),
@@ -142,7 +173,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               width: screenWidth,
               height: 300,
-            )
+            ),
           ],
         )
       ),
