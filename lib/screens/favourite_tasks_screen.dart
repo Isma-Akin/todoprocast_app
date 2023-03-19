@@ -11,14 +11,23 @@ class FavouriteTasksScreen extends StatefulWidget {
   @override
   State<FavouriteTasksScreen> createState() => _FavouriteTasksScreenState();
 }
+enum TodoSortCriteria { dateCreated, alphabetically }
 
 class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
 
-  final List<String> _sortingOptions = [
-  'Sort by due date',
-  'Sort by date created',
-  'Sort alphabetically',
-  ];
+  List<Todo> _todos = [];
+  TodoSortCriteria _sortCriteria = TodoSortCriteria.dateCreated;
+  TodoSortCriteria _sortCriteria2 = TodoSortCriteria.alphabetically;
+
+
+  List<Todo> _sortTodos(List<Todo> todos) {
+    switch (_sortCriteria) {
+      case TodoSortCriteria.dateCreated:
+        return todos..sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
+      default:
+        return todos..sort((a, b) => a.task.compareTo(b.task));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,27 +36,25 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
         home: Scaffold(
           appBar: AppBar(
             actions: [
-              PopupMenuButton(itemBuilder: (BuildContext context) {
-                return _sortingOptions.map((String option) {
-                  return PopupMenuItem<String>(
-                    child: Text(option),
-                    value: option,
-                  );
-                }).toList();
-        }, onSelected: (String selectedOption) {
-                switch (selectedOption) {
-                  case 'Due Date':
-                    context.read<TodosBloc>().add(const SortTodosByDateCreated(todos: []));
-                    break;
-                  case 'Date Created':
-                    context.read<TodosBloc>().add(const SortTodosAlphabetically(todos: []));
-                    break;
-                  case 'Alphabetically':
-                    context.read<TodosBloc>().add(const SortTodosByDueDate(todos: []));
-                    break;
-                }
-        },
-              )],
+              PopupMenuButton<TodoSortCriteria>(
+            icon: Icon(Icons.sort),
+              initialValue: _sortCriteria,
+              onSelected: (value) {
+              setState(() {
+                _sortCriteria = value;
+                _sortTodos(_todos);
+              });
+              },
+              itemBuilder:(BuildContext context) => [
+                PopupMenuItem(
+                  value: TodoSortCriteria.dateCreated,
+                  child: Text('Sort by date created'),
+                ),
+                PopupMenuItem(
+                  value: TodoSortCriteria.alphabetically,
+                  child: Text('Sort alphabetically'),
+                ),
+              ],)],
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -63,9 +70,9 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
                   final favouriteTodos = state.todos.where(
                       (todo) => todo.isFavourite ?? false).toList();
                   return ListView.builder(
-                      itemCount: favouriteTodos.length,
+                      itemCount: _sortTodos(favouriteTodos).length,
                       itemBuilder: (context, index) {
-                        final todo = favouriteTodos[index];
+                        final todo = _sortTodos(favouriteTodos)[index];
                         return _todosCard(context, todo);
                       }
                   );
