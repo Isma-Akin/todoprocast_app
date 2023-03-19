@@ -45,7 +45,9 @@ class EditTodo extends TodosEvent {
   ];
 }
 
-class UpdateTodo extends TodosEvent{
+class UpdateTodo extends TodosEvent {
+  // final Todo oldTodo;
+  // final Todo newTodo;
   final Todo todo;
 
   const UpdateTodo({
@@ -98,6 +100,19 @@ class SortTodosAlphabetically extends TodosEvent {
 
   @override
   List<Object> get props => [todos];
+}
+
+class AddStep extends TodosEvent {
+  final Todo todoId;
+  final String step;
+
+  const AddStep({
+    required this.todoId,
+    required this.step,
+});
+
+  @override
+  List<Object> get props => [todoId, step];
 }
 
 class RemoveTodo extends TodosEvent{
