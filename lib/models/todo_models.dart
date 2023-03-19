@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 
 class Todo extends Equatable {
   final String id;
@@ -8,6 +9,7 @@ class Todo extends Equatable {
   bool? taskCompleted;
   bool? taskCancelled;
   bool? isFavourite;
+  final List<String> steps;
 
   Todo({
     required this.id,
@@ -17,13 +19,16 @@ class Todo extends Equatable {
     this.taskCompleted,
     this.taskCancelled,
     this.isFavourite,
+    this.steps = const <String>[],
   }) {
     taskCompleted = taskCompleted ?? false;
     taskCancelled = taskCancelled ?? false;
     isFavourite = isFavourite ?? false;
   }
 
-  DateTime get dateCreatedInLocal => dateCreated.toLocal();
+  // DateTime get dateCreatedInLocal => dateCreated.toLocal();
+  String get formattedDateCreated =>
+      DateFormat('dd-MM-yyy HH:mm').format(dateCreated.toLocal());
 
   Todo copyWith({
     String? id,
@@ -33,6 +38,7 @@ class Todo extends Equatable {
     bool? taskCompleted,
     bool? taskCancelled,
     bool? isFavourite,
+    String? steps,
   }) {
     return Todo(
       id: id ?? this.id,
@@ -54,5 +60,6 @@ class Todo extends Equatable {
         taskCompleted,
         taskCancelled,
         isFavourite,
+        steps,
       ];
 }
