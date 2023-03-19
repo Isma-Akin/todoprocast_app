@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/models/todo_models.dart';
+import 'package:intl/intl.dart';
 
 import '../blocs/todos/todos_bloc.dart';
 
@@ -15,12 +16,66 @@ class TodoDetailScreen extends StatefulWidget {
 }
 
 class _TodoDetailScreenState extends State<TodoDetailScreen> {
+  DateTime now = DateTime.now();
+  String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
 
-  final List<bool> _steps = [false, false, false, false];
+  // final List<bool> _steps = [false, false, false, false];
+  final List<String> _newSteps = [];
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final _stepController = TextEditingController();
+
+  void _showEditStepDialog(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit Step'),
+          content: TextFormField(
+            controller: TextEditingController(text: widget.todo.steps[index]),
+            decoration: InputDecoration(
+              labelText: 'Step ${index + 1}',
+              border: OutlineInputBorder(),
+            ),
+            onSaved: (newValue) {
+              setState(() {
+                widget.todo.steps[index] = newValue!;
+              });
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a step';
+              }
+              return null;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('CANCEL'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('SAVE'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocProvider(
+  create: (context) => TodosBloc(),
+  child: Scaffold(
       appBar: AppBar(
         title: Text('Todo Details: ${widget.todo.task}',
             style: TextStyle(
@@ -87,42 +142,102 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
             style: Theme.of(context).textTheme.subtitle2,),
             const SizedBox(height: 50,),
             Text("Steps", style: todotitle[0],),
-            Row(children: [Text("Step 1", style: todotitle[1],),
-              Checkbox(value: _steps[0], onChanged: (value) {
-                setState(() {
-                  _steps[0] = value!;
-                });
-              },
+        Expanded(
+            child: BlocBuilder<TodosBloc, TodosState>(
+  builder: (context, state) {
+    return ListView.builder(
+              itemCount: widget.todo.steps.length + _newSteps.length,
+                itemBuilder: (context, index) {
+                if (index < widget.todo.steps.length) {
+          return Row(
+            children: [
+              Text("Step ${index + 1}"),
+              SizedBox(width: 10,),
+              Expanded(
+                child:
+                Text(widget.todo.steps[index], style: TextStyle(fontSize: 18),),
               ),
-            ],),
-            Row(children: [Text("Step 2", style: todotitle[1],),
-              Checkbox(value: _steps[1], onChanged: (value) {
+              IconButton(
+                icon: Icon(Icons.edit),
+                  onPressed: () {
+                  _showEditStepDialog(context, index);
+                  },
+                  ),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
                 setState(() {
-                  _steps[1] = value!;
-                });
+                  widget.todo.steps.removeAt(index);
+                    });
+                  },
+                ),
+              ],
+            );
+          } else {
+                  final stepIndex = index - widget.todo.steps.length;
+                  return Row(
+                    children: [
+                      Text("Step ${index + 1}"),
+                      SizedBox(width: 10,),
+                      Expanded(
+                        child:
+                        Text(_newSteps[stepIndex], style: TextStyle(fontSize: 18),),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          _showEditStepDialog(context, index);
+                        },
+                      ),
+                      IconButton(icon: Icon(Icons.delete),
+                        onPressed: () {
+                        setState(() {
+                          _newSteps.removeAt(stepIndex);
+                        });
+                      },
+                      ),
+                    ],
+                  );
+    }});
+  },
+)),
+            SizedBox(height: 20,),
+            Form(key: _formKey,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _stepController,
+                        decoration: InputDecoration(
+                          labelText: 'Add a step',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a step';
+                          }
+                          return null;
+                        },
+                      )
+                    )
+                  ]
+                )),
+            SizedBox(height: 10,),
+            ElevatedButton(
+              child: Text('Add Step'),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  setState(() {
+                    _newSteps.add(_stepController.text);
+                    _stepController.clear();
+                  });
+                }
               },
-              ),
-            ],),
-            Row(children: [Text("Step 3", style: todotitle[1],),
-              Checkbox(value: _steps[2], onChanged: (value) {
-                setState(() {
-                  _steps[2] = value!;
-                });
-              },
-              ),
-            ],),
-            Row(children: [Text("Step 4", style: todotitle[1],),
-              Checkbox(value: _steps[3], onChanged: (value) {
-                setState(() {
-                  _steps[3] = value!;
-                });
-              },
-              ),
-            ],),
-            
+            ),
           ],
         ),
       ),
-    );
+    ),
+);
   }
 }
