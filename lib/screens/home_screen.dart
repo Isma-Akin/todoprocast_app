@@ -51,13 +51,18 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton: FloatingActionButton(
           onPressed: () {
             _addTodo(context);
-          },child: const Icon(Icons.add),elevation: 2,
+          },child: const Icon(Icons.add),
+            elevation: 2,
         ),
           // drawer: buildDrawer(context),
           // bottomNavigationBar: NavBar(),
             appBar: AppBar(
               backgroundColor: Colors.blueAccent,
-              actions: [
+              actions: [IconButton(onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(
+                    builder: (context) => const Add_ToDo()));},
+                  icon: Icon(Icons.add)),
                 // PopupMenuButton(
                 //     onSelected: (value) {
                 //       switch (value) {

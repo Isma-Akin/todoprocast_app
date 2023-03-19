@@ -9,3 +9,10 @@ final taskdetails = [
 ];
 
 final tasks = ["Task 1", "Task 2", "Task 3", "Task 4"];
+
+// style: Theme.of(context).textTheme.bodyText1,
+
+final todotitle = [TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+  TextStyle(fontSize: 15, fontWeight: FontWeight.w200),
+  TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+  TextStyle(fontSize: 10, fontWeight: FontWeight.w400),];

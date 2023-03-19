@@ -57,6 +57,7 @@ class TodoApp extends StatelessWidget {
           id: '1',
           task: 'Your first task',
           description: 'Task description',
+          dateCreated: DateTime.now(),
         ),
       ],
      ),

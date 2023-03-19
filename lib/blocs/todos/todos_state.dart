@@ -34,3 +34,14 @@ class TodosSortedByDate extends TodosState {
  @override
   List<Object> get props => [todos];
 }
+
+class TodosError extends TodosState {
+  final String message;
+
+ const TodosError({
+    required this.message,
+});
+
+ @override
+  List<Object> get props => [message];
+}
