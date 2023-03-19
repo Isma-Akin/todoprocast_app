@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/constants.dart';
@@ -93,8 +94,9 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
             ),
             const Divider(height: 8,),
             const SizedBox(height: 20,),
-            Row(mainAxisAlignment: MainAxisAlignment.end,children: [
-              Icon(Icons.home)
+            Row(mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+              Icon(Icons.title)
             ],
             ),
             TextFormField(
@@ -110,6 +112,11 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
             ),
             const SizedBox(height: 20,
             ),
+            Row(mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(Icons.description)
+              ],
+            ),
             TextFormField(
               initialValue: widget.todo.description,
               decoration: InputDecoration(
@@ -123,29 +130,43 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
             ),
             const SizedBox(height: 20,
             ),
-            Text('Date Created: ${widget.todo.dateCreated}',
-            style: todotitle[1],
+            Text('Date Created: ${formattedDate}',
+            style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 20,
             ),
-            Switch(value: widget.todo.taskCompleted ?? false,
-                focusColor: Colors.blue,
-                inactiveThumbColor: Colors.grey,
-                activeColor: Colors.green,
-                onChanged: (newValue) {
-              context.read<TodosBloc>().add(
-                UpdateTodo(
-                todo: widget.todo.copyWith(taskCompleted: newValue),
-              ),);
-                }),
-            Text('Completed: ${'Yes or no'}',
-            style: Theme.of(context).textTheme.subtitle2,),
+            // Switch(
+            //     value: widget.todo.taskCompleted ?? false,
+            //     focusColor: Colors.blue,
+            //     inactiveThumbColor: Colors.grey,
+            //     activeColor: Colors.green,
+            //     onChanged: (newValue) {
+            //   context.read<TodosBloc>().add(
+            //     UpdateTodo(
+            //     todo: widget.todo.copyWith(taskCompleted: newValue),
+            //   ),);
+            //     }),
+
+            Row(
+              children: [
+                Text("Mark as completed", style: Theme.of(context).textTheme.titleMedium,),
+                Checkbox(
+                    value: widget.todo.taskCompleted ?? false,
+                    onChanged: (newValue) {
+                    context.read<TodosBloc>().add(UpdateTodo(
+                    todo: widget.todo.copyWith(taskCompleted: newValue),
+      )
+    );
+    }
+    ),
+              ],
+            ),
             const SizedBox(height: 50,),
-            Text("Steps", style: todotitle[0],),
+            Text("Steps", style: Theme.of(context).textTheme.headlineMedium,),
         Expanded(
             child: BlocBuilder<TodosBloc, TodosState>(
-  builder: (context, state) {
-    return ListView.builder(
+            builder: (context, state) {
+          return ListView.builder(
               itemCount: widget.todo.steps.length + _newSteps.length,
                 itemBuilder: (context, index) {
                 if (index < widget.todo.steps.length) {
@@ -223,16 +244,22 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                   ]
                 )),
             SizedBox(height: 10,),
-            ElevatedButton(
-              child: Text('Add Step'),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  setState(() {
-                    _newSteps.add(_stepController.text);
-                    _stepController.clear();
-                  });
-                }
-              },
+            Padding(
+              padding: const EdgeInsets.all(35.0),
+              child: SizedBox(width: double.infinity,
+                height: 40,
+                child: ElevatedButton(
+                  child: Text('Add Step'),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      setState(() {
+                        _newSteps.add(_stepController.text);
+                        _stepController.clear();
+                      });
+                    }
+                  },
+                ),
+              ),
             ),
           ],
         ),
