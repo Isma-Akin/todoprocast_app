@@ -17,6 +17,13 @@ class TodoDetailScreen extends StatefulWidget {
 }
 
 class _TodoDetailScreenState extends State<TodoDetailScreen> {
+  bool _isChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isChecked = widget.todo.taskCompleted ?? false;
+  }
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
 
@@ -90,7 +97,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Todo ID: ${widget.todo.id}',
-            style: todotitle[0],
+            style: Theme.of(context).textTheme.headline4,
             ),
             const Divider(height: 8,),
             const SizedBox(height: 20,),
@@ -153,6 +160,9 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                 Checkbox(
                     value: widget.todo.taskCompleted ?? false,
                     onChanged: (newValue) {
+                      setState(() {
+                        _isChecked = newValue!;
+                      });
                     context.read<TodosBloc>().add(UpdateTodo(
                     todo: widget.todo.copyWith(taskCompleted: newValue),
       )
