@@ -63,38 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(
                     builder: (context) => const Add_ToDo()));},
                   icon: Icon(Icons.add)),
-                // PopupMenuButton(
-                //     onSelected: (value) {
-                //       switch (value) {
-                //         case 'sort':
-                //           BlocProvider.of<TodosStatusBloc>(context)
-                //               .add(TodosStatusSorted());
-                //           break;
-                //           case 'duplicate':
-                //           BlocProvider.of<TodosStatusBloc>(context)
-                //               .add(TodosStatusDuplicated());
-                //           break;
-                //         case 'delete':
-                //           BlocProvider.of<TodosStatusBloc>(context)
-                //               .add(TodosStatusDeleted());
-                //           break;}
-                //       },
-                //     itemBuilder: (BuildContext context) {
-                //       return [
-                //         PopupMenuItem(
-                //           child: const Text('Sort'),
-                //           value: 'sort',
-                //         ),
-                //         PopupMenuItem(
-                //           child: const Text('Duplicate'),
-                //           value: 'duplicate',
-                //         ),
-                //         PopupMenuItem(
-                //           child: const Text('Delete'),
-                //           value: 'delete',
-                //         ),
-                //       ];
-                //     }),
               ],
               title: const Text("Tasks",
               style: TextStyle(fontSize: 30)),
@@ -145,105 +113,105 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-  Drawer buildDrawer(BuildContext context) {
-    return Drawer(
-          child: ListView(
-              children: [
-                ListTile(
-                  title: const Text("Main page"),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MainPage(),
-                      ),
-                    );
-                  },
-                ),
-                Divider(),
-                ListTile(
-                  title: const Text("Todo list"),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Add_ToDo(),
-                      ),
-                    );
-                  },
-                ),
-                Divider(),
-                ListTile(
-                  title: const Text("Settings"),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Settings(),
-                      ),
-                    );
-                  },
-                ),
-                Divider(),
-              ]),
-        );
+  // Drawer buildDrawer(BuildContext context) {
+  //   return Drawer(
+  //         child: ListView(
+  //             children: [
+  //               ListTile(
+  //                 title: const Text("Main page"),
+  //                 onTap: () {
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                       builder: (context) => const MainPage(),
+  //                     ),
+  //                   );
+  //                 },
+  //               ),
+  //               Divider(),
+  //               ListTile(
+  //                 title: const Text("Todo list"),
+  //                 onTap: () {
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                       builder: (context) => const Add_ToDo(),
+  //                     ),
+  //                   );
+  //                 },
+  //               ),
+  //               Divider(),
+  //               ListTile(
+  //                 title: const Text("Settings"),
+  //                 onTap: () {
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                       builder: (context) => const Settings(),
+  //                     ),
+  //                   );
+  //                 },
+  //               ),
+  //               Divider(),
+  //             ]),
+  //       );
   }
 
-  BlocBuilder<NavigationCubit, NavigationState> NavBar() {
-    return BlocBuilder<NavigationCubit, NavigationState>(
-          builder: (context, state) {
-            return BottomNavigationBar(
-              currentIndex: state.index,
-              showUnselectedLabels: false,
-              onTap: (index) {
-                if (index == 0) { Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MainScreen(),
-                  ),
-                );
-                BlocProvider.of<NavigationCubit>(context)
-                    .updateNavBarItem(NavBarItem.settings);
-                  BlocProvider.of<NavigationCubit>(context)
-                      .updateNavBarItem(NavBarItem.home);
-                } else if (index == 1) { Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Settings(),
-                  ),
-                );
-                  BlocProvider.of<NavigationCubit>(context)
-                      .updateNavBarItem(NavBarItem.settings);
-                } else if (index == 2) { Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Profile(),
-                  ),
-                );
-                BlocProvider.of<NavigationCubit>(context)
-                    .updateNavBarItem(NavBarItem.settings);
-                  BlocProvider.of<NavigationCubit>(context)
-                      .updateNavBarItem(NavBarItem.profile);
-                }
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.settings),
-                  label: 'Settings',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profile',
-                ),
-              ],
-            );
-          },);
-  }
-}
+  // BlocBuilder<NavigationCubit, NavigationState> NavBar() {
+  //   return BlocBuilder<NavigationCubit, NavigationState>(
+  //         builder: (context, state) {
+  //           return BottomNavigationBar(
+  //             currentIndex: state.index,
+  //             showUnselectedLabels: false,
+  //             onTap: (index) {
+  //               if (index == 0) { Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                   builder: (context) => const MainScreen(),
+  //                 ),
+  //               );
+  //               BlocProvider.of<NavigationCubit>(context)
+  //                   .updateNavBarItem(NavBarItem.settings);
+  //                 BlocProvider.of<NavigationCubit>(context)
+  //                     .updateNavBarItem(NavBarItem.home);
+  //               } else if (index == 1) { Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                   builder: (context) => const Settings(),
+  //                 ),
+  //               );
+  //                 BlocProvider.of<NavigationCubit>(context)
+  //                     .updateNavBarItem(NavBarItem.settings);
+  //               } else if (index == 2) { Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                   builder: (context) => const Profile(),
+  //                 ),
+  //               );
+  //               BlocProvider.of<NavigationCubit>(context)
+  //                   .updateNavBarItem(NavBarItem.settings);
+  //                 BlocProvider.of<NavigationCubit>(context)
+  //                     .updateNavBarItem(NavBarItem.profile);
+  //               }
+  //             },
+  //             items: [
+  //               BottomNavigationBarItem(
+  //                 icon: Icon(Icons.home),
+  //                 label: 'Home',
+  //               ),
+  //               BottomNavigationBarItem(
+  //                 icon: Icon(Icons.settings),
+  //                 label: 'Settings',
+  //               ),
+  //               BottomNavigationBarItem(
+  //                 icon: Icon(Icons.person),
+  //                 label: 'Profile',
+  //               ),
+  //             ],
+  //           );
+  //         },);
+//   // }
+// }
 
 Column _todo(List<Todo> todos, String status) {
   return Column(
@@ -253,9 +221,9 @@ Column _todo(List<Todo> todos, String status) {
         child: Row(
           children: [
             Text(
-              '$status To Dos: ',
+              '$status Tasks: ${todos.length}',
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
