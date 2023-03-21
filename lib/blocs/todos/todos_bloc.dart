@@ -21,6 +21,40 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     on<SortTodosAlphabetically>(_mapSortTodosAlphabeticallyToState);
     }
 
+  // @override
+  // Stream<TodosState> mapEventToState(TodosEvent event) async* {
+  // if (event is sortTodosByDateCreated) {
+  //   yield* _mapSortTodosByDateCreatedToState();
+  // } else if (event is sortTodosAlphabetically) {
+  //   yield* _mapSortTodosAlphabeticallyToState();
+  // } else if (event is SortTodosByDueDate) {
+  //   yield* _mapSortTodosByDueDateToState();
+  // }
+  // }
+
+  // Stream<TodosState> _mapSortTodosByDateCreatedToState() async* {
+  // final state = this.state;
+  // if (state is TodosLoaded) {
+  //   List<Todo> sortedTodos = List.from(state.todos)..sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
+  //   yield TodosLoaded(todos: sortedTodos);
+  // }
+  // }
+  //
+  // Stream<TodosState> _mapSortTodosAlphabeticallyToState() async* {
+  // final state = this.state;
+  // if (state is TodosLoaded) {
+  //   List<Todo> sortedTodos = List.from(state.todos)..sort((a, b) => a.task.compareTo(b.task));
+  //   yield TodosLoaded(todos: sortedTodos);
+  // }
+  // }
+
+  // Stream<TodosState> _mapSortTodosByDueDateToState() async* {
+  // final state = this.state;
+  // if (state is TodosLoaded) {
+  //   List<Todo> sortedTodos = List.from(state.todos)..sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
+  //   yield TodosLoaded(todos: sortedTodos);
+  // }
+  // }
   void _onLoadTodos(
     LoadTodos event,
       Emitter<TodosState> emit,
