@@ -16,3 +16,11 @@ final todotitle = [TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
   TextStyle(fontSize: 15, fontWeight: FontWeight.w200),
   TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
   TextStyle(fontSize: 10, fontWeight: FontWeight.w400),];
+
+final appcolors = [
+  Color(0x1A2F64E1),
+  Color(0x4C2F64E1),
+  Color(0x992F64E1),
+
+
+];
