@@ -46,18 +46,23 @@ class _HomeScreenState extends State<HomeScreen> {
     return MaterialApp(
         title: "Todo app",
         debugShowCheckedModeBanner: false,
-        color: Colors.blue,
+        color: appcolors[2],
         home: Scaffold(
           floatingActionButton: FloatingActionButton(
+            backgroundColor: appcolors[2],
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
           onPressed: () {
             _addTodo(context);
-          },child: const Icon(Icons.add),
-            elevation: 2,
+          },child: const Icon(Icons.add, size: 30),
+            elevation: 1,
         ),
           // drawer: buildDrawer(context),
           // bottomNavigationBar: NavBar(),
             appBar: AppBar(
-              backgroundColor: Colors.blueAccent,
+              backgroundColor: appcolors[2],
               actions: [IconButton(onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(
@@ -93,7 +98,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (state.pendingTodos.isEmpty)
                           SizedBox(height: 40,
                             width: 200,
-                            child: ElevatedButton(onPressed: () => {
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: appcolors[1],
+                                  ),
+                                onPressed: () => {
                               _addTodo(context),
                             }, child: Text("Add todo")),
                           ),
@@ -259,7 +268,7 @@ InkWell _todosCard(
       );
     },
     child: Card(
-      color: todo.taskCompleted == true ? Colors.orange : Colors.blue,
+      color: todo.taskCompleted == true ? Colors.orange : appcolors[1],
       margin: const EdgeInsets.only(bottom: 8.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
