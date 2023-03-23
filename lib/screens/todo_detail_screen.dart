@@ -85,7 +85,8 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   create: (context) => TodosBloc(),
   child: Scaffold(
       appBar: AppBar(
-        title: Text('Todo Details: ${widget.todo.task}',
+        backgroundColor: AppColors.tertiaryColor,
+        title: Text('Task Details: ${widget.todo.task}',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 28,
@@ -259,6 +260,9 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
               child: SizedBox(width: double.infinity,
                 height: 40,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: AppColors.tertiaryColor,
+                  ),
                   child: Text('Add Step'),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
