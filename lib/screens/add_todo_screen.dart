@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoprocast_app/constants.dart';
 
 import '../blocs/todos/todos_bloc.dart';
 import '../models/todo_models.dart';
@@ -18,7 +19,7 @@ class AddTodoScreen extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          Text("Add a new todo",
+          Text("Add a new task",
             style: TextStyle(
                 fontSize: 24),),
           SizedBox(height: 10,),
@@ -26,7 +27,7 @@ class AddTodoScreen extends StatelessWidget {
             autocorrect: true,
             controller: taskController,
             decoration: InputDecoration(
-              hintText: "Enter a todo title",
+              hintText: "Enter a task name",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -36,10 +37,12 @@ class AddTodoScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              TextButton(
+              TextButton(style: TextButton.styleFrom(primary: AppColors.secondaryColor),
                   onPressed: () => Navigator.pop(context),
-                  child: Text("Cancel")),
+                  child: Text("Cancel", style: TextStyle(fontSize: 20),)),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: AppColors.tertiaryColor),
                   onPressed: (){
                     var todo = Todo(
                         id: idController.text,
@@ -51,6 +54,7 @@ class AddTodoScreen extends StatelessWidget {
                   },
                   child: Text("Add Todo",
                     style: TextStyle(
+                        color: Colors.white,
                       fontWeight: FontWeight.bold),))
             ],
           ),
