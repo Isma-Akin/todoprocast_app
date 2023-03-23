@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/blocs/blocs.dart';
+import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/screens/todo_detail_screen.dart';
 
 import '../models/todo_models.dart';
+import 'add_todo_screen.dart';
 
 class FavouriteTasksScreen extends StatefulWidget {
   const FavouriteTasksScreen({Key? key}) : super(key: key);
@@ -29,11 +31,35 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
     }
   }
 
+  void _addTodo(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: const AddTodoScreen(),
+          ),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
+          floatingActionButton:  FloatingActionButton(
+          backgroundColor: appcolors[2],
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          onPressed: () {
+            _addTodo(context);
+          },child: const Icon(Icons.add, size: 30),
+          elevation: 1,
+        ),
           appBar: AppBar(
             actions: [
               PopupMenuButton<TodoSortCriteria>(
@@ -61,7 +87,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
               },
               icon: const Icon(Icons.arrow_back),
             ),
-            backgroundColor: Colors.blueAccent,
+            backgroundColor: AppColors.tertiaryColor,
             title: const Text('Favourite Tasks'),
           ),
           body: BlocBuilder<TodosBloc, TodosState>(
@@ -69,13 +95,25 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
                 if (state is TodosLoaded) {
                   final favouriteTodos = state.todos.where(
                       (todo) => todo.isFavourite ?? false).toList();
-                  return ListView.builder(
-                      itemCount: _sortTodos(favouriteTodos).length,
-                      itemBuilder: (context, index) {
-                        final todo = _sortTodos(favouriteTodos)[index];
-                        return _todosCard(context, todo);
-                      }
-                  );
+                  if (favouriteTodos.isEmpty) {
+                    return Center(
+                      child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('No favourite tasks yet',
+                            style: TextStyle(fontSize: 30),),
+                          SizedBox(width: 10,),
+                          Icon(Icons.sticky_note_2)
+                        ],
+                      ));
+                  } else {
+                    return ListView.builder(
+                        itemCount: _sortTodos(favouriteTodos).length,
+                        itemBuilder: (context, index) {
+                          final todo = _sortTodos(favouriteTodos)[index];
+                          return _todosCard(context, todo);
+                        }
+                    );
+                  }
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }
@@ -98,7 +136,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
         );
       },
       child: Card(
-        color: todo.taskCompleted == true ? Colors.orange : Colors.blue,
+        color: todo.taskCompleted == true ? Colors.orange : AppColors.secondaryColor,
         margin: const EdgeInsets.only(bottom: 8.0),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
