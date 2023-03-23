@@ -26,6 +26,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   }
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
+  String formattedDueDate = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
 
   // final List<bool> _steps = [false, false, false, false];
   final List<String> _newSteps = [];
@@ -86,7 +87,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   child: Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.tertiaryColor,
-        title: Text('Task Details: ${widget.todo.task}',
+        title: Text(widget.todo.task,
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 28,
@@ -97,7 +98,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Todo ID: ${widget.todo.id}',
+            Text(widget.todo.task,
             style: Theme.of(context).textTheme.headline4,
             ),
             const Divider(height: 8,),
@@ -107,25 +108,26 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
               Icon(Icons.title)
             ],
             ),
+            // TextFormField(
+            //   initialValue: widget.todo.task,
+            //   decoration: InputDecoration(
+            //     labelText: 'Task',
+            //     border: OutlineInputBorder(),
+            //   ),
+            //   onChanged: (value) {
+            //     context.read<TodosBloc>().add(
+            //       UpdateTodo(todo: widget.todo));
+            //   },
+            // ),
+            // const SizedBox(height: 20,
+            // ),
+            // Row(mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     Icon(Icons.description)
+            //   ],
+            // ),
             TextFormField(
-              initialValue: widget.todo.task,
-              decoration: InputDecoration(
-                labelText: 'Task',
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) {
-                context.read<TodosBloc>().add(
-                  UpdateTodo(todo: widget.todo));
-              },
-            ),
-            const SizedBox(height: 20,
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Icon(Icons.description)
-              ],
-            ),
-            TextFormField(
+              style: TextStyle(fontSize: 18),
               initialValue: widget.todo.description,
               decoration: InputDecoration(
                 labelText: 'Description',
@@ -138,7 +140,12 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
             ),
             const SizedBox(height: 20,
             ),
-            Text('Date Created: ${formattedDate}',
+            Text('Date Created: $formattedDate',
+            style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 20,
+            ),
+            Text('Due Date: $formattedDueDate',
             style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 20,
@@ -157,7 +164,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
 
             Row(
               children: [
-                Text("Mark as completed", style: Theme.of(context).textTheme.titleMedium,),
+                Text("Mark as complete", style: Theme.of(context).textTheme.titleMedium,),
                 Checkbox(
                     value: widget.todo.taskCompleted ?? false,
                     onChanged: (newValue) {
@@ -254,7 +261,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                     )
                   ]
                 )),
-            SizedBox(height: 10,),
+            SizedBox(height: 0.5,),
             Padding(
               padding: const EdgeInsets.all(35.0),
               child: SizedBox(width: double.infinity,
