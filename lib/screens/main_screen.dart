@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/screens/add_todo.dart';
 import 'package:todoprocast_app/screens/add_todo_screen.dart';
 import 'package:todoprocast_app/screens/calendar_page.dart';
@@ -22,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blueAccent,
+          backgroundColor: AppColors.tertiaryColor,
           actions: [
             IconButton(
               onPressed: () {
@@ -61,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
                     child: Card(shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
                       margin: EdgeInsets.only(left: 1, right: 1),
-                      color: Colors.grey,
+                      color: AppColors.secondaryColor,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: SizedBox(
@@ -71,7 +72,7 @@ class _MainScreenState extends State<MainScreen> {
                             children: [
                               Text('Task planner', style: TextStyle(fontSize: 25),),
                               // SizedBox(width: MediaQuery.of(context).size.width - 80,),
-                              Icon(Icons.book_online_rounded)
+                              Icon(Icons.book_online_rounded, color: Colors.lightGreen,)
                             ],),
                         )
                       )
@@ -97,14 +98,14 @@ class _MainScreenState extends State<MainScreen> {
                     child: Card(shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
                         margin: EdgeInsets.only(left: 1, right: 1),
-                      color: Colors.grey,
+                      color: AppColors.secondaryColor,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [Text('Your day', style: TextStyle(fontSize: 25),),
                             // SizedBox(width: 412,),
-                            Icon(Icons.home)],)
+                            Icon(Icons.home, color: Colors.greenAccent,)],)
                       )
                     ),
                   ),
@@ -123,14 +124,14 @@ class _MainScreenState extends State<MainScreen> {
                     child: Card(shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
                       margin: EdgeInsets.only(left: 1, right: 1),
-                      color: Colors.grey,
+                      color: AppColors.secondaryColor,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [Text('Important tasks', style: TextStyle(fontSize: 25),),
                             // SizedBox(width: 366,),
-                            Icon(Icons.lightbulb)],)
+                            Icon(Icons.lightbulb, color: Colors.teal,)],)
                       )
                     ),
                   ),
@@ -151,19 +152,19 @@ class _MainScreenState extends State<MainScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0)),
                       margin: EdgeInsets.only(left: 1, right: 1),
-                      color: Colors.grey,
+                      color: AppColors.secondaryColor,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [Text('Task list', style: TextStyle(fontSize: 25),),
                             // SizedBox(width: 413,),
-                            Icon(Icons.all_inbox)],)
+                            Icon(Icons.all_inbox, color: Colors.limeAccent,)],)
                       ),
                     ),
                   ),
                 ),
-              ]
+              ],
             ),
             Divider(height: 50, color: Colors.black,),
             Container(
@@ -173,6 +174,59 @@ class _MainScreenState extends State<MainScreen> {
               ),
               width: screenWidth,
               height: 300,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Your tasks', style: TextStyle(fontSize: 25),),
+                      ),
+                    ],
+                  ),
+                  Divider(height: 10, color: Colors.black,),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Task 1', style: TextStyle(fontSize: 20),),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Task 2', style: TextStyle(fontSize: 20),),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Task 3', style: TextStyle(fontSize: 20),),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Task 4', style: TextStyle(fontSize: 20),),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Task 5', style: TextStyle(fontSize: 20),),
+                      ),
+                    ],
+                  ),
+                ],
+              )
             ),
           ],
         )
