@@ -6,6 +6,7 @@ class Todo extends Equatable {
   final String task;
   final String description;
   final DateTime dateCreated;
+  final DateTime dueDate;
   bool? taskCompleted;
   bool? taskCancelled;
   bool? isFavourite;
@@ -16,6 +17,7 @@ class Todo extends Equatable {
     required this.task,
     required this.description,
     required this.dateCreated,
+    required this.dueDate,
     this.taskCompleted,
     this.taskCancelled,
     this.isFavourite,
@@ -35,6 +37,7 @@ class Todo extends Equatable {
     String? task,
     String? description,
     DateTime? dateCreated,
+    DateTime? dueDate,
     bool? taskCompleted,
     bool? taskCancelled,
     bool? isFavourite,
@@ -45,6 +48,7 @@ class Todo extends Equatable {
       task: task ?? this.task,
       description: description ?? this.description,
       dateCreated: dateCreated ?? this.dateCreated,
+      dueDate: dueDate ?? this.dueDate,
       taskCompleted: taskCompleted ?? this.taskCompleted,
       taskCancelled: taskCancelled ?? this.taskCancelled,
       isFavourite: isFavourite ?? this.isFavourite,
@@ -57,6 +61,7 @@ class Todo extends Equatable {
         task,
         description,
         dateCreated,
+        dueDate,
         taskCompleted,
         taskCancelled,
         isFavourite,
