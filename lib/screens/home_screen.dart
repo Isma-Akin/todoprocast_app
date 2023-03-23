@@ -86,31 +86,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
                 if (state is TodosStatusLoaded) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _todo(
-                          state.pendingTodos,
-                          'Pending',
-                        ),
-                        if (state.pendingTodos.isEmpty)
-                          SizedBox(height: 40,
-                            width: 200,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: appcolors[1],
-                                  ),
-                                onPressed: () => {
-                              _addTodo(context),
-                            }, child: Text("Add todo")),
+                  return SingleChildScrollView(physics: const BouncingScrollPhysics(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          _todo(
+                            state.pendingTodos,
+                            'Pending',
                           ),
-                        _todo(
-                          state.completedTodos,
-                          'Completed',
-                        ),
-                      ],
+                          if (state.pendingTodos.isEmpty)
+                            const Text('You have no tasks yet.', style: TextStyle(
+                                color: AppColors.secondaryColor,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold),),
+                          _todo(
+                            state.completedTodos,
+                            'Completed',
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 } else {
@@ -268,7 +264,7 @@ InkWell _todosCard(
       );
     },
     child: Card(
-      color: todo.taskCompleted == true ? Colors.orange : appcolors[1],
+      color: todo.taskCompleted == true ? Colors.orange : AppColors.secondaryColor,
       margin: const EdgeInsets.only(bottom: 8.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
