@@ -21,6 +21,10 @@ final appcolors = [
   Color(0x1A2F64E1),
   Color(0x4C2F64E1),
   Color(0x992F64E1),
-
-
 ];
+
+class AppColors {
+  static const Color primaryColor = Color(0x1A2F64E1);
+  static const Color secondaryColor = Color(0x4C2F64E1);
+  static const Color tertiaryColor = Color(0x992F64E1);
+}

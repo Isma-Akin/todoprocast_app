@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:todoprocast_app/constants.dart';
 
 import '../blocs/todos/time_bloc.dart';
 
@@ -38,6 +39,7 @@ class _CalendarPageState extends State<CalendarPage> {
       child: MaterialApp(debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
+            backgroundColor: AppColors.tertiaryColor,
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);

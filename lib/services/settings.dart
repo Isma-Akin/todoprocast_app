@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:todoprocast_app/constants.dart';
 
 import 'package:todoprocast_app/logic/navigation/constants/nav_bar_items.dart';
 import 'package:todoprocast_app/logic/navigation/navigation_cubit.dart';
@@ -22,6 +23,7 @@ class _SettingsState extends State<Settings> {
       builder: (context, child) {
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: AppColors.tertiaryColor,
             title: const Text('Settings'),
           ),
           body: const Center(
