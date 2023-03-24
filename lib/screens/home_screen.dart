@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/logic/navigation/constants/nav_bar_items.dart';
 import 'package:todoprocast_app/logic/navigation/navigation_cubit.dart';
@@ -97,14 +98,28 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Pending',
                           ),
                           if (state.pendingTodos.isEmpty)
-                            const Text('You have no tasks yet.', style: TextStyle(
-                                color: AppColors.secondaryColor,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),),
+                            Column(
+                              children: [
+                                const Text('You have no pending tasks yet.', style: TextStyle(
+                                    color: AppColors.secondaryColor,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold),),
+                                const SizedBox(height: 20,),
+                                const Text('Add a task by clicking the + button below.', style: TextStyle(
+                                    color: AppColors.secondaryColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),),
+                              ],
+                            ),
                           _todo(
                             state.completedTodos,
                             'Completed',
                           ),
+                          if (state.completedTodos.isEmpty)
+                            const Text('You have no completed tasks yet.', style: TextStyle(
+                                color: AppColors.secondaryColor,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold),),
                         ],
                       ),
                     ),
