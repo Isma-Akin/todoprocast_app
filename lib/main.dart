@@ -8,6 +8,7 @@ import 'package:todoprocast_app/models/todo_models.dart';
 import 'package:todoprocast_app/screens/home_screen.dart';
 import 'package:todoprocast_app/blocs/todos_status/todos_status_bloc.dart';
 import 'package:todoprocast_app/screens/main_screen.dart';
+import 'themes.dart';
 
 import 'logic/navigation/navigation_cubit.dart';
 
@@ -58,7 +59,7 @@ class TodoApp extends StatelessWidget {
           task: 'Your first task',
           description: 'Task description',
           dateCreated: DateTime.now(),
-        ),
+          dueDate: DateTime.now()),
       ],
      ),
     ),

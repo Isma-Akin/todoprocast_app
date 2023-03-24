@@ -15,6 +15,34 @@ class AddTodoScreen extends StatelessWidget {
     TextEditingController taskController = TextEditingController();
     TextEditingController idController = TextEditingController();
 
+    List<Todo> defaultTodos = [
+      Todo(
+        dateCreated: DateTime.now(),
+        task: 'Buy groceries',
+        description: 'Task description',
+        id: '99',
+        dueDate: DateTime.now().add(Duration(days: 1)),
+      ),Todo(
+        dateCreated: DateTime.now(),
+        task: 'Study for exams',
+        description: 'Task description',
+        id: '98',
+        dueDate: DateTime.now().add(Duration(days: 5)),
+      ),Todo(
+        dateCreated: DateTime.now(),
+        task: 'Do laundry',
+        description: 'Task description',
+        id: '98',
+        dueDate: DateTime.now().add(Duration(days: 2)),
+      ),Todo(
+        dateCreated: DateTime.now(),
+        task: 'Meal prep',
+        description: 'Task description',
+        id: '97',
+        dueDate: DateTime.now().add(Duration(days: 3)),
+      ),
+    ];
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -33,6 +61,26 @@ class AddTodoScreen extends StatelessWidget {
               ),
             ),
           ),
+      Container(
+        height: 80.0,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: defaultTodos.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(defaultTodos[index].task),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
           SizedBox(height: 20,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -48,7 +96,8 @@ class AddTodoScreen extends StatelessWidget {
                         id: idController.text,
                         task: taskController.text,
                         description: "description",
-                        dateCreated: DateTime.now());
+                        dateCreated: DateTime.now(),
+                        dueDate: DateTime.now());
                     context.read<TodosBloc>().add(AddTodo(todo: todo));
                     Navigator.pop(context);
                   },

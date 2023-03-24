@@ -180,7 +180,7 @@ class _MainScreenState extends State<MainScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('Your tasks', style: TextStyle(fontSize: 25),),
+                        child: Text('Catch up with tasks!', style: TextStyle(fontSize: 25),),
                       ),
                     ],
                   ),

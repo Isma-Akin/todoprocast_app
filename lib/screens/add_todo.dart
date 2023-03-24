@@ -47,6 +47,7 @@ class _Add_ToDoState extends State<Add_ToDo> {
                           task: controllerTask.value.text,
                           description: controllerDescription.value.text,
                           dateCreated: DateTime.now(),
+                          dueDate: DateTime.now(),
                         );
                         context.read<TodosBloc>().add(AddTodo(todo: todo));
                         Navigator.pop(context);
