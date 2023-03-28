@@ -87,7 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
                 if (state is TodosStatusLoaded) {
-                  return SingleChildScrollView(physics: const BouncingScrollPhysics(),
+                  return SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
