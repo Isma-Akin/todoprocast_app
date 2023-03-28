@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todoprocast_app/constants.dart';
-import 'package:todoprocast_app/screens/add_todo.dart';
-import 'package:todoprocast_app/screens/add_todo_screen.dart';
-import 'package:todoprocast_app/screens/calendar_page.dart';
-import 'package:todoprocast_app/screens/favourite_tasks_screen.dart';
-import 'package:todoprocast_app/screens/home_screen.dart';
 import 'package:todoprocast_app/services/settings.dart';
+import 'package:todoprocast_app/widgets/mainscreen_widgets.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -18,7 +14,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    String? selectedTask;
+    // String? selectedTask;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -45,184 +41,14 @@ class _MainScreenState extends State<MainScreen> {
         body: Column(
           children: [
             SizedBox(height: 20,),
-            Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const HomeScreen(),
-                    //   ),
-                    // );
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(milliseconds: 500),
-                        pageBuilder: (context, animation, secondaryAnimation) => const HomeScreen(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          var begin = Offset(1.0, 0.0);
-                          var end = Offset.zero;
-                          var curve = Curves.ease;
-                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(4.0),
-                    width: screenWidth,
-                    child: Card(shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                      margin: EdgeInsets.only(left: 1, right: 1),
-                      color: AppColors.secondaryColor,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          width: screenWidth - 20,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Task planner', style: TextStyle(fontSize: 25),),
-                              // SizedBox(width: MediaQuery.of(context).size.width - 80,),
-                              Icon(Icons.book_online_rounded, color: Colors.lightGreen,)
-                            ],),
-                        )
-                      )
-                    ),
-                  ),
-                ),
-              ]
-            ),
-            Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(milliseconds: 500),
-                        pageBuilder: (context, animation, secondaryAnimation) => const CalendarPage(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          var begin = Offset(1.0, 0.0);
-                          var end = Offset.zero;
-                          var curve = Curves.ease;
-                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  child: Container(
-                    width: screenWidth,
-                    padding: const EdgeInsets.all(4.0),
-                    child: Card(shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                        margin: EdgeInsets.only(left: 1, right: 1),
-                      color: AppColors.secondaryColor,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [Text('Your day', style: TextStyle(fontSize: 25),),
-                            // SizedBox(width: 412,),
-                            Icon(Icons.home, color: Colors.greenAccent,)],)
-                      )
-                    ),
-                  ),
-                ),
-              ]
-            ),
-            Row(
-              children: [
-                InkWell(onTap: (){
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: Duration(milliseconds: 500),
-                      pageBuilder: (context, animation, secondaryAnimation) => const FavouriteTasksScreen(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        var begin = Offset(1.0, 0.0);
-                        var end = Offset.zero;
-                        var curve = Curves.ease;
-                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );},
-                  child: Container(
-                    width: screenWidth,
-                    padding: const EdgeInsets.all(4.0),
-                    child: Card(shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                      margin: EdgeInsets.only(left: 1, right: 1),
-                      color: AppColors.secondaryColor,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [Text('Important tasks', style: TextStyle(fontSize: 25),),
-                            // SizedBox(width: 366,),
-                            Icon(Icons.lightbulb, color: Colors.teal,)],)
-                      )
-                    ),
-                  ),
-                ),
-              ]
-            ),
-            Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(milliseconds: 500),
-                        pageBuilder: (context, animation, secondaryAnimation) => const FavouriteTasksScreen(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                          var begin = Offset(1.0, 0.0);
-                          var end = Offset.zero;
-                          var curve = Curves.ease;
-                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                          return SlideTransition(
-                            position: animation.drive(tween),
-                            child: child,
-                          );
-                        },
-                      ),
-                    );},
-                  child: Container(
-                    width: screenWidth,
-                    padding: const EdgeInsets.all(4.0),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                      margin: EdgeInsets.only(left: 1, right: 1),
-                      color: AppColors.secondaryColor,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [Text('Task list', style: TextStyle(fontSize: 25),),
-                            // SizedBox(width: 413,),
-                            Icon(Icons.all_inbox, color: Colors.limeAccent,)],)
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Divider(height: 50, color: Colors.black,),
+            TaskPlanner(screenWidth: screenWidth),
+            Divider(height: 4, color: Colors.black,),
+            YourDay(screenWidth: screenWidth),
+            Divider(height: 4, color: Colors.black,),
+            ImportantTasks(screenWidth: screenWidth),
+            Divider(height: 4, color: Colors.black,),
+            TaskList(screenWidth: screenWidth),
+            Divider(height: 10, color: Colors.black,),
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
