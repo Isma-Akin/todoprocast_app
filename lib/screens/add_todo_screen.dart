@@ -40,6 +40,18 @@ class AddTodoScreen extends StatelessWidget {
         description: 'Task description',
         id: '97',
         dueDate: DateTime.now().add(Duration(days: 3)),
+      // ),Todo(
+      //   dateCreated: DateTime.now(),
+      //   task: 'Clean room',
+      //   description: 'Task description',
+      //   id: '81',
+      //   dueDate: DateTime.now().add(Duration(days: 3)),
+      // ),Todo(
+      //   dateCreated: DateTime.now(),
+      //   task: 'Wash clothes',
+      //   description: 'Task description',
+      //   id: '82',
+      //   dueDate: DateTime.now().add(Duration(days: 3)),
       ),
     ];
 
@@ -62,19 +74,24 @@ class AddTodoScreen extends StatelessWidget {
             ),
           ),
       Container(
-        height: 80.0,
+        height: 75.0,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: defaultTodos.length,
           itemBuilder: (BuildContext context, int index) {
-            return Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(defaultTodos[index].task),
-                  ],
+            return InkWell(
+              onTap: () {
+                context.read<TodosBloc>().add(AddTodo(todo: defaultTodos[index]));
+              },
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(defaultTodos[index].task),
+                    ],
+                  ),
                 ),
               ),
             );
