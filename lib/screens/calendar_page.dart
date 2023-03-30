@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todoprocast_app/blocs/blocs.dart';
 import 'package:todoprocast_app/constants.dart';
+import 'package:todoprocast_app/screens/todo_detail_screen.dart';
 
 import '../blocs/todos/time_bloc.dart';
 import '../models/todo_models.dart';
@@ -54,7 +55,7 @@ class _CalendarPageState extends State<CalendarPage> {
             builder: (context, state) {
               return Column(
                   children: [
-                    SizedBox(height: 30,),
+                    const SizedBox(height: 30,),
                     // Text(DateFormat('hh:mm:ss').format(DateTime.now()),
                     //   style: const TextStyle(fontSize: 30),),
                     Text(DateFormat('EEEE, MMM d').format(DateTime.now()),
@@ -92,14 +93,32 @@ class _CalendarPageState extends State<CalendarPage> {
                         ),
                       ),
                     ),
+                    const Divider(color: Colors.black,),
                     Expanded(
                       child: ListView.builder(
+                        scrollDirection: Axis.vertical,
                         itemCount: _selectedTasks.length,
                         itemBuilder: (context, index) {
                           final task = _selectedTasks[index];
-                          return ListTile(
-                            title: Text(task.task + " is due today!"),
-                            subtitle: Text(task.description),
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TodoDetailScreen(todo: task),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              color: AppColors.tertiaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: ListTile(
+                                title: Text(task.task + " is due today!"),
+                                subtitle: Text(task.description),
+                              ),
+                            ),
                           );
                         },
                       ),
