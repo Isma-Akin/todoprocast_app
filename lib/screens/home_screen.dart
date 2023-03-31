@@ -1,25 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:todoprocast_app/constants.dart';
-import 'package:todoprocast_app/logic/navigation/constants/nav_bar_items.dart';
-import 'package:todoprocast_app/logic/navigation/navigation_cubit.dart';
-import 'package:todoprocast_app/screens/home_screen.dart';
-import 'package:todoprocast_app/screens/todo_detail_screen.dart';
-import 'package:todoprocast_app/services/profile.dart';
-import 'package:todoprocast_app/services/settings.dart';
-// import 'package:todoprocast_app/screens/profile_screen.dart';
-// import 'package:todoprocast_app/screens/settings_screen.dart';
-import 'package:todoprocast_app/screens/initial_screen.dart';
 
 
+import '../widgets/todos_card.dart';
 import '/models/models.dart';
-import '../services/screens.dart';
 import '/blocs/blocs.dart';
 import 'add_todo.dart';
 import 'add_todo_screen.dart';
-import 'initial_screen.dart';
-import 'main_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -60,15 +48,13 @@ class _HomeScreenState extends State<HomeScreen> {
           },child: const Icon(Icons.add, size: 30),
             elevation: 1,
         ),
-          // drawer: buildDrawer(context),
-          // bottomNavigationBar: NavBar(),
             appBar: AppBar(
               backgroundColor: appcolors[2],
               actions: [IconButton(onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(
                     builder: (context) => const Add_ToDo()));},
-                  icon: Icon(Icons.add)),
+                  icon: const Icon(Icons.add)),
               ],
               title: const Text("Tasks",
               style: TextStyle(fontSize: 30)),
@@ -100,13 +86,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           if (state.pendingTodos.isEmpty)
                             Column(
-                              children: [
-                                const Text('You have no pending tasks yet.', style: TextStyle(
+                              children: const [
+                                Text('You have no pending tasks yet.', style: TextStyle(
                                     color: AppColors.secondaryColor,
                                     fontSize: 30,
                                     fontWeight: FontWeight.bold),),
-                                const SizedBox(height: 20,),
-                                const Text('Add a task by clicking the + button below.', style: TextStyle(
+                                SizedBox(height: 20,),
+                                Text('Add a task by clicking the + button below.', style: TextStyle(
                                     color: AppColors.secondaryColor,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold),),
@@ -134,106 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-  // Drawer buildDrawer(BuildContext context) {
-  //   return Drawer(
-  //         child: ListView(
-  //             children: [
-  //               ListTile(
-  //                 title: const Text("Main page"),
-  //                 onTap: () {
-  //                   Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(
-  //                       builder: (context) => const MainPage(),
-  //                     ),
-  //                   );
-  //                 },
-  //               ),
-  //               Divider(),
-  //               ListTile(
-  //                 title: const Text("Todo list"),
-  //                 onTap: () {
-  //                   Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(
-  //                       builder: (context) => const Add_ToDo(),
-  //                     ),
-  //                   );
-  //                 },
-  //               ),
-  //               Divider(),
-  //               ListTile(
-  //                 title: const Text("Settings"),
-  //                 onTap: () {
-  //                   Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(
-  //                       builder: (context) => const Settings(),
-  //                     ),
-  //                   );
-  //                 },
-  //               ),
-  //               Divider(),
-  //             ]),
-  //       );
-  }
-
-  // BlocBuilder<NavigationCubit, NavigationState> NavBar() {
-  //   return BlocBuilder<NavigationCubit, NavigationState>(
-  //         builder: (context, state) {
-  //           return BottomNavigationBar(
-  //             currentIndex: state.index,
-  //             showUnselectedLabels: false,
-  //             onTap: (index) {
-  //               if (index == 0) { Navigator.push(
-  //                 context,
-  //                 MaterialPageRoute(
-  //                   builder: (context) => const MainScreen(),
-  //                 ),
-  //               );
-  //               BlocProvider.of<NavigationCubit>(context)
-  //                   .updateNavBarItem(NavBarItem.settings);
-  //                 BlocProvider.of<NavigationCubit>(context)
-  //                     .updateNavBarItem(NavBarItem.home);
-  //               } else if (index == 1) { Navigator.push(
-  //                 context,
-  //                 MaterialPageRoute(
-  //                   builder: (context) => const Settings(),
-  //                 ),
-  //               );
-  //                 BlocProvider.of<NavigationCubit>(context)
-  //                     .updateNavBarItem(NavBarItem.settings);
-  //               } else if (index == 2) { Navigator.push(
-  //                 context,
-  //                 MaterialPageRoute(
-  //                   builder: (context) => const Profile(),
-  //                 ),
-  //               );
-  //               BlocProvider.of<NavigationCubit>(context)
-  //                   .updateNavBarItem(NavBarItem.settings);
-  //                 BlocProvider.of<NavigationCubit>(context)
-  //                     .updateNavBarItem(NavBarItem.profile);
-  //               }
-  //             },
-  //             items: [
-  //               BottomNavigationBarItem(
-  //                 icon: Icon(Icons.home),
-  //                 label: 'Home',
-  //               ),
-  //               BottomNavigationBarItem(
-  //                 icon: Icon(Icons.settings),
-  //                 label: 'Settings',
-  //               ),
-  //               BottomNavigationBarItem(
-  //                 icon: Icon(Icons.person),
-  //                 label: 'Profile',
-  //               ),
-  //             ],
-  //           );
-  //         },);
-//   // }
-// }
-
 Column _todo(List<Todo> todos, String status) {
   return Column(
     children: [
@@ -255,7 +141,7 @@ Column _todo(List<Todo> todos, String status) {
         shrinkWrap: true,
         itemCount: todos.length,
         itemBuilder: (BuildContext context, int index) {
-          return _todosCard(
+          return todosCard(
             context,
             todos[index],
           );
@@ -264,80 +150,4 @@ Column _todo(List<Todo> todos, String status) {
     ],
   );
 }
-
-InkWell _todosCard(
-    BuildContext context,
-    Todo todo,
-    ) {
-  return InkWell(
-    splashColor: Colors.blue.withAlpha(30),
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => TodoDetailScreen(todo: todo),
-        ),
-      );
-    },
-    child: Card(
-      color: todo.taskCompleted == true ? Colors.orange : AppColors.secondaryColor,
-      margin: const EdgeInsets.only(bottom: 8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '#${todo.id}: ${todo.task}',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            BlocBuilder<TodosBloc, TodosState>(
-              builder: (context, state) {
-                return Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        context.read<TodosBloc>().add(
-                MarkTodoAsFavOrUnFav(todo: todo));
-                      },
-                      icon: Icon(
-                          todo.isFavourite! ? Icons.star : Icons.star_border),
-                      color: Colors.yellow,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: IconButton(
-                        onPressed: () {
-                          context.read<TodosBloc>().add(
-                            UpdateTodo(
-                              todo: todo.copyWith(taskCompleted: true),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.add_task),
-                      ),
-                    ),IconButton(
-                      onPressed: () {
-                        context.read<TodosBloc>().add(
-                          RemoveTodo(
-                            todo: todo.copyWith(taskCancelled: true),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.cancel),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
 }
