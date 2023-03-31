@@ -28,9 +28,8 @@ class Todo extends Equatable {
     isFavourite = isFavourite ?? false;
   }
 
-  // DateTime get dateCreatedInLocal => dateCreated.toLocal();
-  String get formattedDateCreated =>
-      DateFormat('dd-MM-yyy HH:mm').format(dateCreated.toLocal());
+  String get formattedDateCreated => DateFormat('dd-MM-yyy HH:mm').format(dateCreated.toLocal());
+  String get formattedDueDate => DateFormat.yMMMEd().format(dueDate.toLocal());
 
   Todo copyWith({
     String? id,
