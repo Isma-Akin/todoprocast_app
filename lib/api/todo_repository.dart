@@ -26,7 +26,6 @@ class TodoRepository {
       Uri.parse(baseUrl + createTodoUrl),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
-        'id': todo.id,
         'task': todo.task,
         'description': todo.description,
         'dateCreated': todo.dateCreated.toIso8601String(),
@@ -40,9 +39,10 @@ class TodoRepository {
       final dynamic todoJson = json.decode(response.body);
       return Todo.fromJson(todoJson);
     } else {
-      throw Exception('Failed to create todo');
+      throw Exception('Failed to create todo: ${response.statusCode}');
     }
   }
+
 
   static Future<Todo> updateTodo(Todo todo) async {
     final response = await http.put(
@@ -59,7 +59,7 @@ class TodoRepository {
     }
   }
 
-  static Future<void> deleteTodoById(String id) async {
+  static Future<void> deleteTodoById(int id) async {
     final response = await http.delete(Uri.parse(baseUrl + '/todos/$id'));
 
     if (response.statusCode != 204) {
