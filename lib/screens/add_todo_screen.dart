@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/constants.dart';
 
+import '../api/todo_repository.dart';
 import '../blocs/todos/todos_bloc.dart';
 import '../models/todo_models.dart';
 
-class AddTodoScreen extends StatelessWidget {
+class AddTodoScreen extends StatefulWidget {
+  final TodosBloc todosBloc;
   const AddTodoScreen({
-    Key? key,
+    Key? key, required this.todosBloc,
   }) : super(key: key);
+
+  @override
+  State<AddTodoScreen> createState() => _AddTodoScreenState();
+}
+class _AddTodoScreenState extends State<AddTodoScreen> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,38 +28,26 @@ class AddTodoScreen extends StatelessWidget {
         dateCreated: DateTime.now(),
         task: 'Buy groceries',
         description: 'Task description',
-        id: '99',
+        id: 4,
         dueDate: DateTime.now().add(Duration(days: 1)),
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Study for exams',
         description: 'Task description',
-        id: '98',
+        id: 3,
         dueDate: DateTime.now().add(Duration(days: 5)),
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Do laundry',
         description: 'Task description',
-        id: '98',
+        id: 2,
         dueDate: DateTime.now().add(Duration(days: 2)),
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Meal prep',
         description: 'Task description',
-        id: '97',
+        id: 1,
         dueDate: DateTime.now().add(Duration(days: 3)),
-      // ),Todo(
-      //   dateCreated: DateTime.now(),
-      //   task: 'Clean room',
-      //   description: 'Task description',
-      //   id: '81',
-      //   dueDate: DateTime.now().add(Duration(days: 3)),
-      // ),Todo(
-      //   dateCreated: DateTime.now(),
-      //   task: 'Wash clothes',
-      //   description: 'Task description',
-      //   id: '82',
-      //   dueDate: DateTime.now().add(Duration(days: 3)),
       ),
     ];
 
@@ -80,8 +76,10 @@ class AddTodoScreen extends StatelessWidget {
           itemCount: defaultTodos.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: () {
+              onTap: () async {
                 context.read<TodosBloc>().add(AddTodo(todo: defaultTodos[index]));
+                // TodoRepository.createTodo(defaultTodos[index]);
+                BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
               },
               child: Card(
                 child: Padding(
@@ -104,18 +102,23 @@ class AddTodoScreen extends StatelessWidget {
             children: [
               TextButton(style: TextButton.styleFrom(primary: AppColors.secondaryColor),
                   onPressed: () => Navigator.pop(context),
-                  child: Text("Cancel", style: TextStyle(fontSize: 20),)),
+                  child: const Text("Cancel", style: TextStyle(fontSize: 20),)),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     primary: AppColors.tertiaryColor),
-                  onPressed: (){
+                  onPressed: () async {
                     var todo = Todo(
-                        id: idController.text,
+                        id: 1,
                         task: taskController.text,
-                        description: "description",
+                        description: "",
                         dateCreated: DateTime.now(),
-                        dueDate: DateTime.now());
+                        dueDate: DateTime.now(),
+                        taskCompleted: false,
+                        taskCancelled: false,
+                        isFavourite: false);
                     context.read<TodosBloc>().add(AddTodo(todo: todo));
+                    TodoRepository.createTodo(todo);
+                    BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
                     Navigator.pop(context);
                   },
                   child: Text("Add Todo",

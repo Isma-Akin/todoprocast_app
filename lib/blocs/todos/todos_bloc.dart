@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../models/todo_models.dart';
+import '../../api/todo_repository.dart';
 import '/models/models.dart';
 
 part 'todos_event.dart';
@@ -21,86 +22,87 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     on<SortTodosAlphabetically>(_mapSortTodosAlphabeticallyToState);
     }
 
-  // @override
-  // Stream<TodosState> mapEventToState(TodosEvent event) async* {
-  // if (event is sortTodosByDateCreated) {
-  //   yield* _mapSortTodosByDateCreatedToState();
-  // } else if (event is sortTodosAlphabetically) {
-  //   yield* _mapSortTodosAlphabeticallyToState();
-  // } else if (event is SortTodosByDueDate) {
-  //   yield* _mapSortTodosByDueDateToState();
-  // }
-  // }
-
-  // Stream<TodosState> _mapSortTodosByDateCreatedToState() async* {
-  // final state = this.state;
-  // if (state is TodosLoaded) {
-  //   List<Todo> sortedTodos = List.from(state.todos)..sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
-  //   yield TodosLoaded(todos: sortedTodos);
-  // }
-  // }
-  //
-  // Stream<TodosState> _mapSortTodosAlphabeticallyToState() async* {
-  // final state = this.state;
-  // if (state is TodosLoaded) {
-  //   List<Todo> sortedTodos = List.from(state.todos)..sort((a, b) => a.task.compareTo(b.task));
-  //   yield TodosLoaded(todos: sortedTodos);
-  // }
-  // }
-
-  // Stream<TodosState> _mapSortTodosByDueDateToState() async* {
-  // final state = this.state;
-  // if (state is TodosLoaded) {
-  //   List<Todo> sortedTodos = List.from(state.todos)..sort((a, b) => a.dateCreated.compareTo(b.dateCreated));
-  //   yield TodosLoaded(todos: sortedTodos);
-  // }
-  // }
   void _onLoadTodos(
-    LoadTodos event,
+      LoadTodos event,
       Emitter<TodosState> emit,
-      ) {
-    emit(TodosLoaded(todos: event.todos));
+      ) async {
+    try {
+      final todos = await TodoRepository.getAllTodos();
+      emit(TodosLoaded(todos: todos));
+    } catch (error) {
+      emit(TodosError(error: error.toString(), message: 'Error loading todos'));
+    }
   }
 
   void _onAddTodos(
       AddTodo event,
       Emitter<TodosState> emit,
-      ) {
+      ) async {
+    try {
+      final todo = await TodoRepository.createTodo(event.todo);
       final state = this.state;
       if (state is TodosLoaded) {
-        emit(
-        TodosLoaded(
-        todos: List.from(state.todos)..add(event.todo),
-        )
-        );
+        final todos = List<Todo>.from(state.todos)..add(todo);
+        emit(TodosLoaded(todos: todos));
       }
+    } catch (error) {
+      emit(TodosError(error: error.toString(), message: 'Error adding todo'));
+    }
   }
+
+  // void _onAddTodos(
+  //     AddTodo event,
+  //     Emitter<TodosState> emit,
+  //     ) async {
+  //   try {
+  //     // Remove the id field from the event.todo object
+  //     final todoWithoutId = event.todo.copyWith(id: null);
+  //
+  //     // Create the todo in the repository
+  //     final todo = await TodoRepository.createTodo(todoWithoutId);
+  //
+  //     // Update the state with the new todo
+  //     final state = this.state;
+  //     if (state is TodosLoaded) {
+  //       final todos = List<Todo>.from(state.todos)..add(todo);
+  //       emit(TodosLoaded(todos: todos));
+  //     }
+  //   } catch (error) {
+  //     emit(TodosError(error: error.toString(), message: 'Error adding todo'));
+  //   }
+  // }
 
   void _onUpdateTodo(
       UpdateTodo event,
       Emitter<TodosState> emit,
-      ) {
+      ) async {
+    try {
+      final todo = await TodoRepository.updateTodo(event.todo);
       final state = this.state;
       if (state is TodosLoaded) {
-      List<Todo> todos = (state.todos.map((todo) {
-        return todo.id == event.todo.id ? event.todo : todo;
-      })).toList();
-
-      emit(TodosLoaded(todos: todos));
+        final todos = state.todos.map((t) {
+          return t.id == todo.id ? todo : t;
+        }).toList();
+        emit(TodosLoaded(todos: todos));
       }
+    } catch (error) {
+      emit(TodosError(error: error.toString(), message: 'Error updating todo'));
+    }
   }
 
   void _onRemoveTodo(
       RemoveTodo event,
       Emitter<TodosState> emit,
-      ) {
-    final state = this.state;
-    if (state is TodosLoaded) {
-      List<Todo> todos = (state.todos.where((todo) {
-        return todo.id != event.todo.id;
-      })).toList();
-
-      emit(TodosLoaded(todos: todos));
+      ) async {
+    try {
+      await TodoRepository.deleteTodoById(event.todo.id);
+      final state = this.state;
+      if (state is TodosLoaded) {
+        final todos = state.todos.where((t) => t.id != event.todo.id).toList();
+        emit(TodosLoaded(todos: todos));
+      }
+    } catch (error) {
+      emit(TodosError(error: error.toString(), message: 'Error removing todo'));
     }
   }
 
@@ -120,6 +122,24 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       emit(TodosLoaded(todos: todos));
     }
   }
+//Repository version
+  // void _onMarkTodoAsFavOrUnFav(
+  //     MarkTodoAsFavOrUnFav event,
+  //     Emitter<TodosState> emit,
+  //     ) async {
+  //   try {
+  //     final todo = await _todoRepository.markTodoAsFavOrUnFav(event.todo.id, event.isFavorite);
+  //     final state = this.state;
+  //     if (state is TodosLoaded) {
+  //       final todos = state.todos.map((t) {
+  //         return t.id == todo.id ? todo : t;
+  //       }).toList();
+  //       emit(TodosLoaded(todos: todos));
+  //     }
+  //   } catch (error) {
+  //     emit(TodosError(error: error.toString()));
+  //   }
+  // }
 
   void _mapSortTodosByDueDateToState(
       SortTodosByDueDate event,
@@ -160,4 +180,16 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       ) {
     emit(const TodosLoaded(todos: []));
   }
+//Repository version
+  // void _onRemoveAllTodos(
+  //     RemoveAllTodos event,
+  //     Emitter<TodosState> emit,
+  //     ) async {
+  //   try {
+  //     await _todoRepository.removeAllTodos();
+  //     emit(TodosLoaded(todos: []));
+  //   } catch (error) {
+  //     emit(TodosError(error: error.toString()));
+  //   }
+  // }
 }
