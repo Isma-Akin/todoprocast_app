@@ -142,6 +142,12 @@ Column _todo(List<Todo> todos, String status) {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const Spacer(),
+            IconButton(
+                onPressed: () {
+                  context.read<TodosBloc>().add(RemoveAllTodos());
+                },
+                icon: const Icon(Icons.delete_forever)),
           ],
         ),
       ),
