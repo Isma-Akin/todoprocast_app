@@ -109,37 +109,24 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   void _onMarkTodoAsFavOrUnFav(
       MarkTodoAsFavOrUnFav event,
       Emitter<TodosState> emit,
-      ) {
+      ) async {
     final state = this.state;
     if (state is TodosLoaded) {
       List<Todo> todos = (state.todos.map((todo) {
         return todo.id == event.todo.id
             ? event.todo.copyWith(isFavourite: !event.todo.isFavourite!)
-            // ? event.todo.copyWith(isFavourite: true)
             : todo;
       })).toList();
-
-      emit(TodosLoaded(todos: todos));
+      try {
+        await TodoRepository.updateTodo(event.todo.copyWith(
+          isFavourite: !event.todo.isFavourite!,
+        ));
+        emit(TodosLoaded(todos: todos));
+      } catch (e) {
+        emit(TodosError(error: e.toString(), message: 'Error removing todo. Endpoint down?'));
+      }
     }
   }
-//Repository version
-  // void _onMarkTodoAsFavOrUnFav(
-  //     MarkTodoAsFavOrUnFav event,
-  //     Emitter<TodosState> emit,
-  //     ) async {
-  //   try {
-  //     final todo = await _todoRepository.markTodoAsFavOrUnFav(event.todo.id, event.isFavorite);
-  //     final state = this.state;
-  //     if (state is TodosLoaded) {
-  //       final todos = state.todos.map((t) {
-  //         return t.id == todo.id ? todo : t;
-  //       }).toList();
-  //       emit(TodosLoaded(todos: todos));
-  //     }
-  //   } catch (error) {
-  //     emit(TodosError(error: error.toString()));
-  //   }
-  // }
 
   void _mapSortTodosByDueDateToState(
       SortTodosByDueDate event,
@@ -177,19 +164,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   void _onRemoveAllTodos(
       RemoveAllTodos event,
       Emitter<TodosState> emit,
-      ) {
-    emit(const TodosLoaded(todos: []));
+      ) async {
+    try {
+      await TodoRepository.deleteAllTodos();
+      emit(const TodosLoaded(todos: []));
+    } catch (error) {
+      emit(TodosError(error: error.toString(), message: 'Error removing all todos. Endpoint down?'));
+    }
   }
-//Repository version
-  // void _onRemoveAllTodos(
-  //     RemoveAllTodos event,
-  //     Emitter<TodosState> emit,
-  //     ) async {
-  //   try {
-  //     await _todoRepository.removeAllTodos();
-  //     emit(TodosLoaded(todos: []));
-  //   } catch (error) {
-  //     emit(TodosError(error: error.toString()));
-  //   }
-  // }
 }
