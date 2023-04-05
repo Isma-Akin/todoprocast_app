@@ -29,6 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  json_annotation: ^4.1.0
+  http: ^0.13.3
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -41,6 +43,8 @@ dependencies:
   hydrated_bloc: ^9.1.0
   table_calendar: ^3.0.9
   intl: ^0.18.0
+  shared_preferences: ^2.0.6
+  flutter_secure_storage: ^4.2.1
 
 dev_dependencies:
   flutter_test:
