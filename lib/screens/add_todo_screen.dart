@@ -83,7 +83,6 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
             return InkWell(
               onTap: () async {
                 context.read<TodosBloc>().add(AddTodo(todo: defaultTodos[index]));
-                // TodoRepository.createTodo(defaultTodos[index]);
                 BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
               },
               child: Card(
@@ -122,7 +121,6 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
                         taskCancelled: false,
                         isFavourite: false);
                     context.read<TodosBloc>().add(AddTodo(todo: todo));
-                    TodoRepository.createTodo(todo);
                     BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
                     Navigator.pop(context);
                   },
