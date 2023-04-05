@@ -71,7 +71,6 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   //     emit(TodosError(error: error.toString(), message: 'Error adding todo'));
   //   }
   // }
-
   void _onUpdateTodo(
       UpdateTodo event,
       Emitter<TodosState> emit,
