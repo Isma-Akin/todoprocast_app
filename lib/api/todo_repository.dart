@@ -43,12 +43,20 @@ class TodoRepository {
     }
   }
 
-
   static Future<Todo> updateTodo(Todo todo) async {
     final response = await http.put(
       Uri.parse(baseUrl + '/todos/${todo.id}'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(todo.toJson()),
+      body: json.encode({
+        'task': todo.task,
+        'description': todo.description,
+        'dateCreated': todo.dateCreated.toIso8601String(),
+        'dueDate': todo.dueDate.toIso8601String(),
+        'taskCompleted': todo.taskCompleted,
+        'taskCancelled': todo.taskCancelled,
+        'isFavourite': todo.isFavourite,
+        'id': todo.id,
+      }),
     );
 
     if (response.statusCode == 200) {
@@ -64,6 +72,14 @@ class TodoRepository {
 
     if (response.statusCode != 204) {
       throw Exception('Failed to delete todo.');
+    }
+  }
+
+  static Future<void> deleteAllTodos() async {
+    final response = await http.delete(Uri.parse(baseUrl + '/todos'));
+
+    if (response.statusCode != 204) {
+      throw Exception('Failed to delete all todos.');
     }
   }
 }
