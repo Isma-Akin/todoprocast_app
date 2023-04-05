@@ -8,7 +8,6 @@ import '../blocs/todos/todos_bloc.dart';
 
 class TodoDetailScreen extends StatefulWidget {
   final Todo todo;
-  
   const TodoDetailScreen({required this.todo});
 
   @override
@@ -19,12 +18,30 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   bool _isChecked = false;
   late final Todo todo;
   late final TodosBloc todosBloc;
+  late final TextEditingController _descriptionController;
 
   @override
   void initState() {
     super.initState();
+    todo = widget.todo;
+    _descriptionController = TextEditingController(text: widget.todo.description);
+    todosBloc = context.read<TodosBloc>();
     _isChecked = widget.todo.taskCompleted ?? false;
   }
+
+  @override
+  void dispose() {
+    _descriptionController.dispose();
+    _formKey.currentState?.save();
+    super.dispose();
+  }
+
+  void _updateTodoDescription(String newDescription) {
+    final updatedTodo = todo.copyWith(description: newDescription);
+    todosBloc.add(UpdateTodo(todo: updatedTodo));
+  }
+
+
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
   String formattedDueDate = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
@@ -128,16 +145,18 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
             //   ],
             // ),
             TextFormField(
+              onSaved: (value) {
+      final updatedTodo = widget.todo.copyWith(description: value);
+      context.read<TodosBloc>().add(UpdateTodo(todo: updatedTodo));
+      },
+              controller: _descriptionController,
               style: const TextStyle(fontSize: 18),
-              initialValue: widget.todo.description,
+              // initialValue: widget.todo.description,
               decoration: const InputDecoration(
                 labelText: 'Description',
                 border: OutlineInputBorder(),
               ),
-              onChanged: (value) {
-                context.read<TodosBloc>().add(
-                    UpdateTodo(todo: widget.todo));
-              },
+              onChanged: _updateTodoDescription,
             ),
             const SizedBox(height: 20,
             ),
