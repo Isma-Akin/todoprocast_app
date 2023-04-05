@@ -5,10 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/main_bloc_observer.dart';
 import 'package:todoprocast_app/blocs/todos/todos_bloc.dart';
 import 'package:todoprocast_app/models/todo_models.dart';
-import 'package:todoprocast_app/screens/home_screen.dart';
 import 'package:todoprocast_app/blocs/todos_status/todos_status_bloc.dart';
 import 'package:todoprocast_app/screens/main_screen.dart';
-import 'themes.dart';
+import 'package:todoprocast_app/api/todo_repository.dart';
 
 import 'logic/navigation/navigation_cubit.dart';
 
@@ -55,7 +54,7 @@ class TodoApp extends StatelessWidget {
         LoadTodos(
           todos: [
             Todo(
-          id: '1',
+          id: 3,
           task: 'Your first task',
           description: 'Task description',
           dateCreated: DateTime.now(),
@@ -75,6 +74,7 @@ class TodoApp extends StatelessWidget {
     ],
         child: MaterialApp(
           title: 'Todo App',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),

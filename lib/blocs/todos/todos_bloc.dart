@@ -30,7 +30,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       final todos = await TodoRepository.getAllTodos();
       emit(TodosLoaded(todos: todos));
     } catch (error) {
-      emit(TodosError(error: error.toString(), message: 'Error loading todos'));
+      emit(TodosError(error: error.toString(), message: 'Error loading todos. Endpoint down?'));
     }
   }
 
@@ -46,7 +46,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         emit(TodosLoaded(todos: todos));
       }
     } catch (error) {
-      emit(TodosError(error: error.toString(), message: 'Error adding todo'));
+      emit(TodosError(error: error.toString(), message: 'Error adding todo. Endpoint down?'));
     }
   }
 
@@ -86,7 +86,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         emit(TodosLoaded(todos: todos));
       }
     } catch (error) {
-      emit(TodosError(error: error.toString(), message: 'Error updating todo'));
+      emit(TodosError(error: error.toString(), message: 'Error updating todo. Endpoint down?'));
     }
   }
 
@@ -102,7 +102,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
         emit(TodosLoaded(todos: todos));
       }
     } catch (error) {
-      emit(TodosError(error: error.toString(), message: 'Error removing todo'));
+      emit(TodosError(error: error.toString(), message: 'Error removing todo. Endpoint down?'));
     }
   }
 

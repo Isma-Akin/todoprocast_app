@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/constants.dart';
@@ -18,6 +17,8 @@ class TodoDetailScreen extends StatefulWidget {
 
 class _TodoDetailScreenState extends State<TodoDetailScreen> {
   bool _isChecked = false;
+  late final Todo todo;
+  late final TodosBloc todosBloc;
 
   @override
   void initState() {
@@ -39,12 +40,12 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit Step'),
+          title: const Text('Edit Step'),
           content: TextFormField(
             controller: TextEditingController(text: widget.todo.steps[index]),
             decoration: InputDecoration(
               labelText: 'Step ${index + 1}',
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
             onSaved: (newValue) {
               setState(() {
@@ -63,7 +64,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('CANCEL'),
+              child: const Text('CANCEL'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -72,7 +73,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                   Navigator.pop(context);
                 }
               },
-              child: Text('SAVE'),
+              child: const Text('SAVE'),
             ),
           ],
         );
@@ -88,7 +89,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.tertiaryColor,
         title: Text(widget.todo.task,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 28,
                 color: Colors.white )),
@@ -104,7 +105,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
             const Divider(height: 8,),
             const SizedBox(height: 20,),
             Row(mainAxisAlignment: MainAxisAlignment.end,
-              children: [
+              children: const [
               Icon(Icons.title)
             ],
             ),
@@ -127,9 +128,9 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
             //   ],
             // ),
             TextFormField(
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
               initialValue: widget.todo.description,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Description',
                 border: OutlineInputBorder(),
               ),
@@ -191,19 +192,19 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
           return Row(
             children: [
               Text("Step ${index + 1}"),
-              SizedBox(width: 10,),
+              const SizedBox(width: 10,),
               Expanded(
                 child:
-                Text(widget.todo.steps[index], style: TextStyle(fontSize: 18),),
+                Text(widget.todo.steps[index], style: const TextStyle(fontSize: 18),),
               ),
               IconButton(
-                icon: Icon(Icons.edit),
+                icon: const Icon(Icons.edit),
                   onPressed: () {
                   _showEditStepDialog(context, index);
                   },
                   ),
               IconButton(
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
                 onPressed: () {
                 setState(() {
                   widget.todo.steps.removeAt(index);
@@ -217,18 +218,18 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                   return Row(
                     children: [
                       Text("Step ${index + 1}"),
-                      SizedBox(width: 10,),
+                      const SizedBox(width: 10,),
                       Expanded(
                         child:
-                        Text(_newSteps[stepIndex], style: TextStyle(fontSize: 18),),
+                        Text(_newSteps[stepIndex], style: const TextStyle(fontSize: 18),),
                       ),
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () {
                           _showEditStepDialog(context, index);
                         },
                       ),
-                      IconButton(icon: Icon(Icons.delete),
+                      IconButton(icon: const Icon(Icons.delete),
                         onPressed: () {
                         setState(() {
                           _newSteps.removeAt(stepIndex);
@@ -240,14 +241,14 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
     }});
   },
 )),
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             Form(key: _formKey,
                 child: Row(
                   children: [
                     Expanded(
                       child: TextFormField(
                         controller: _stepController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Add a step',
                           border: OutlineInputBorder(),
                         ),
@@ -261,7 +262,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                     )
                   ]
                 )),
-            SizedBox(height: 0.5,),
+            const SizedBox(height: 0.5,),
             Padding(
               padding: const EdgeInsets.all(35.0),
               child: SizedBox(width: double.infinity,
@@ -270,7 +271,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                   style: ElevatedButton.styleFrom(
                     primary: AppColors.tertiaryColor,
                   ),
-                  child: Text('Add Step'),
+                  child: const Text('Add Step'),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       setState(() {

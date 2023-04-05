@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/blocs/blocs.dart';
 import 'package:todoprocast_app/constants.dart';
-import 'package:todoprocast_app/screens/todo_detail_screen.dart';
 
 import '../models/todo_models.dart';
+import '../widgets/todos_card.dart';
 import 'add_todo_screen.dart';
 
 class FavouriteTasksScreen extends StatefulWidget {
@@ -39,7 +39,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
           child: Container(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: const AddTodoScreen(),
+            child:  AddTodoScreen(todosBloc: context.read<TodosBloc>()),
           ),
         ));
   }
@@ -72,11 +72,11 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
               });
               },
               itemBuilder:(BuildContext context) => [
-                PopupMenuItem(
+                const PopupMenuItem(
                   value: TodoSortCriteria.dateCreated,
                   child: Text('Sort by date created'),
                 ),
-                PopupMenuItem(
+                const PopupMenuItem(
                   value: TodoSortCriteria.alphabetically,
                   child: Text('Sort alphabetically'),
                 ),
@@ -98,7 +98,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
                   if (favouriteTodos.isEmpty) {
                     return Center(
                       child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: const [
                           Text('No favourite tasks yet',
                             style: TextStyle(fontSize: 30),),
                           SizedBox(width: 10,),
@@ -110,7 +110,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
                         itemCount: _sortTodos(favouriteTodos).length,
                         itemBuilder: (context, index) {
                           final todo = _sortTodos(favouriteTodos)[index];
-                          return _todosCard(context, todo);
+                          return todosCard(context, todo);
                         }
                     );
                   }
@@ -121,79 +121,79 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
         ));
   }
 
-  InkWell _todosCard(
-      BuildContext context,
-      Todo todo,
-      ) {
-    return InkWell(
-      splashColor: Colors.blue.withAlpha(30),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TodoDetailScreen(todo: todo),
-          ),
-        );
-      },
-      child: Card(
-        color: todo.taskCompleted == true ? Colors.orange : AppColors.secondaryColor,
-        margin: const EdgeInsets.only(bottom: 8.0),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '#${todo.id}: ${todo.task}',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              BlocBuilder<TodosBloc, TodosState>(
-                builder: (context, state) {
-                  return Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          context.read<TodosBloc>().add(
-                              MarkTodoAsFavOrUnFav(todo: todo));
-                        },
-                        icon: Icon(
-                            todo.isFavourite! ? Icons.star : Icons.star_border),
-                        color: Colors.yellow,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: IconButton(
-                          onPressed: () {
-                            context.read<TodosBloc>().add(
-                              UpdateTodo(
-                                todo: todo.copyWith(taskCompleted: true),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.add_task),
-                        ),
-                      ),IconButton(
-                        onPressed: () {
-                          context.read<TodosBloc>().add(
-                            RemoveTodo(
-                              todo: todo.copyWith(taskCancelled: true),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.cancel),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-}}
+  // InkWell _todosCard(
+  //     BuildContext context,
+  //     Todo todo,
+  //     ) {
+  //   return InkWell(
+  //     splashColor: Colors.blue.withAlpha(30),
+  //     onTap: () {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => TodoDetailScreen(todo: todo),
+  //         ),
+  //       );
+  //     },
+  //     child: Card(
+  //       color: todo.taskCompleted == true ? Colors.orange : AppColors.secondaryColor,
+  //       margin: const EdgeInsets.only(bottom: 8.0),
+  //       child: Padding(
+  //         padding: const EdgeInsets.all(8.0),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               '#${todo.id}: ${todo.task}',
+  //               style: const TextStyle(
+  //                 fontSize: 18,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //             BlocBuilder<TodosBloc, TodosState>(
+  //               builder: (context, state) {
+  //                 return Row(
+  //                   children: [
+  //                     IconButton(
+  //                       onPressed: () {
+  //                         context.read<TodosBloc>().add(
+  //                             MarkTodoAsFavOrUnFav(todo: todo));
+  //                       },
+  //                       icon: Icon(
+  //                           todo.isFavourite! ? Icons.star : Icons.star_border),
+  //                       color: Colors.yellow,
+  //                     ),
+  //                     InkWell(
+  //                       onTap: () {
+  //                         Navigator.pop(context);
+  //                       },
+  //                       child: IconButton(
+  //                         onPressed: () {
+  //                           context.read<TodosBloc>().add(
+  //                             UpdateTodo(
+  //                               todo: todo.copyWith(taskCompleted: true),
+  //                             ),
+  //                           );
+  //                         },
+  //                         icon: const Icon(Icons.add_task),
+  //                       ),
+  //                     ),IconButton(
+  //                       onPressed: () {
+  //                         context.read<TodosBloc>().add(
+  //                           RemoveTodo(
+  //                             todo: todo.copyWith(taskCancelled: true),
+  //                           ),
+  //                         );
+  //                       },
+  //                       icon: const Icon(Icons.cancel),
+  //                     ),
+  //                   ],
+  //                 );
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+}

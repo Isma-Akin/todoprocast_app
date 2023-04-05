@@ -43,7 +43,7 @@ class _Add_ToDoState extends State<Add_ToDo> {
                     ElevatedButton(
                       onPressed: () {
                         var todo = Todo(
-                          id: controllerId.value.text,
+                          id: int.parse(controllerId.value.text),
                           task: controllerTask.value.text,
                           description: controllerDescription.value.text,
                           dateCreated: DateTime.now(),

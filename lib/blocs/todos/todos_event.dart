@@ -114,6 +114,16 @@ class AddStep extends TodosEvent {
   @override
   List<Object> get props => [todoId, step];
 }
+//
+// class TodosFilterByDate extends TodosEvent {
+//   final DateTime date;
+//   final List<Todo> todos;
+//
+//   const TodosFilterByDate({required this.date, required this.todos});
+//
+//   @override
+//   List<Object> get props => [date, todos];
+// }
 
 class RemoveTodo extends TodosEvent{
   final Todo todo;

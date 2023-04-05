@@ -14,7 +14,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    // String? selectedTask;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -35,84 +34,38 @@ class _MainScreenState extends State<MainScreen> {
               ),
             );
           },
-              icon: Icon(Icons.settings))],
+              icon: const Icon(Icons.settings))],
           title: const Text('Main Screen'),
         ),
         body: Column(
           children: [
-            SizedBox(height: 20,),
+            const SizedBox(height: 20,),
             TaskPlanner(screenWidth: screenWidth),
-            Divider(height: 4, color: Colors.black,),
+            const Divider(height: 4, color: Colors.grey,),
             YourDay(screenWidth: screenWidth),
-            Divider(height: 4, color: Colors.black,),
+            const Divider(height: 4, color: Colors.grey,),
             ImportantTasks(screenWidth: screenWidth),
-            Divider(height: 4, color: Colors.black,),
+            const Divider(height: 4, color: Colors.grey,),
             TaskList(screenWidth: screenWidth),
-            Divider(height: 10, color: Colors.black,),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+            const Divider(height: 10, color: Colors.grey,),
+            SizedBox(
+              height: 100,
+              child: SizedBox(
+                width: 700,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 15,
+                  itemBuilder: (BuildContext context, int index) => const Card(
+                    child: Center(child: Text('Dummy Card Text')),
+                  ),
+                ),
               ),
-              width: screenWidth,
-              height: 300,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Catch up with tasks!', style: TextStyle(fontSize: 25),),
-                      ),
-                    ],
-                  ),
-                  Divider(height: 10, color: Colors.black,),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Task 1', style: TextStyle(fontSize: 20),),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Task 2', style: TextStyle(fontSize: 20),),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Task 3', style: TextStyle(fontSize: 20),),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Task 4', style: TextStyle(fontSize: 20),),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Task 5', style: TextStyle(fontSize: 20),),
-                      ),
-                    ],
-                  ),
-                ],
-              )
             ),
-          ],
-        )
-      ),
+    ],
+    ),
+    ),
     );
   }
 }

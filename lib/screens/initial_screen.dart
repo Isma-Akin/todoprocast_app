@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/screens/add_todo_screen.dart';
 import 'package:todoprocast_app/screens/home_screen.dart';
 import 'package:todoprocast_app/services/settings.dart';
 
+import '../blocs/todos/todos_bloc.dart';
 import '../services/profile.dart';
 
 class MainPage extends StatefulWidget {
@@ -13,12 +15,20 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final List<Widget> _pages = [
-    const HomeScreen(),
-    const AddTodoScreen(),
-    const Profile(),
-    const Settings(),
-  ];
+
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      HomeScreen(todosBloc: context.read<TodosBloc>()),
+      // const AddTodoScreen(),
+      // const Profile(),
+      // const Settings(),
+    ];
+  }
+
 
   final List<IconData> _icons = [
     Icons.home,

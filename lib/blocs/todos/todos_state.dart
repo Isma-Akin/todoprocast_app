@@ -39,7 +39,7 @@ class TodosError extends TodosState {
   final String message;
 
  const TodosError({
-    required this.message,
+    required this.message, required String error,
 });
 
  @override

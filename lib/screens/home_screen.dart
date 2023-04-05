@@ -1,8 +1,14 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/constants.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-
+import '../api/todo_repository.dart';
 import '../widgets/todos_card.dart';
 import '/models/models.dart';
 import '/blocs/blocs.dart';
@@ -10,7 +16,8 @@ import 'add_todo.dart';
 import 'add_todo_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final TodosBloc todosBloc;
+  const HomeScreen({Key? key, required this.todosBloc}) : super(key: key);
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -25,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: const AddTodoScreen(),
+            child: AddTodoScreen(todosBloc: context.read<TodosBloc>()),
       ),
     ));
   }
@@ -50,7 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
             appBar: AppBar(
               backgroundColor: appcolors[2],
-              actions: [IconButton(onPressed: () {
+              actions: [
+                IconButton(onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(
                     builder: (context) => const Add_ToDo()));},
