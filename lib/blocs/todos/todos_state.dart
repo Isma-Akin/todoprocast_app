@@ -35,6 +35,16 @@ class TodosSortedByDate extends TodosState {
   List<Object> get props => [todos];
 }
 
+class TodoDueDateUpdated extends TodosState {
+  final Todo todo;
+  final DateTime? dueDate;
+
+  const TodoDueDateUpdated({required this.todo, required this.dueDate});
+
+  @override
+  List<Object?> get props => [todo, dueDate];
+}
+
 class TodosError extends TodosState {
   final String message;
 

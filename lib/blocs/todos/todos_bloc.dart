@@ -14,12 +14,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     on<AddTodo>(_onAddTodos);
     on<UpdateTodo>(_onUpdateTodo);
     on<RemoveTodo>(_onRemoveTodo);
-    // on<EditTodo>(_onEditTodo);
     on<MarkTodoAsFavOrUnFav>(_onMarkTodoAsFavOrUnFav);
     on<RemoveAllTodos>(_onRemoveAllTodos);
     on<SortTodosByDueDate>(_mapSortTodosByDueDateToState);
     on<SortTodosByDateCreated>(_mapSortTodosByDateCreatedToState);
     on<SortTodosAlphabetically>(_mapSortTodosAlphabeticallyToState);
+    on<UpdateDueDateEvent>(_onUpdateDueDate);
     }
 
   void _onLoadTodos(
@@ -33,6 +33,14 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       emit(TodosError(error: error.toString(), message: 'Error loading todos. Endpoint down?'));
     }
   }
+
+  //Old method for reference
+  // void _onLoadTodos(
+  //     LoadTodos event,
+  //     Emitter<TodosState> emit,
+  //     ) {
+  //   emit(TodosLoaded(todos: event.todos));
+  // }
 
   void _onAddTodos(
       AddTodo event,
@@ -50,27 +58,21 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     }
   }
 
+  //Old method for reference
   // void _onAddTodos(
   //     AddTodo event,
   //     Emitter<TodosState> emit,
-  //     ) async {
-  //   try {
-  //     // Remove the id field from the event.todo object
-  //     final todoWithoutId = event.todo.copyWith(id: null);
-  //
-  //     // Create the todo in the repository
-  //     final todo = await TodoRepository.createTodo(todoWithoutId);
-  //
-  //     // Update the state with the new todo
-  //     final state = this.state;
-  //     if (state is TodosLoaded) {
-  //       final todos = List<Todo>.from(state.todos)..add(todo);
-  //       emit(TodosLoaded(todos: todos));
-  //     }
-  //   } catch (error) {
-  //     emit(TodosError(error: error.toString(), message: 'Error adding todo'));
+  //     ) {
+  //   final state = this.state;
+  //   if (state is TodosLoaded) {
+  //     emit(
+  //         TodosLoaded(
+  //           todos: List.from(state.todos)..add(event.todo),
+  //         )
+  //     );
   //   }
   // }
+
   void _onUpdateTodo(
       UpdateTodo event,
       Emitter<TodosState> emit,
@@ -88,6 +90,19 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       emit(TodosError(error: error.toString(), message: 'Error updating todo. Endpoint down?'));
     }
   }
+
+  // void _onUpdateTodo(
+  //     UpdateTodo event,
+  //     Emitter<TodosState> emit,
+  //     ) async {
+  //   try {
+  //     final updatedTodo = event.todo.copyWith(dueDate: event.dueDate);
+  //     await TodoRepository.updateTodo(updatedTodo);
+  //     emit(TodoDueDateUpdated(todo: updatedTodo, dueDate: event.dueDate));
+  //   } catch (error) {
+  //     emit(TodosError(error: error.toString(), message: 'Error updating todo.'));
+  //   }
+  // }
 
   void _onRemoveTodo(
       RemoveTodo event,
@@ -157,6 +172,27 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     if (state is TodosLoaded) {
       List<Todo> sortedTodos = List.from(state.todos)..sort((a, b) => a.task.compareTo(b.task));
       emit(TodosLoaded(todos: sortedTodos));
+    }
+  }
+
+  void _onUpdateDueDate(
+      UpdateDueDateEvent event,
+      Emitter<TodosState> emit,
+      ) async {
+    try {
+      final updatedTodo = event.todo.copyWith(dueDate: event.dueDate);
+      final todo = await TodoRepository.updateTodo(updatedTodo);
+      final state = this.state;
+      if (state is TodosLoaded) {
+        final todos = state.todos.map((t) {
+          return t.id == todo.id ? todo : t;
+        }).toList();
+        emit(TodosLoaded(todos: todos));
+      }
+    } catch (error) {
+      emit(TodosError(
+          error: error.toString(),
+          message: 'Error updating todo due date. Endpoint down?'));
     }
   }
 

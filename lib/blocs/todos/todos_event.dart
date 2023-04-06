@@ -46,8 +46,6 @@ class EditTodo extends TodosEvent {
 }
 
 class UpdateTodo extends TodosEvent {
-  // final Todo oldTodo;
-  // final Todo newTodo;
   final Todo todo;
 
   const UpdateTodo({
@@ -113,6 +111,13 @@ class AddStep extends TodosEvent {
 
   @override
   List<Object> get props => [todoId, step];
+}
+
+class UpdateDueDateEvent extends TodosEvent {
+  final Todo todo;
+  final DateTime? dueDate;
+
+  const UpdateDueDateEvent({required this.todo, required this.dueDate});
 }
 //
 // class TodosFilterByDate extends TodosEvent {

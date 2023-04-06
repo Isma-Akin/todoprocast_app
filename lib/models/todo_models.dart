@@ -66,6 +66,7 @@ class Todo extends Equatable {
   String get formattedDateCreated => DateFormat('dd-MM-yyy HH:mm').format(dateCreated.toLocal());
   String get formattedDueDate => DateFormat.yMMMEd().format(dueDate.toLocal());
 
+
   Todo copyWith({
     int? id,
     String? task,
