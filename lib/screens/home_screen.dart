@@ -1,14 +1,8 @@
-import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/constants.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../api/todo_repository.dart';
 import '../widgets/todos_card.dart';
 import '/models/models.dart';
 import '/blocs/blocs.dart';
@@ -143,11 +137,14 @@ Column _todo(List<Todo> todos, String status) {
               ),
             ),
             const Spacer(),
-            IconButton(
-                onPressed: () {
-                  context.read<TodosBloc>().add(RemoveAllTodos());
-                },
-                icon: const Icon(Icons.delete_forever)),
+            Visibility(
+              visible: todos.isNotEmpty,
+              child: IconButton(
+                  onPressed: () {
+                    context.read<TodosBloc>().add(RemoveAllTodos());
+                  },
+                  icon: const Icon(Icons.delete_forever)),
+            ),
           ],
         ),
       ),
