@@ -17,21 +17,6 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  // Timer? _timer;
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     BlocProvider.of<TimeBloc>(context).add(UpdateTime());
-  //   });
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   _timer?.cancel();
-  //   super.dispose();
-  // }
   DateTime _selectedDay = DateTime.now();
 
   List<Todo> _selectedTasks = [];
@@ -61,6 +46,56 @@ class _CalendarPageState extends State<CalendarPage> {
                     Text(DateFormat('EEEE, MMM d').format(DateTime.now()),
                       style: const TextStyle(fontSize: 30),),
                     TableCalendar(
+                      calendarBuilders: CalendarBuilders(
+                        selectedBuilder: (context, date, events) =>
+                            Container(
+                              margin: const EdgeInsets.all(4.0),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryColor,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Text(
+                                date.day.toString(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                                todayBuilder: (context, date, events) =>
+                            Container(
+                              margin: const EdgeInsets.all(4.0),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColors.secondaryColor,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Text(
+                                date.day.toString(),
+                                style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                markerBuilder: (context, date, events) {
+                          final state = context.watch<TodosStatusBloc>().state;
+                          if (state is TodosStatusLoaded) {
+                            final todosDueOnDate = state.pendingTodos.where((task) =>
+                                isSameDay(task.dueDate, date)).toList();
+                            if (todosDueOnDate.isNotEmpty) {
+                              return Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.red,
+                                  ),
+                                  width: 6,
+                                  height: 6,
+                                ),
+                              );
+                            }
+                          }
+                          return null;
+                        },
+                      ),
                       firstDay: DateTime.utc(2010, 10, 16),
                       lastDay: DateTime.utc(2030, 3, 14),
                       focusedDay: DateTime.now(),
@@ -76,7 +111,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             _selectedTasks = [];
                           }
                         });
-                        },
+                      },
                       calendarFormat: CalendarFormat.month,
                       headerStyle: const HeaderStyle(
                         formatButtonVisible: false,
@@ -93,6 +128,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         ),
                       ),
                     ),
+
                     const Divider(color: Colors.black,),
                     Expanded(
                       child: ListView.builder(
