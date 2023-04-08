@@ -4,10 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:todoprocast_app/main_bloc_observer.dart';
 import 'package:todoprocast_app/blocs/todos/todos_bloc.dart';
-import 'package:todoprocast_app/models/todo_models.dart';
 import 'package:todoprocast_app/blocs/todos_status/todos_status_bloc.dart';
 import 'package:todoprocast_app/screens/main_screen.dart';
-import 'package:todoprocast_app/api/todo_repository.dart';
 
 import 'logic/navigation/navigation_cubit.dart';
 
@@ -51,14 +49,14 @@ class TodoApp extends StatelessWidget {
       BlocProvider(
       create: (context) => TodosBloc()
       ..add(
-        LoadTodos(
+        const LoadTodos(
           todos: [
-            Todo(
-          id: 3,
-          task: 'Your first task',
-          description: 'Task description',
-          dateCreated: DateTime.now(),
-          dueDate: DateTime.now()),
+          //   Todo(
+          // id: 3,
+          // task: 'Your first task',
+          // description: 'Task description',
+          // dateCreated: DateTime.now(),
+          // dueDate: DateTime.now()),
       ],
      ),
     ),
@@ -79,7 +77,6 @@ class TodoApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           home: const MainScreen(),
-          debugShowCheckedModeBanner: false,
         ));
   }
 }
