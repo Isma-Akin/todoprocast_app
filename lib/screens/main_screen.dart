@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:todoprocast_app/constants.dart';
+import 'package:todoprocast_app/screens/task_detail_screen.dart';
 import 'package:todoprocast_app/services/settings.dart';
 import 'package:todoprocast_app/widgets/mainscreen_widgets.dart';
+
+import '../models/todo_models.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -11,6 +14,58 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+  final List<Todo> _task = [];
+  final List _tasks = [];
+
+  final TextEditingController _taskController = TextEditingController();
+
+
+  void _showAddTaskSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Add Task',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Task Name',
+                    border: OutlineInputBorder(),
+                  ),
+                  controller: _taskController,
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    final taskName = _taskController.text;
+                    setState(() {
+                      _tasks.add(taskName);
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: Text('Add Task'),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -44,28 +99,84 @@ class _MainScreenState extends State<MainScreen> {
             const Divider(height: 4, color: Colors.grey,),
             YourDay(screenWidth: screenWidth),
             const Divider(height: 4, color: Colors.grey,),
-            ImportantTasks(screenWidth: screenWidth),
+            ImportantTasks(screenWidth: screenWidth, favouriteTasks: [],),
             const Divider(height: 4, color: Colors.grey,),
             TaskList(screenWidth: screenWidth),
-            const Divider(height: 10, color: Colors.grey,),
-            SizedBox(
-              height: 100,
-              child: SizedBox(
-                width: 700,
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 15,
-                  itemBuilder: (BuildContext context, int index) => const Card(
-                    child: Center(child: Text('Dummy Card Text')),
+            const Divider(height: 4, color: Colors.grey,),
+            TaskActivity(screenWidth: screenWidth),
+            const Divider(height: 4, color: Colors.grey,),
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _tasks.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final task = _tasks[index];
+                        return Card(
+                          child: ListTile(
+                            title: Text(task),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TaskDetailScreen(task: task),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
+                  Row(
+                    children: [
+                      Container(
+                        width: screenWidth,
+                        color: AppColors.tertiaryColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _showAddTaskSheet(context);
+                            },
+                            child: Text('Create Task'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
     ],
     ),
     ),
+    );
+  }
+}
+
+class MainScreenCard extends StatelessWidget {
+  const MainScreenCard({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 100,
+      child: SizedBox(
+        width: 700,
+        child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: 15,
+          itemBuilder: (BuildContext context, int index) => const Card(
+            child: Center(child: Text('Dummy Card Text')),
+          ),
+        ),
+      ),
     );
   }
 }
