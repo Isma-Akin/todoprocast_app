@@ -12,6 +12,7 @@ class Todo extends Equatable {
   bool? taskCompleted;
   bool? taskCancelled;
   bool? isFavourite;
+  String groupId;
   final List<String> steps;
 
   Todo({
@@ -23,6 +24,7 @@ class Todo extends Equatable {
     this.taskCompleted,
     this.taskCancelled,
     this.isFavourite,
+    this.groupId = '',
     this.steps = const <String>[],
   }) {
     taskCompleted = taskCompleted ?? false;
@@ -77,6 +79,7 @@ class Todo extends Equatable {
     bool? taskCancelled,
     bool? isFavourite,
     String? steps,
+    String? groupId,
   }) {
     return Todo(
       id: id ?? this.id,
@@ -87,6 +90,7 @@ class Todo extends Equatable {
       taskCompleted: taskCompleted ?? this.taskCompleted,
       taskCancelled: taskCancelled ?? this.taskCancelled,
       isFavourite: isFavourite ?? this.isFavourite,
+      groupId: groupId ?? this.groupId,
     );
   }
 
@@ -101,5 +105,6 @@ class Todo extends Equatable {
         taskCancelled,
         isFavourite,
         steps,
+        groupId,
       ];
 }
