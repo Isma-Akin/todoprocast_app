@@ -1,15 +1,10 @@
-import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoprocast_app/constants.dart';
 
-import '../api/todo_repository.dart';
 import '../blocs/todos/todos_bloc.dart';
 import '../models/todo_models.dart';
-import 'home_screen.dart';
 
 class AddTodoScreen extends StatefulWidget {
   final TodosBloc todosBloc;
@@ -22,11 +17,9 @@ class AddTodoScreen extends StatefulWidget {
 }
 class _AddTodoScreenState extends State<AddTodoScreen> {
 
-
   @override
   Widget build(BuildContext context) {
     TextEditingController taskController = TextEditingController();
-    TextEditingController idController = TextEditingController();
 
     List<Todo> defaultTodos = [
       Todo(
@@ -53,6 +46,18 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
         description: 'Task description',
         id: 1,
         dueDate: DateTime.now().add(Duration(days: 3)),
+      ),Todo(
+        dateCreated: DateTime.now(),
+        task: 'Vacuum',
+        description: 'Task description',
+        id: 1,
+        dueDate: DateTime.now().add(Duration(days: 7)),
+      ),Todo(
+        dateCreated: DateTime.now(),
+        task: 'Replace light-bulbs',
+        description: 'Task description',
+        id: 1,
+        dueDate: DateTime.now().add(Duration(days: 2)),
       ),
     ];
 
@@ -60,22 +65,51 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          Text("Add a new task",
-            style: TextStyle(
-                fontSize: 24),),
           SizedBox(height: 10,),
-          TextField(
-            autocorrect: true,
-            controller: taskController,
-            decoration: InputDecoration(
-              hintText: "Enter a task name",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  autocorrect: true,
+                  controller: taskController,
+                  decoration: InputDecoration(
+                    hintText: "Enter a task name",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
               ),
-            ),
+              SizedBox(
+                height: 50,
+                width: 50,
+                child: IconButton(
+                  onPressed: () {
+                    var todo = Todo(
+                      id: 1,
+                      task: taskController.text,
+                      description: "Description",
+                      dateCreated: DateTime.now(),
+                      dueDate: DateTime.now(),
+                      taskCompleted: false,
+                      taskCancelled: false,
+                      isFavourite: false,
+                    );
+                    context.read<TodosBloc>().add(AddTodo(todo: todo));
+                    taskController.clear();
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(Icons.add_box_outlined,
+                      color: AppColors.secondaryColor,
+                      size: 40,),
+                ),
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
           ),
-      Container(
-        height: 75.0,
+      const SizedBox(height: 10,),
+      SizedBox(
+        height: 45.0,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: defaultTodos.length,
@@ -86,6 +120,10 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
                 BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
               },
               child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -100,36 +138,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
           },
         ),
       ),
-          SizedBox(height: 20,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(style: TextButton.styleFrom(primary: AppColors.secondaryColor),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("Cancel", style: TextStyle(fontSize: 20),)),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: AppColors.tertiaryColor),
-                  onPressed: () async {
-                    var todo = Todo(
-                        id: 1,
-                        task: taskController.text,
-                        description: "",
-                        dateCreated: DateTime.now(),
-                        dueDate: DateTime.now(),
-                        taskCompleted: false,
-                        taskCancelled: false,
-                        isFavourite: false);
-                    context.read<TodosBloc>().add(AddTodo(todo: todo));
-                    BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
-                    Navigator.pop(context);
-                  },
-                  child: Text("Add Todo",
-                    style: TextStyle(
-                        color: Colors.white,
-                      fontWeight: FontWeight.bold),))
-            ],
-          ),
+          const SizedBox(height: 20,),
         ],),
     );
   }
