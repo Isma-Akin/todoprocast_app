@@ -68,13 +68,15 @@ InkWell todosCard(
                       },
                       child: IconButton(
                         onPressed: () {
+                          final isCompleted = todo.taskCompleted ?? false;
+                          final updatedTodo = todo.copyWith(taskCompleted: !isCompleted);
                           context.read<TodosBloc>().add(
-                            UpdateTodo(
-                              todo: todo.copyWith(taskCompleted: true),
-                            ),
+                            UpdateTodo(todo: updatedTodo),
                           );
                         },
-                        icon: const Icon(Icons.add_task),
+                        icon: Icon(todo.taskCompleted ?? false
+                            ? Icons.check_box
+                            : Icons.check_box_outline_blank),
                       ),
                     ),
                     IconButton(
