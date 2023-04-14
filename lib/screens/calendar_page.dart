@@ -34,7 +34,7 @@ class _CalendarPageState extends State<CalendarPage> {
               },
               icon: const Icon(Icons.arrow_back),
             ),
-            title: const Text('Calendar'),
+            title: const Text('Your Day'),
           ),
           body: BlocBuilder<TimeBloc, DateTime>(
             builder: (context, state) {
@@ -146,11 +146,13 @@ class _CalendarPageState extends State<CalendarPage> {
                               );
                             },
                             child: Card(
-                              color: AppColors.tertiaryColor,
+                              elevation: 5,
+                              color: AppColors.secondaryColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               child: ListTile(
+                                textColor: Colors.white,
                                 title: Text(task.task + " is due today!"),
                                 subtitle: Text(task.description),
                               ),
