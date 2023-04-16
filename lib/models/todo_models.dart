@@ -3,16 +3,35 @@ import 'package:intl/intl.dart';
 
 import '../api/custom_serializer.dart';
 
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+part 'todo_models.g.dart';
+
+@HiveType(typeId: 0)
 class Todo extends Equatable {
   final int id;
+  @HiveField(0)
   final String task;
+  @HiveField(1)
   final String description;
+  @HiveField(2)
   final DateTime dateCreated;
+  @HiveField(3)
   final DateTime dueDate;
+  @HiveField(4)
   bool? taskCompleted;
+  @HiveField(5)
   bool? taskCancelled;
+  @HiveField(6)
   bool? isFavourite;
+  @HiveField(7)
+  bool isSynced;
+  @HiveField(8)
   String groupId;
+  @HiveField(9)
+  bool isTempId;
+  @HiveField(10)
   final List<String> steps;
 
   Todo({
@@ -24,6 +43,8 @@ class Todo extends Equatable {
     this.taskCompleted,
     this.taskCancelled,
     this.isFavourite,
+    this.isSynced = false,
+    this.isTempId = false,
     this.groupId = '',
     this.steps = const <String>[],
   }) {
@@ -78,6 +99,8 @@ class Todo extends Equatable {
     bool? taskCompleted,
     bool? taskCancelled,
     bool? isFavourite,
+    bool? isSynced,
+    bool? isTempId,
     String? steps,
     String? groupId,
   }) {
@@ -90,6 +113,8 @@ class Todo extends Equatable {
       taskCompleted: taskCompleted ?? this.taskCompleted,
       taskCancelled: taskCancelled ?? this.taskCancelled,
       isFavourite: isFavourite ?? this.isFavourite,
+      isSynced: isSynced ?? this.isSynced,
+      isTempId: isTempId ?? this.isTempId,
       groupId: groupId ?? this.groupId,
     );
   }
@@ -104,6 +129,8 @@ class Todo extends Equatable {
         taskCompleted,
         taskCancelled,
         isFavourite,
+        isSynced,
+        isTempId,
         steps,
         groupId,
       ];
