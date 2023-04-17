@@ -15,11 +15,11 @@ import 'models/todo_models.dart';
 
 Future<void> main() async {
   //initialize hive
-  await Hive.initFlutter();
+  // await Hive.initFlutter();
   //register adapters for todo class
-  Hive.registerAdapter(TodoAdapter());
+  // Hive.registerAdapter(TodoAdapter());
   //open box for todos
-  await Hive.openBox<Todo>('todos');
+  // await Hive.openBox<Todo>('todos');
 
   // final todosRepository = TodoRepository(todoBox);
   // final todosBloc = TodosBloc(todosRepository: todosRepository);
