@@ -6,33 +6,21 @@ import '../api/custom_serializer.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-part 'todo_models.g.dart';
+// part 'todo_models.g.dart';
 
-@HiveType(typeId: 0)
 class Todo extends Equatable {
   final int id;
-  @HiveField(0)
   final String task;
-  @HiveField(1)
   final String description;
-  @HiveField(2)
   final DateTime dateCreated;
-  @HiveField(3)
   final DateTime dueDate;
-  @HiveField(4)
   bool? taskCompleted;
-  @HiveField(5)
   bool? taskCancelled;
-  @HiveField(6)
   bool? isFavourite;
-  @HiveField(7)
   bool isSynced;
-  @HiveField(8)
-  String groupId;
-  @HiveField(9)
   bool isTempId;
-  @HiveField(10)
-  final List<String> steps;
+  String groupId;
+  List<String> steps;
 
   Todo({
     required this.id,
