@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
         debugShowCheckedModeBanner: false,
         color: appcolors[2],
         home: Scaffold(
+          extendBodyBehindAppBar: true,
           floatingActionButton: FloatingActionButton(
             backgroundColor: appcolors[2],
             foregroundColor: Colors.white,
@@ -47,10 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {
             _addTodo(context);
           },child: const Icon(Icons.add, size: 30),
-            elevation: 1,
+            elevation: 0.1,
         ),
             appBar: AppBar(
-              backgroundColor: appcolors[2],
+              elevation: 0,
+              backgroundColor: AppColors.tertiaryColor,
               actions: [
                 IconButton(onPressed: () {
                 Navigator.push(context,
@@ -67,59 +69,67 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: const Icon(Icons.arrow_back),
               ),
             ),
-            body: BlocBuilder<TodosStatusBloc, TodosStatusState>(
+          body: SafeArea(
+            top: true,
+            child: BlocBuilder<TodosStatusBloc, TodosStatusState>(
               builder: (context, state) {
+                print('Current TodosStatusState: $state');
                 if (state is TodosStatusLoading) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
                 if (state is TodosStatusLoaded) {
-                  return SingleChildScrollView(
+                  return CustomScrollView(
                     physics: const BouncingScrollPhysics(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _todo(
-                            state.pendingTodos,
-                            'Pending',
-                          ),
-                          if (state.pendingTodos.isEmpty)
-                            Column(
-                              children: const [
-                                Text('You have no pending tasks yet.', style: TextStyle(
-                                    color: AppColors.secondaryColor,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold),),
-                                SizedBox(height: 20,),
-                                Text('Add a task by clicking the + button below.', style: TextStyle(
-                                    color: AppColors.secondaryColor,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),),
-                              ],
+                    slivers: [
+                      SliverPadding(
+                        padding: const EdgeInsets.all(8.0),
+                        sliver: SliverList(
+                          delegate: SliverChildListDelegate([
+                            _todo(
+                              state.pendingTodos,
+                              'Pending',
                             ),
-                          _todo(
-                            state.completedTodos,
-                            'Completed',
-                          ),
-                          if (state.completedTodos.isEmpty)
-                            const Text('You have no completed tasks yet.', style: TextStyle(
-                                color: AppColors.secondaryColor,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),),
-                        ],
-                      ),
+                            if (state.pendingTodos.isEmpty)
+                              Column(
+                                children: const [
+                              Text('You have no pending tasks.',
+                                    style: TextStyle(
+                                      color: AppColors.secondaryColor,
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold),),
+                              SizedBox(height: 20,),
+                              Text('Add a task by clicking the + button below.',
+                                      style: TextStyle(
+                                      color: AppColors.secondaryColor,
+                                      fontSize: 20.2,
+                                      fontWeight: FontWeight.bold),),
+                                ],
+                              ),
+                              _todo(
+                              state.completedTodos,
+                              'Completed',
+                              ),
+                              if (state.completedTodos.isEmpty)
+                               const Text('You have no completed tasks.',
+                                  style: TextStyle(
+                                  color: AppColors.secondaryColor,
+                                  fontSize: 27,
+                                  fontWeight: FontWeight.bold),),
+                                  ]),
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return const Text('Something went wrong.');
+                        }
+                      },
                     ),
-                  );
-                } else {
-                  return const Text('Something went wrong.');
-                }
-              },
-            ),
-        ));
-  }
+                  ),
+                ));
+          }
 
 
 Column _todo(List<Todo> todos, String status) {
