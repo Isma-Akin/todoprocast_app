@@ -29,7 +29,7 @@ class TaskList extends StatelessWidget {
               context,
               PageRouteBuilder(
                 transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) => const GroupedTasksScreen(),
+                pageBuilder: (context, animation, secondaryAnimation) => GroupedTasksScreen(),
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   var begin = const Offset(1.0, 0.0);
                   var end = Offset.zero;
@@ -64,11 +64,11 @@ class ImportantTasks extends StatelessWidget {
   const ImportantTasks({
     Key? key,
     required this.screenWidth,
-    required this.favouriteTasks, // add this parameter
+    required this.favouriteTasks,
   }) : super(key: key);
 
   final double screenWidth;
-  final List<Todo> favouriteTasks; // add this field
+  final List<Todo> favouriteTasks;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,8 @@ class ImportantTasks extends StatelessWidget {
               context,
               PageRouteBuilder(
                 transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) => const FavouriteTasksScreen(),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                const FavouriteTasksScreen(),
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   var begin = const Offset(1.0, 0.0);
                   var end = Offset.zero;
@@ -92,33 +93,46 @@ class ImportantTasks extends StatelessWidget {
                   );
                 },
               ),
-            );},
+            );
+          },
           child: Container(
-              width: screenWidth,
-              height: 50,
-              color: AppColors.secondaryColor,
-              margin: EdgeInsets.zero,
-              child: Row(
-                children: [
-                  SizedBox(width: 10,),
-                  Icon(Icons.all_inbox, color: Colors.teal,),
-                  SizedBox(width: 10,),
-                  Text('Important Tasks', style: TextStyle(fontSize: 25),),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${getNumFavouriteTasks(favouriteTasks)}', // use the favouriteTasks parameter
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+            width: screenWidth,
+            height: 50,
+            color: AppColors.secondaryColor,
+            margin: EdgeInsets.zero,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                const Icon(
+                  Icons.all_inbox,
+                  color: Colors.teal,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Important Tasks',
+                  style: const TextStyle(fontSize: 25),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${getNumFavouriteTasks(favouriteTasks)}',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ),
-                ],)
+                ),
+              ],
+            ),
           ),
         ),
       ],
