@@ -1,6 +1,9 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoprocast_app/constants.dart';
 
 import '../blocs/todos/todos_bloc.dart';
@@ -24,40 +27,36 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
     List<Todo> defaultTodos = [
       Todo(
         dateCreated: DateTime.now(),
+        id: 1,
         task: 'Buy groceries',
         description: 'Task description',
-        id: 4,
         dueDate: DateTime.now().add(Duration(days: 1)),
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Study for exams',
+        id: 2,
         description: 'Task description',
-        id: 3,
         dueDate: DateTime.now().add(Duration(days: 5)),
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Do laundry',
         description: 'Task description',
-        id: 2,
-        dueDate: DateTime.now().add(Duration(days: 2)),
+        dueDate: DateTime.now().add(Duration(days: 2)), id: 6,
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Meal prep',
         description: 'Task description',
-        id: 1,
-        dueDate: DateTime.now().add(Duration(days: 3)),
+        dueDate: DateTime.now().add(Duration(days: 3)), id: 3,
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Vacuum',
         description: 'Task description',
-        id: 1,
-        dueDate: DateTime.now().add(Duration(days: 7)),
+        dueDate: DateTime.now().add(Duration(days: 7)), id: 4,
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Replace light-bulbs',
         description: 'Task description',
-        id: 1,
-        dueDate: DateTime.now().add(Duration(days: 2)),
+        dueDate: DateTime.now().add(Duration(days: 2)), id: 7,
       ),
     ];
 
@@ -84,22 +83,22 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
                 height: 50,
                 width: 50,
                 child: IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     var todo = Todo(
-                      id: 1,
                       task: taskController.text,
                       description: "Description",
                       dateCreated: DateTime.now(),
-                      dueDate: DateTime.now(),
+                      dueDate: DateTime.now().add(Duration(days: 10)),
                       taskCompleted: false,
                       taskCancelled: false,
                       isFavourite: false,
+                      id: 1,
                     );
                     context.read<TodosBloc>().add(AddTodo(todo: todo));
                     taskController.clear();
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.add_box_outlined,
+                  icon: const Icon(Icons.add_box_outlined,
                       color: AppColors.secondaryColor,
                       size: 40,),
                 ),
