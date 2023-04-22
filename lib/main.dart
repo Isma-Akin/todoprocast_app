@@ -1,30 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/adapters.dart';
 
-import 'package:todoprocast_app/main_bloc_observer.dart';
 import 'package:todoprocast_app/blocs/todos/todos_bloc.dart';
 import 'package:todoprocast_app/blocs/todos_status/todos_status_bloc.dart';
 import 'package:todoprocast_app/screens/main_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/todo_repository.dart';
 import 'logic/navigation/navigation_cubit.dart';
-import 'models/todo_models.dart';
+
 
 Future<void> main() async {
-  //initialize hive
-  // await Hive.initFlutter();
-  //register adapters for todo class
-  // Hive.registerAdapter(TodoAdapter());
-  //open box for todos
-  // await Hive.openBox<Todo>('todos');
-
-  // final todosRepository = TodoRepository(todoBox);
-  // final todosBloc = TodosBloc(todosRepository: todosRepository);
-  Bloc.observer = MainBlocObserver();
-  runApp(const TodoApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = SimpleBlocObserver();
+  final prefs = await SharedPreferences.getInstance();
+  runApp(TodoApp(prefs: prefs));
 }
 
 class SimpleBlocObserver extends BlocObserver {
@@ -54,14 +45,16 @@ class SimpleBlocObserver extends BlocObserver {
 }
 
 class TodoApp extends StatelessWidget {
-  const TodoApp({Key? key}) : super(key: key);
+  final SharedPreferences prefs;
+
+  const TodoApp({Key? key, required this.prefs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<TodosBloc>(
-          create: (context) => TodosBloc(TodoRepository()),
+          create: (context) => TodosBloc(TodoRepository(prefs: prefs), prefs),
         ),
         BlocProvider<TodosStatusBloc>(
           create: (context) => TodosStatusBloc(
