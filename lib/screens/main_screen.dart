@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoprocast_app/constants.dart';
-import 'package:todoprocast_app/screens/task_detail_screen.dart';
+import 'package:todoprocast_app/screens/mini_task_detail_screen.dart';
 import 'package:todoprocast_app/services/settings.dart';
 import 'package:todoprocast_app/widgets/mainscreen_widgets.dart';
 
@@ -17,6 +17,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Todo> _task = [];
   final List _tasks = [];
+  final List<Todo> _favouriteTasks = [];
 
   final TextEditingController _taskController = TextEditingController();
 
@@ -99,7 +100,7 @@ class _MainScreenState extends State<MainScreen> {
             const Divider(height: 4, color: Colors.grey,),
             YourDay(screenWidth: screenWidth),
             const Divider(height: 4, color: Colors.grey,),
-            ImportantTasks(screenWidth: screenWidth, favouriteTasks: [],),
+            ImportantTasks(screenWidth: screenWidth, favouriteTasks: _favouriteTasks,),
             const Divider(height: 4, color: Colors.grey,),
             TaskList(screenWidth: screenWidth),
             const Divider(height: 4, color: Colors.grey,),
@@ -120,7 +121,7 @@ class _MainScreenState extends State<MainScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => TaskDetailScreen(task: task),
+                                  builder: (context) => MiniTaskDetailScreen(task: task),
                                 ),
                               );
                             },
