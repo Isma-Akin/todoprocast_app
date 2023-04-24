@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/models/todo_models.dart';
 import 'package:intl/intl.dart';
 
+import '../api/todo_repository.dart';
 import '../blocs/todos/todos_bloc.dart';
 
 class TodoDetailScreen extends StatefulWidget {
@@ -17,6 +19,7 @@ class TodoDetailScreen extends StatefulWidget {
 }
 
 class _TodoDetailScreenState extends State<TodoDetailScreen> {
+  late final SharedPreferences prefs;
   DateTime? _dueDate;
   bool _isChecked = false;
   bool _isExpanded = false;
@@ -154,7 +157,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TodosBloc(),
+      create: (context) => TodosBloc(TodoRepository(prefs: prefs), prefs),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.tertiaryColor,
