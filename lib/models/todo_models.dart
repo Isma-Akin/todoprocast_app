@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 
@@ -66,6 +68,16 @@ class Todo extends Equatable {
       'isFavourite': isFavourite,
       // 'steps': steps,
     };
+  }
+
+  static Todo decode(String todoJson) {
+    Map<String, dynamic> jsonMap = jsonDecode(todoJson);
+    return Todo.fromJson(jsonMap);
+  }
+
+  static String encode(Todo todo) {
+    String jsonString = jsonEncode(todo.toJson());
+    return jsonString;
   }
 
   static DateTime _dateTimeFromJson(String json) =>
