@@ -82,15 +82,27 @@ class _MainScreenState extends State<MainScreen> {
               },
               icon: const Icon(Icons.search),
             ),
-          IconButton(onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const Settings(),
-              ),
-            );
-          },
-              icon: const Icon(Icons.settings))],
+            PopupMenuButton(
+              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                PopupMenuItem(
+                  value: 1,
+                  child: Text('Settings'),
+                ),
+                PopupMenuItem(
+                  value: 2,
+                  child: Text('Change Theme'),
+                ),
+                PopupMenuItem(
+                  value: 3,
+                  child: Text('View Profile'),
+                ),
+              ],
+              onSelected: (value) {
+                // Handle menu item selection here
+              },
+              icon: Icon(Icons.more_vert),
+            ),
+          ],
           title: const Text('Main Screen'),
         ),
         body: Column(
