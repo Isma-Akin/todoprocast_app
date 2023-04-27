@@ -16,10 +16,9 @@ class FavouriteTasksScreen extends StatefulWidget {
 enum TodoSortCriteria { dateCreated, alphabetically }
 
 class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
-
-  List<Todo> _todos = [];
+  final List<Todo> _todos = [];
   TodoSortCriteria _sortCriteria = TodoSortCriteria.dateCreated;
-  TodoSortCriteria _sortCriteria2 = TodoSortCriteria.alphabetically;
+  final TodoSortCriteria _sortCriteria2 = TodoSortCriteria.alphabetically;
 
 
   List<Todo> _sortTodos(List<Todo> todos) {
@@ -48,7 +47,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(
+        home: Scaffold(extendBodyBehindAppBar: true,
           floatingActionButton:  FloatingActionButton(
           backgroundColor: appcolors[2],
           foregroundColor: Colors.white,
@@ -63,7 +62,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
           appBar: AppBar(
             actions: [
               PopupMenuButton<TodoSortCriteria>(
-            icon: Icon(Icons.sort),
+            icon: const Icon(Icons.sort),
               initialValue: _sortCriteria,
               onSelected: (value) {
               setState(() {
@@ -90,34 +89,49 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
             backgroundColor: AppColors.tertiaryColor,
             title: const Text('Favourite Tasks'),
           ),
-          body: BlocBuilder<TodosBloc, TodosState>(
-              builder: (context, state) {
-                if (state is TodosLoaded) {
-                  final favouriteTodos = state.todos.where(
-                      (todo) => todo.isFavourite ?? false).toList();
-                  if (favouriteTodos.isEmpty) {
-                    return Center(
-                      child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text('No favourite tasks yet',
-                            style: TextStyle(fontSize: 30),),
-                          SizedBox(width: 10,),
-                          Icon(Icons.sticky_note_2)
-                        ],
-                      ));
+          body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/cloudbackground.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: BlocBuilder<TodosBloc, TodosState>(
+                builder: (context, state) {
+                  if (state is TodosLoaded) {
+                    final favouriteTodos = state.todos.where(
+                        (todo) => todo.isFavourite ?? false).toList();
+                    if (favouriteTodos.isEmpty) {
+                      return Center(
+                        child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text('No favourite tasks yet',
+                              style: TextStyle(fontSize: 30),),
+                            SizedBox(width: 10,),
+                            Icon(Icons.sticky_note_2)
+                          ],
+                        ));
+                    } else {
+                      return ListView.builder(
+                          itemCount: _sortTodos(favouriteTodos).length,
+                          itemBuilder: (context, index) {
+                            final todo = _sortTodos(favouriteTodos)[index];
+                            return todosCard(context, todo);
+                          }
+                      );
+                    }
                   } else {
-                    return ListView.builder(
-                        itemCount: _sortTodos(favouriteTodos).length,
-                        itemBuilder: (context, index) {
-                          final todo = _sortTodos(favouriteTodos)[index];
-                          return todosCard(context, todo);
-                        }
-                    );
+                    return Center(
+                        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Loading...',
+                              style: const TextStyle(fontSize: 30),),
+                            CircularProgressIndicator(color: Colors.orange,),
+                          ],
+                        ));
                   }
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              }),
+                }),
+          ),
         ));
   }
 
