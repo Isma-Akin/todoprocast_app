@@ -21,6 +21,7 @@ class Todo extends Equatable {
   bool? isFavourite;
   bool isSynced;
   bool isTempId;
+  bool isApplied;
   String groupId;
   List<String> steps;
 
@@ -35,6 +36,7 @@ class Todo extends Equatable {
     this.isFavourite,
     this.isSynced = false,
     this.isTempId = false,
+    this.isApplied = false,
     this.groupId = '',
     this.steps = const <String>[],
   }) {
