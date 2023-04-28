@@ -34,13 +34,17 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        builder: (context) => SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child:  AddTodoScreen(todosBloc: context.read<TodosBloc>()),
-          ),
-        ));
+        builder: (context) =>
+            SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery
+                        .of(context)
+                        .viewInsets
+                        .bottom),
+                child: AddTodoScreen(todosBloc: context.read<TodosBloc>()),
+              ),
+            ));
   }
 
   @override
@@ -48,38 +52,41 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(extendBodyBehindAppBar: true,
-          floatingActionButton:  FloatingActionButton(
-          backgroundColor: appcolors[2],
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: appcolors[2],
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            onPressed: () {
+              _addTodo(context);
+            },
+            child: const Icon(Icons.add, size: 30),
+            elevation: 1,
           ),
-          onPressed: () {
-            _addTodo(context);
-          },child: const Icon(Icons.add, size: 30),
-          elevation: 1,
-        ),
           appBar: AppBar(
             actions: [
               PopupMenuButton<TodoSortCriteria>(
-            icon: const Icon(Icons.sort),
-              initialValue: _sortCriteria,
-              onSelected: (value) {
-              setState(() {
-                _sortCriteria = value;
-                _sortTodos(_todos);
-              });
-              },
-              itemBuilder:(BuildContext context) => [
-                const PopupMenuItem(
-                  value: TodoSortCriteria.dateCreated,
-                  child: Text('Sort by date created'),
-                ),
-                const PopupMenuItem(
-                  value: TodoSortCriteria.alphabetically,
-                  child: Text('Sort alphabetically'),
-                ),
-              ],)],
+                icon: const Icon(Icons.sort),
+                initialValue: _sortCriteria,
+                onSelected: (value) {
+                  setState(() {
+                    _sortCriteria = value;
+                    _sortTodos(_todos);
+                  });
+                },
+                itemBuilder: (BuildContext context) =>
+                [
+                  const PopupMenuItem(
+                    value: TodoSortCriteria.dateCreated,
+                    child: Text('Sort by date created'),
+                  ),
+                  const PopupMenuItem(
+                    value: TodoSortCriteria.alphabetically,
+                    child: Text('Sort alphabetically'),
+                  ),
+                ],)
+            ],
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -98,19 +105,21 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
             ),
             child: BlocBuilder<TodosBloc, TodosState>(
                 builder: (context, state) {
+                  BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
                   if (state is TodosLoaded) {
                     final favouriteTodos = state.todos.where(
-                        (todo) => todo.isFavourite ?? false).toList();
+                            (todo) => todo.isFavourite ?? false).toList();
                     if (favouriteTodos.isEmpty) {
                       return Center(
-                        child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text('No favourite tasks yet',
-                              style: TextStyle(fontSize: 30),),
-                            SizedBox(width: 10,),
-                            Icon(Icons.sticky_note_2)
-                          ],
-                        ));
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text('No favourite tasks yet',
+                                style: TextStyle(fontSize: 30),),
+                              SizedBox(width: 10,),
+                              Icon(Icons.sticky_note_2)
+                            ],
+                          ));
                     } else {
                       return ListView.builder(
                           itemCount: _sortTodos(favouriteTodos).length,
@@ -122,7 +131,8 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
                     }
                   } else {
                     return Center(
-                        child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text('Loading...',
                               style: const TextStyle(fontSize: 30),),
@@ -134,80 +144,4 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
           ),
         ));
   }
-
-  // InkWell _todosCard(
-  //     BuildContext context,
-  //     Todo todo,
-  //     ) {
-  //   return InkWell(
-  //     splashColor: Colors.blue.withAlpha(30),
-  //     onTap: () {
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => TodoDetailScreen(todo: todo),
-  //         ),
-  //       );
-  //     },
-  //     child: Card(
-  //       color: todo.taskCompleted == true ? Colors.orange : AppColors.secondaryColor,
-  //       margin: const EdgeInsets.only(bottom: 8.0),
-  //       child: Padding(
-  //         padding: const EdgeInsets.all(8.0),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Text(
-  //               '#${todo.id}: ${todo.task}',
-  //               style: const TextStyle(
-  //                 fontSize: 18,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //             ),
-  //             BlocBuilder<TodosBloc, TodosState>(
-  //               builder: (context, state) {
-  //                 return Row(
-  //                   children: [
-  //                     IconButton(
-  //                       onPressed: () {
-  //                         context.read<TodosBloc>().add(
-  //                             MarkTodoAsFavOrUnFav(todo: todo));
-  //                       },
-  //                       icon: Icon(
-  //                           todo.isFavourite! ? Icons.star : Icons.star_border),
-  //                       color: Colors.yellow,
-  //                     ),
-  //                     InkWell(
-  //                       onTap: () {
-  //                         Navigator.pop(context);
-  //                       },
-  //                       child: IconButton(
-  //                         onPressed: () {
-  //                           context.read<TodosBloc>().add(
-  //                             UpdateTodo(
-  //                               todo: todo.copyWith(taskCompleted: true),
-  //                             ),
-  //                           );
-  //                         },
-  //                         icon: const Icon(Icons.add_task),
-  //                       ),
-  //                     ),IconButton(
-  //                       onPressed: () {
-  //                         context.read<TodosBloc>().add(
-  //                           RemoveTodo(
-  //                             todo: todo.copyWith(taskCancelled: true),
-  //                           ),
-  //                         );
-  //                       },
-  //                       icon: const Icon(Icons.cancel),
-  //                     ),
-  //                   ],
-  //                 );
-  //               },
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
 }
