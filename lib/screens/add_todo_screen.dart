@@ -41,104 +41,102 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
         dateCreated: DateTime.now(),
         task: 'Do laundry',
         description: 'Task description',
-        dueDate: DateTime.now().add(Duration(days: 2)), id: 6,
+        dueDate: DateTime.now().add(Duration(days: 2)), id: 3,
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Meal prep',
         description: 'Task description',
-        dueDate: DateTime.now().add(Duration(days: 3)), id: 3,
+        dueDate: DateTime.now().add(Duration(days: 3)), id: 4,
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Vacuum',
         description: 'Task description',
-        dueDate: DateTime.now().add(Duration(days: 7)), id: 4,
+        dueDate: DateTime.now().add(Duration(days: 7)), id: 5,
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Replace light-bulbs',
         description: 'Task description',
-        dueDate: DateTime.now().add(Duration(days: 2)), id: 7,
+        dueDate: DateTime.now().add(Duration(days: 2)), id: 6,
       ),
     ];
 
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          SizedBox(height: 10,),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  autocorrect: true,
-                  controller: taskController,
-                  decoration: InputDecoration(
-                    hintText: "Enter a task name",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                autocorrect: true,
+                controller: taskController,
+                decoration: const InputDecoration(
+                  hintText: "Add a task",
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  // Set the desired font size here
+                  labelStyle: TextStyle(fontSize: 16),
                 ),
               ),
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: IconButton(
-                  onPressed: () async {
-                    var todo = Todo(
-                      task: taskController.text,
-                      description: "Description",
-                      dateCreated: DateTime.now(),
-                      dueDate: DateTime.now().add(Duration(days: 10)),
-                      taskCompleted: false,
-                      taskCancelled: false,
-                      isFavourite: false,
-                      id: 1,
-                    );
-                    context.read<TodosBloc>().add(AddTodo(todo: todo));
-                    taskController.clear();
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.add_box_outlined,
-                      color: AppColors.secondaryColor,
-                      size: 40,),
-                ),
+            ),
+            SizedBox(
+              height: 50,
+              width: 50,
+              child: IconButton(
+                onPressed: () async {
+                  var todo = Todo(
+                    task: taskController.text,
+                    description: "Description",
+                    dateCreated: DateTime.now(),
+                    dueDate: DateTime.now().add(Duration(days: 10)),
+                    taskCompleted: false,
+                    taskCancelled: false,
+                    isFavourite: false,
+                    id: 7,
+                  );
+                  context.read<TodosBloc>().add(AddTodo(todo: todo));
+                  BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
+                  taskController.clear();
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.my_library_add_rounded,
+                    color: AppColors.secondaryColor,
+                    size: 40,),
               ),
-            ],
-            mainAxisAlignment: MainAxisAlignment.center,
-          ),
-      const SizedBox(height: 10,),
-      SizedBox(
-        height: 45.0,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: defaultTodos.length,
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              onTap: () async {
-                context.read<TodosBloc>().add(AddTodo(todo: defaultTodos[index]));
-                BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
-              },
-              child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(defaultTodos[index].task),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
         ),
+    // const SizedBox(height: 10,),
+        Divider(thickness: 1,color: Colors.white),
+    SizedBox(
+      height: 45.0,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: defaultTodos.length,
+        itemBuilder: (BuildContext context, int index) {
+          return InkWell(
+            onTap: () async {
+              context.read<TodosBloc>().add(AddTodo(todo: defaultTodos[index]));
+              BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(defaultTodos[index].task),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
-          const SizedBox(height: 20,),
-        ],),
-    );
+    ),
+        const SizedBox(height: 20,),
+      ],);
   }
 }
