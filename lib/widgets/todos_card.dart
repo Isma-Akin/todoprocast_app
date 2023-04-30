@@ -18,14 +18,27 @@ InkWell todosCard(
     onTap: () {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => TodoDetailScreen(todo: todo),
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 500),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              TodoDetailScreen(todo: todo,),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            var begin = const Offset(1.0, 0.0);
+            var end = Offset.zero;
+            var curve = Curves.ease;
+            var tween = Tween(begin: begin, end: end).chain(
+                CurveTween(curve: curve));
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
         ),
       );
     },
     child: Card(
-      color: todo.taskCompleted == true ? Colors.orange : AppColors
-          .secondaryColor,
+      // color: todo.taskCompleted == true ? Colors.orange : AppColors.blueSecondaryColor,
+      color: AppColors.orangeSecondaryColor,
       margin: const EdgeInsets.only(bottom: 5.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -48,7 +61,7 @@ InkWell todosCard(
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
             BlocBuilder<TodosBloc, TodosState>(
