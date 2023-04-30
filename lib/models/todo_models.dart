@@ -5,10 +5,6 @@ import 'package:intl/intl.dart';
 
 import '../api/custom_serializer.dart';
 
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-
-// part 'todo_models.g.dart';
 
 class Todo extends Equatable {
   final int id;
@@ -55,6 +51,7 @@ class Todo extends Equatable {
       taskCompleted: json['taskCompleted'],
       taskCancelled: json['taskCancelled'],
       isFavourite: json['isFavourite'],
+      steps: json['steps'] != null ? List<String>.from(json['steps']) : [],
     );
   }
 
@@ -68,7 +65,7 @@ class Todo extends Equatable {
       'taskCompleted': taskCompleted,
       'taskCancelled': taskCancelled,
       'isFavourite': isFavourite,
-      // 'steps': steps,
+      'steps': steps,
     };
   }
 
@@ -103,7 +100,7 @@ class Todo extends Equatable {
     bool? isFavourite,
     bool? isSynced,
     bool? isTempId,
-    String? steps,
+    List<String>? steps,
     String? groupId,
   }) {
     return Todo(
@@ -118,6 +115,7 @@ class Todo extends Equatable {
       isSynced: isSynced ?? this.isSynced,
       isTempId: isTempId ?? this.isTempId,
       groupId: groupId ?? this.groupId,
+      steps: steps as List<String>? ?? this.steps,
     );
   }
 
