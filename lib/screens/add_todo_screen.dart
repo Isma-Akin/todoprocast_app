@@ -31,6 +31,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
         task: 'Buy groceries',
         description: 'Task description',
         dueDate: DateTime.now().add(Duration(days: 1)),
+        steps: [],
       ),Todo(
         dateCreated: DateTime.now(),
         task: 'Study for exams',
@@ -98,7 +99,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.my_library_add_rounded,
-                    color: AppColors.secondaryColor,
+                    color: AppColors.blueSecondaryColor,
                     size: 40,),
               ),
             ),

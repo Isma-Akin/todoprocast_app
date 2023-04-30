@@ -23,7 +23,7 @@ class _SettingsState extends State<Settings> {
       builder: (context, child) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: AppColors.tertiaryColor,
+            backgroundColor: AppColors.blueTertiaryColor,
             title: const Text('Settings'),
           ),
           body: const Center(
