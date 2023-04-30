@@ -27,7 +27,7 @@ class _CalendarPageState extends State<CalendarPage> {
       child: MaterialApp(debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
-            backgroundColor: AppColors.tertiaryColor,
+            backgroundColor: Colors.purple,
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -52,7 +52,7 @@ class _CalendarPageState extends State<CalendarPage> {
                               margin: const EdgeInsets.all(4.0),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: AppColors.primaryColor,
+                                color: AppColors.bluePrimaryColor,
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: Text(
@@ -65,7 +65,7 @@ class _CalendarPageState extends State<CalendarPage> {
                               margin: const EdgeInsets.all(4.0),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: AppColors.secondaryColor,
+                                color: AppColors.blueSecondaryColor,
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: Text(
@@ -147,7 +147,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             },
                             child: Card(
                               elevation: 5,
-                              color: AppColors.secondaryColor,
+                              color: AppColors.blueSecondaryColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
