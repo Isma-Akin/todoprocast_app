@@ -24,7 +24,11 @@ final appcolors = [
 ];
 
 class AppColors {
-  static const Color primaryColor = Color(0x1A2F64E1);
-  static const Color secondaryColor = Color(0x4C2F64E1);
-  static const Color tertiaryColor = Color(0x992F64E1);
+  static const Color bluePrimaryColor = Color(0x1A2F64E1);
+  static const Color blueSecondaryColor = Color(0x4C2F64E1);
+  static const Color blueTertiaryColor = Color(0x992F64E1);
+
+  static const Color orangePrimaryColor = Color(0x1AED7D31);
+  static const Color orangeSecondaryColor = Color(0x4CED7D31);
+  static const Color orangeTertiaryColor = Color(0x99ED7D31);
 }
