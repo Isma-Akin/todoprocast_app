@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:todoprocast_app/blocs/todos/todos_bloc.dart';
 import 'package:todoprocast_app/blocs/todos_status/todos_status_bloc.dart';
-import 'package:todoprocast_app/screens/main_screen.dart';
+import 'package:todoprocast_app/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/todo_repository.dart';
@@ -71,7 +71,7 @@ class TodoApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const MainScreen(),
+        home: const HomeScreen(),
       ),
     );
   }

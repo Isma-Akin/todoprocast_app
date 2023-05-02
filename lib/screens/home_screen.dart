@@ -1,174 +1,264 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:todoprocast_app/constants.dart';
+import 'package:todoprocast_app/screens/mini_task_detail_screen.dart';
+import 'package:todoprocast_app/services/settings.dart';
+import 'package:todoprocast_app/widgets/mainscreen_widgets.dart';
 
-import '../widgets/todos_card.dart';
-import '/models/models.dart';
-import '/blocs/blocs.dart';
-import 'add_todo.dart';
-import 'add_todo_screen.dart';
+import '../models/todo_models.dart';
 
 class HomeScreen extends StatefulWidget {
-  final TodosBloc todosBloc;
-  const HomeScreen({Key? key, required this.todosBloc}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  void _addTodo(BuildContext context) {
+  final List _tasks = [];
+  final List<Todo> _favouriteTasks = [];
+
+  final TextEditingController _taskController = TextEditingController();
+
+
+  void _showAddTaskSheet(BuildContext context) {
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (context) => SingleChildScrollView(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: AddTodoScreen(todosBloc: context.read<TodosBloc>()),
-      ),
-    ));
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 16),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Add a mini task',
+                    border: OutlineInputBorder(),
+                  ),
+                  controller: _taskController,
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  height: 50,
+                  width: 200,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final taskName = _taskController.text;
+                      setState(() {
+                        _tasks.add(taskName);
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: Text('Add task'),
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
+
+// void _showMiniTaskDetailSheet(BuildContext context, Todo todo) {
+//     showModalBottomSheet(
+//       context: context,
+//       isScrollControlled: true,
+//       builder: (BuildContext context) {
+//         return MiniTaskDetailScreen(todo: todo);
+//       },
+//     );
+//   }
+
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return MaterialApp(
-        title: "Todo app",
-        debugShowCheckedModeBanner: false,
-        color: appcolors[2],
-        home: Scaffold(
-          extendBodyBehindAppBar: true,
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: appcolors[2],
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: SearchBar());
+              },
+              icon: const Icon(Icons.search, color: Colors.black,),
             ),
-          onPressed: () {
-            _addTodo(context);
-          },child: const Icon(Icons.add, size: 30),
-            elevation: 0.1,
-        ),
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: AppColors.tertiaryColor,
-              actions: [
-                IconButton(onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(
-                    builder: (context) => const Add_ToDo()));},
-                  icon: const Icon(Icons.add)),
-              ],
-              title: const Text("Tasks",
-              style: TextStyle(fontSize: 30)),
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.arrow_back),
-              ),
-            ),
-          body: SafeArea(
-            top: true,
-            child: BlocBuilder<TodosStatusBloc, TodosStatusState>(
-              builder: (context, state) {
-                print('Current TodosStatusState: $state');
-                if (state is TodosStatusLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (state is TodosStatusLoaded) {
-                  return CustomScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    slivers: [
-                      SliverPadding(
-                        padding: const EdgeInsets.all(8.0),
-                        sliver: SliverList(
-                          delegate: SliverChildListDelegate([
-                            _todo(
-                              state.pendingTodos,
-                              'Pending',
-                            ),
-                            if (state.pendingTodos.isEmpty)
-                              Column(
-                                children: const [
-                              Text('You have no pending tasks.',
-                                    style: TextStyle(
-                                      color: AppColors.secondaryColor,
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.bold),),
-                              SizedBox(height: 20,),
-                              Text('Add a task by clicking the + button below.',
-                                      style: TextStyle(
-                                      color: AppColors.secondaryColor,
-                                      fontSize: 20.2,
-                                      fontWeight: FontWeight.bold),),
-                                ],
-                              ),
-                              _todo(
-                              state.completedTodos,
-                              'Completed',
-                              ),
-                              if (state.completedTodos.isEmpty)
-                               const Text('You have no completed tasks.',
-                                  style: TextStyle(
-                                  color: AppColors.secondaryColor,
-                                  fontSize: 27,
-                                  fontWeight: FontWeight.bold),),
-                                  ]),
-                                ),
-                              ),
-                            ],
-                          );
-                        } else {
-                          return const Text('Something went wrong.');
-                        }
-                      },
-                    ),
-                  ),
-                ));
-          }
-
-
-Column _todo(List<Todo> todos, String status) {
-  return Column(
-    children: [
-      SizedBox(
-        height: 50,
-        child: Row(
-          children: [
-            Text(
-              '$status Tasks: ${todos.length}',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Spacer(),
-            Visibility(
-              visible: todos.isNotEmpty,
-              child: IconButton(
-                  onPressed: () {
-                    context.read<TodosBloc>().add(RemoveAllTodos());
+            PopupMenuButton(
+              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                PopupMenuItem(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Settings(),
+                      ),
+                    );
                   },
-                  icon: const Icon(Icons.delete_forever)),
+                  value: 1,
+                  child: const Text('Settings'),
+                ),
+                const PopupMenuItem(
+                  value: 2,
+                  child: Text('Change Theme'),
+                ),
+                const PopupMenuItem(
+                  value: 3,
+                  child: Text('View Profile'),
+                ),
+              ],
+              onSelected: (value) {
+                // Handle menu item selection here
+              },
+              icon: Icon(Icons.more_vert, color: Colors.black,),
             ),
           ],
+          title: Text('Welcome back!', style: GoogleFonts.openSans(
+              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),),
+        ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              // const SizedBox(height: 10,),
+              const Divider(height: 2, color: Colors.black,),
+              TaskPlannerWidget(screenWidth: screenWidth),
+              const Divider(height: 4, color: Colors.grey,),
+              YourDayWidget(screenWidth: screenWidth),
+              const Divider(height: 4, color: Colors.grey,),
+              ImportantTasksWidget(
+                screenWidth: screenWidth,
+                favouriteTasks: _favouriteTasks,
+              ),
+              const Divider(height: 4, color: Colors.grey,),
+              TaskListWidget(screenWidth: screenWidth),
+              const Divider(height: 4, color: Colors.grey,),
+              TaskActivityWidget(screenWidth: screenWidth, todos: const [],),
+              const Divider(height: 4, color: Colors.grey,),
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: AppColors.bluePrimaryColor,
+                    borderRadius: BorderRadius.all(Radius.circular(10)
+
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: _tasks.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final task = _tasks[index];
+                            return Card(
+                              color: AppColors.blueSecondaryColor,
+                              child: ListTile(
+                                title: Text(task),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MiniTaskDetailScreen(taskTitle: task),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            // width: MediaQuery.of(context).size.width * 0.5,
+                            width: screenWidth,
+                            height: 30,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                _showAddTaskSheet(context);
+                              },
+                              child: Text('Create Task', style: GoogleFonts.openSans(fontSize: 24),),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+    ],
+    ),
+        ),
+    ),
+    );
+  }
+}
+
+class HomeScreenCard extends StatelessWidget {
+  const HomeScreenCard({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 100,
+      child: SizedBox(
+        width: 700,
+        child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: 15,
+          itemBuilder: (BuildContext context, int index) => const Card(
+            child: Center(child: Text('Dummy Card Text')),
+          ),
         ),
       ),
-      ListView.builder(
-        shrinkWrap: true,
-        itemCount: todos.length,
-        itemBuilder: (BuildContext context, int index) {
-          return todosCard(
-            context,
-            todos[index],
-          );
+    );
+  }
+}
+
+class SearchBar extends SearchDelegate<String> {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
         },
       ),
-    ],
-  );
-}
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Container();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return Container();
+  }
 }

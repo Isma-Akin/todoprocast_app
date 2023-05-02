@@ -5,7 +5,7 @@ import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/logic/navigation/constants/nav_bar_items.dart';
 import 'package:todoprocast_app/logic/navigation/navigation_cubit.dart';
 
-import 'package:todoprocast_app/screens/home_screen.dart';
+import 'package:todoprocast_app/screens/task_planner_screen.dart';
 // import 'package:todoprocast_app/screens/profile_screen.dart';
 // import 'package:todoprocast_app/screens/settings_screen.dart';
 
