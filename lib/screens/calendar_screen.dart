@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todoprocast_app/blocs/blocs.dart';
@@ -24,7 +25,8 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TimeBloc(),
-      child: MaterialApp(debugShowCheckedModeBanner: false,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.purple,
@@ -32,9 +34,9 @@ class _CalendarPageState extends State<CalendarPage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: const Icon(Icons.arrow_back),
+              icon:  Icon(Icons.arrow_back, color: Colors.purple[800]),
             ),
-            title: const Text('Your Day'),
+            title:  Text('Your Day', style: GoogleFonts.openSans(fontSize: 24)),
           ),
           body: BlocBuilder<TimeBloc, DateTime>(
             builder: (context, state) {
@@ -44,7 +46,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     // Text(DateFormat('hh:mm:ss').format(DateTime.now()),
                     //   style: const TextStyle(fontSize: 30),),
                     Text(DateFormat('EEEE, MMM d').format(DateTime.now()),
-                      style: const TextStyle(fontSize: 30),),
+                      style: GoogleFonts.openSans(fontSize: 30),),
                     TableCalendar(
                       calendarBuilders: CalendarBuilders(
                         selectedBuilder: (context, date, events) =>
@@ -57,7 +59,7 @@ class _CalendarPageState extends State<CalendarPage> {
                               ),
                               child: Text(
                                 date.day.toString(),
-                                style: const TextStyle(color: Colors.white),
+                                style: GoogleFonts.openSans(fontSize: 24),
                               ),
                             ),
                                 todayBuilder: (context, date, events) =>
@@ -70,7 +72,8 @@ class _CalendarPageState extends State<CalendarPage> {
                               ),
                               child: Text(
                                 date.day.toString(),
-                                style: const TextStyle(color: Colors.white),
+                                style: GoogleFonts.openSans(color: Colors.white,
+                                    fontSize: 24),
                                   ),
                                 ),
                                 markerBuilder: (context, date, events) {

@@ -51,9 +51,10 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(extendBodyBehindAppBar: true,
+        home: Scaffold(
+          extendBodyBehindAppBar: true,
           floatingActionButton: FloatingActionButton(
-            backgroundColor: appcolors[2],
+            backgroundColor: Colors.teal,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -67,7 +68,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
           appBar: AppBar(
             actions: [
               PopupMenuButton<TodoSortCriteria>(
-                icon: const Icon(Icons.sort),
+                icon:  Icon(Icons.sort, color: Colors.teal[50],),
                 initialValue: _sortCriteria,
                 onSelected: (value) {
                   setState(() {
@@ -91,15 +92,16 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: const Icon(Icons.arrow_back),
+              icon:  Icon(Icons.arrow_back, color: Colors.teal[50],),
             ),
-            backgroundColor: AppColors.tertiaryColor,
+            backgroundColor: Colors.teal,
+            elevation: 0,
             title: const Text('Favourite Tasks'),
           ),
           body: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("images/cloudbackground.jpg"),
+                image: AssetImage("assets/images/cloudbackground.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -133,9 +135,9 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
                     return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             Text('Loading...',
-                              style: const TextStyle(fontSize: 30),),
+                              style: TextStyle(fontSize: 30),),
                             CircularProgressIndicator(color: Colors.orange,),
                           ],
                         ));
