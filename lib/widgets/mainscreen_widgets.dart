@@ -6,13 +6,15 @@ import 'package:todoprocast_app/screens/task_activity_screen.dart';
 import '../blocs/todos/todos_bloc.dart';
 import '../constants.dart';
 import '../models/todo_models.dart';
-import '../screens/calendar_page.dart';
+import '../screens/calendar_screen.dart';
 import '../screens/favourite_tasks_screen.dart';
-import '../screens/home_screen.dart';
+import '../screens/task_planner_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'dart:typed_data';
 
 
-class TaskList extends StatelessWidget {
-  const TaskList({
+class TaskPlannerWidget extends StatelessWidget {
+  const TaskPlannerWidget({
     Key? key,
     required this.screenWidth,
   }) : super(key: key);
@@ -22,130 +24,47 @@ class TaskList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
-        InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) => GroupedTasksScreen(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  var begin = const Offset(1.0, 0.0);
-                  var end = Offset.zero;
-                  var curve = Curves.ease;
-                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                  return SlideTransition(
-                    position: animation.drive(tween),
-                    child: child,
-                  );
-                },
-              ),
-            );},
-          child: Container(
-              width: screenWidth,
-              height: 50,
-              color: AppColors.secondaryColor,
-              margin: EdgeInsets.zero,
-              child: Row(
-                children: const [
-                  SizedBox(width: 10,),
-                  Icon(Icons.all_inbox, color: Colors.limeAccent,),
-                  SizedBox(width: 10,),
-                  Text('Grouped Tasks', style: TextStyle(fontSize: 25),),],)
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ImportantTasks extends StatelessWidget {
-  const ImportantTasks({
-    Key? key,
-    required this.screenWidth,
-    required this.favouriteTasks,
-  }) : super(key: key);
-
-  final double screenWidth;
-  final List<Todo> favouriteTasks;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                const FavouriteTasksScreen(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  var begin = const Offset(1.0, 0.0);
-                  var end = Offset.zero;
-                  var curve = Curves.ease;
-                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                  return SlideTransition(
-                    position: animation.drive(tween),
-                    child: child,
-                  );
-                },
-              ),
-            );
-          },
-          child: Container(
-            width: screenWidth,
-            height: 50,
-            color: AppColors.secondaryColor,
-            margin: EdgeInsets.zero,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 10,
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 500),
+                  pageBuilder: (context, animation, secondaryAnimation) => TaskPlanner(todosBloc: context.read<TodosBloc>()),
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var begin = const Offset(1.0, 0.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
                 ),
-                const Icon(
-                  Icons.all_inbox,
-                  color: Colors.teal,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Important Tasks',
-                  style: const TextStyle(fontSize: 25),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          '${getNumFavouriteTasks(favouriteTasks)}',
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+              );
+            },
+            splashColor: Colors.orange,
+            child: Container(
+                width: screenWidth,
+                height: 50,
+                margin: EdgeInsets.zero,
+                child: Row(
+                  children:  [
+                    const SizedBox(width: 10,),
+                    const Icon(Icons.sticky_note_2, color: Colors.orange,),
+                    const SizedBox(width: 10,),
+                    Text('Task Planner', style: GoogleFonts.openSans(fontSize: 24)),],)
             ),
           ),
-        ),
-      ],
+        ]
     );
-  }
-
-  int getNumFavouriteTasks(List<Todo> todos) {
-    return todos.where((todo) => todo.isFavourite ?? false).length;
   }
 }
 
-class YourDay extends StatelessWidget {
-  const YourDay({
+class YourDayWidget extends StatelessWidget {
+  const YourDayWidget({
     Key? key,
     required this.screenWidth,
   }) : super(key: key);
@@ -175,17 +94,17 @@ class YourDay extends StatelessWidget {
                 },
               ),
             );},
+          splashColor: Colors.purple,
           child: Container(
               width: screenWidth,
               height: 50,
-              color: AppColors.secondaryColor,
               margin: EdgeInsets.zero,
               child: Row(
-                children: const [
-                  SizedBox(width: 10,),
-                  Icon(Icons.calendar_today, color: Colors.purple,),
-                  SizedBox(width: 10,),
-                  Text('Your Day', style: TextStyle(fontSize: 25),),],)
+                children: [
+                  const SizedBox(width: 10,),
+                  const Icon(Icons.calendar_today, color: Colors.purple,),
+                  const SizedBox(width: 10,),
+                  Text('Your Day', style: GoogleFonts.openSans(fontSize: 24),),],)
           ),
         ),
       ],
@@ -193,64 +112,95 @@ class YourDay extends StatelessWidget {
   }
 }
 
-class TaskPlanner extends StatelessWidget {
-  const TaskPlanner({
+class ImportantTasksWidget extends StatelessWidget {
+  const ImportantTasksWidget({
     Key? key,
     required this.screenWidth,
+    required this.favouriteTasks,
   }) : super(key: key);
 
   final double screenWidth;
+  final List<Todo> favouriteTasks;
+
+  int getNumFavouriteTasks(List<Todo> todos) {
+    return todos.where((todo) => todo.isFavourite ?? false).length;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
-        children: [
-          InkWell(
-            onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => const HomeScreen(),
-              //   ),
-              // );
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: const Duration(milliseconds: 500),
-                  pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(todosBloc: context.read<TodosBloc>()),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    var begin = const Offset(1.0, 0.0);
-                    var end = Offset.zero;
-                    var curve = Curves.ease;
-                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
-                    );
-                  },
+      children: [
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: const Duration(milliseconds: 500),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                const FavouriteTasksScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  var begin = const Offset(1.0, 0.0);
+                  var end = Offset.zero;
+                  var curve = Curves.ease;
+                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+              ),
+            );
+          },
+          splashColor: Colors.teal,
+          child: Container(
+            width: screenWidth,
+            height: 50,
+            margin: EdgeInsets.zero,
+            child: Row(
+              children: [
+                const SizedBox(
+                  width: 10,
                 ),
-              );
-            },
-            child: Container(
-                width: screenWidth,
-                height: 50,
-                color: AppColors.secondaryColor,
-                margin: EdgeInsets.zero,
-                child: Row(
-                  children: const [
-                    SizedBox(width: 10,),
-                    Icon(Icons.sticky_note_2, color: Colors.orange,),
-                    SizedBox(width: 10,),
-                    Text('Task Planner', style: TextStyle(fontSize: 25),),],)
+                const Icon(
+                  Icons.all_inbox,
+                  color: Colors.teal,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Important Tasks',
+                  style: GoogleFonts.openSans(fontSize: 24),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${getNumFavouriteTasks(favouriteTasks)}',
+                          style: GoogleFonts.openSans(fontSize: 24, color: Colors.teal),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ]
+        ),
+      ],
     );
   }
+
 }
 
-class TaskActivity extends StatelessWidget {
-  const TaskActivity({Key? key, required this.screenWidth}) : super(key: key);
+class TaskListWidget extends StatelessWidget {
+  const TaskListWidget({
+    Key? key,
+    required this.screenWidth,
+  }) : super(key: key);
 
   final double screenWidth;
 
@@ -264,7 +214,7 @@ class TaskActivity extends StatelessWidget {
               context,
               PageRouteBuilder(
                 transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) => const TaskActivityScreen(),
+                pageBuilder: (context, animation, secondaryAnimation) => const GroupedTasksScreen(),
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   var begin = const Offset(1.0, 0.0);
                   var end = Offset.zero;
@@ -277,17 +227,66 @@ class TaskActivity extends StatelessWidget {
                 },
               ),
             );},
+          splashColor: Colors.limeAccent,
           child: Container(
               width: screenWidth,
               height: 50,
-              color: AppColors.secondaryColor,
               margin: EdgeInsets.zero,
               child: Row(
-                children: const [
-                  SizedBox(width: 10,),
-                  Icon(Icons.airplay, color: Colors.pinkAccent,),
-                  SizedBox(width: 10,),
-                  Text('Task Activity', style: TextStyle(fontSize: 25),),],)
+                children: [
+                  const SizedBox(width: 10,),
+                  const Icon(Icons.all_inbox, color: Colors.limeAccent,),
+                  const SizedBox(width: 10,),
+                  Text('Grouped Tasks', style: GoogleFonts.openSans(fontSize: 24),),],)
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TaskActivityWidget extends StatelessWidget {
+  final List<Todo> todos;
+  const TaskActivityWidget({Key? key,
+    required this.screenWidth,
+    required this.todos}) : super(key: key);
+
+  final double screenWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionDuration: const Duration(milliseconds: 500),
+                pageBuilder: (context, animation, secondaryAnimation) => TaskActivityScreen(todos: todos,),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  var begin = const Offset(1.0, 0.0);
+                  var end = Offset.zero;
+                  var curve = Curves.ease;
+                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+              ),
+            );},
+          splashColor: Colors.pinkAccent,
+          child: Container(
+              width: screenWidth,
+              height: 50,
+              margin: EdgeInsets.zero,
+              child: Row(
+                children: [
+                  const SizedBox(width: 10,),
+                  const Icon(Icons.airplay, color: Colors.pinkAccent,),
+                  const SizedBox(width: 10,),
+                  Text('Task Activity', style: GoogleFonts.openSans(fontSize: 24),),],)
           ),
         ),
       ],
