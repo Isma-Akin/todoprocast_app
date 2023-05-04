@@ -50,6 +50,7 @@ dependencies:
   source_gen: ^1.2.2
   like_button: ^2.0.5
   google_fonts: ^4.0.4
+  avatar_glow: ^2.0.2
 
 dev_dependencies:
   flutter_test:
