@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todoprocast_app/constants.dart';
 
-import '../services/settings.dart';
 import '../widgets/todos_card.dart';
 import '/models/models.dart';
 import '/blocs/blocs.dart';
@@ -21,6 +20,7 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
   bool _isCompletedListVisible = true;
   bool _isPendingListVisible = true;
   late TabController _tabController;
+
   void _addTodo(BuildContext context) {
     showModalBottomSheet(
         context: context,
@@ -79,8 +79,10 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
         debugShowCheckedModeBanner: false,
         color: appcolors[2],
         home: Scaffold(
+          backgroundColor: Colors.blueGrey[50],
           extendBodyBehindAppBar: true,
-          floatingActionButton: FloatingActionButton(backgroundColor: Colors.orange,
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.blue,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
@@ -89,43 +91,59 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
           },child: const Icon(Icons.add, size: 30),
             elevation: 0.1,
         ),
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                flexibleSpace: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.orange, Colors.orangeAccent],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+          body: Container(
+            decoration:  const BoxDecoration(
+              image: DecorationImage(
+                opacity: 0.4,
+                image: AssetImage("assets/images/cloudbackground.jpg"),
+                // image: NetworkImage('https://media.tenor.com/VXwpcfsk17UAAAAd/bubble-abth.gif'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      colorFilter: ColorFilter.mode(Colors.orange.withOpacity(0.5), BlendMode.dstATop),
+                      image: AssetImage('assets/images/cloudbackground.jpg'),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.navigate_before,
-                  color: AppColors.blueTertiaryColor,
-                ),
-              ),
-              title:  Center(
-                  child: Text('Task planner', style: GoogleFonts.openSans(fontSize: 25, color: Colors.black),)),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.settings,color: AppColors.blueTertiaryColor,),
-                    onPressed: () {
-                      // Code to open settings
-                    },
+                backgroundColor: Colors.blue,
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.navigate_before,
+                    color: Colors.blueGrey,
+                    size: 30,
                   ),
-                ],
-                floating: true,
-                snap: true,
-              ),
-              SliverToBoxAdapter(
-                child: SafeArea(
-                  top: true,
+                ),
+                title:  Center(
+                    child: Text('Task planner',
+                      style: GoogleFonts.openSans(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.white),)),
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.settings,
+                        color: Colors.blueGrey,
+                      size: 30,),
+                      onPressed: () {
+                        // Code to open settings
+                      },
+                    ),
+                  ],
+                  floating: true,
+                  snap: true,
+                ),
+                SliverToBoxAdapter(
                   child: BlocBuilder<TodosStatusBloc, TodosStatusState>(
                     builder: (context, state) {
                       BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
@@ -141,7 +159,7 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
                           physics: const BouncingScrollPhysics(),
                           slivers: [
                             SliverPadding(
-                              padding: const EdgeInsets.all(1.0),
+                              padding: const EdgeInsets.all(6.0),
                               sliver: SliverList(
                                 delegate: SliverChildListDelegate([
                                   _todoPending(
@@ -151,12 +169,6 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
                                   if (state.pendingTodos.isEmpty)
                                     Column(
                                       children: const [
-                                        Text('You have no pending tasks.',
-                                          style: TextStyle(
-                                              color: AppColors.blueSecondaryColor,
-                                              fontSize: 26,
-                                              fontWeight: FontWeight.bold),),
-                                        SizedBox(height: 20,),
                                         Text('Add a task by clicking the + button below.',
                                           style: TextStyle(
                                               color: AppColors.blueSecondaryColor,
@@ -185,9 +197,9 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
                     },
                   ),
                 ),
+                ],
               ),
-              ],
-            ),
+          ),
           ),
         );
   }
@@ -200,12 +212,28 @@ Column _todoPending(List<Todo> todos, String status) {
         height: 50,
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.orange[100],
+            color: Colors.blueGrey[100],
             borderRadius: BorderRadius.circular(2),
-            border: Border.all(color: Colors.black),
+            // border: const Border.fromBorderSide(
+            //   BorderSide(
+            //     color: Colors.orange,
+            //     width: 2,
+            //   ),
+            // ),
           ),
           child: Row(
             children: [
+              Visibility(
+                visible: todos.isNotEmpty,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isPendingListVisible = !_isPendingListVisible;
+                    });
+                  },
+                  icon: Icon(_isPendingListVisible ? Icons.visibility : Icons.visibility_off, color: Colors.grey,),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
@@ -225,37 +253,17 @@ Column _todoPending(List<Todo> todos, String status) {
                     },
                     icon: const Icon(Icons.delete_forever, color: Colors.grey,)),
               ),
-              Visibility(
-                visible: todos.isNotEmpty,
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _isPendingListVisible = !_isPendingListVisible;
-                    });
-                  },
-                  icon: Icon(_isPendingListVisible ? Icons.visibility : Icons.visibility_off, color: Colors.grey,),
-                ),
-              ),
             ],
           ),
         ),
       ),
-      // if (_isPendingListVisible)
-      //   ListView.builder(
-      //     shrinkWrap: true,
-      //     itemCount: todos.length,
-      //     itemBuilder: (BuildContext context, int index) {
-      //       return todosCard(
-      //         context,
-      //         todos[index],
-      //       );
-      //     },
-      //   ),
       AnimatedContainer(
         height: _isPendingListVisible ? todos.length * 104 : 0.0,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         child: ListView.builder(
+          reverse: true,
+          primary: false,
           shrinkWrap: true,
           itemCount: todos.length,
           itemBuilder: (BuildContext context, int index) {
@@ -272,6 +280,18 @@ Column _todoPending(List<Todo> todos, String status) {
   );
 }
 
+// if (_isPendingListVisible)
+  //   ListView.builder(
+  //     shrinkWrap: true,
+  //     itemCount: todos.length,
+  //     itemBuilder: (BuildContext context, int index) {
+  //       return todosCard(
+  //         context,
+  //         todos[index],
+  //       );
+  //     },
+  //   ),
+
 Column _todoCompleted(List<Todo> todos, String status) {
   return Column(
     children: [
@@ -283,12 +303,28 @@ Column _todoCompleted(List<Todo> todos, String status) {
         height: 50,
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.orange[100],
+            color: Colors.blueGrey[100],
             borderRadius: BorderRadius.circular(2),
-            border: Border.all(color: Colors.black),
+            // border: const Border.fromBorderSide(
+            //   BorderSide(
+            //     color: Colors.orange,
+            //     width: 2,
+            //   ),
+            // ),
           ),
           child: Row(
             children: [
+              Visibility(
+                visible: todos.isNotEmpty,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isCompletedListVisible = !_isCompletedListVisible;
+                    });
+                  },
+                  icon: Icon(_isCompletedListVisible ? Icons.visibility : Icons.visibility_off, color: Colors.grey,),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
@@ -307,17 +343,6 @@ Column _todoCompleted(List<Todo> todos, String status) {
                       _showDeleteAllTodosDialog(context);
                     },
                     icon: const Icon(Icons.delete_forever, color: Colors.grey,)),
-              ),
-              Visibility(
-                visible: todos.isNotEmpty,
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _isCompletedListVisible = !_isCompletedListVisible;
-                    });
-                  },
-                  icon: Icon(_isCompletedListVisible ? Icons.visibility : Icons.visibility_off, color: Colors.grey,),
-                ),
               ),
               // IconButton(
               //   onPressed: () {
@@ -336,6 +361,7 @@ Column _todoCompleted(List<Todo> todos, String status) {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         child: ListView.builder(
+          primary: false,
           shrinkWrap: true,
           itemCount: todos.length,
           itemBuilder: (BuildContext context, int index) {
