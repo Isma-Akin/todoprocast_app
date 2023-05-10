@@ -1,10 +1,14 @@
+import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/screens/mini_task_detail_screen.dart';
 import 'package:todoprocast_app/services/settings.dart';
 import 'package:todoprocast_app/widgets/mainscreen_widgets.dart';
 
+import '../api/todo_repository.dart';
+import '../blocs/todos/todos_bloc.dart';
 import '../models/todo_models.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,6 +19,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  late final TodoRepository repository;
+  late final TodosBloc todosBloc;
 
   final List _tasks = [];
   final List<Todo> _favouriteTasks = [];
@@ -59,13 +66,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-              ],
-            ),
+            ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
 
 // void _showMiniTaskDetailSheet(BuildContext context, Todo todo) {
 //     showModalBottomSheet(
@@ -86,6 +93,15 @@ class _HomeScreenState extends State<HomeScreen> {
       home: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(Colors.indigo.withOpacity(0.3), BlendMode.dstATop),
+                image: AssetImage('assets/images/cloudbackground.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
@@ -121,25 +137,25 @@ class _HomeScreenState extends State<HomeScreen> {
               onSelected: (value) {
                 // Handle menu item selection here
               },
-              icon: Icon(Icons.more_vert, color: Colors.black,),
+              icon: const Icon(Icons.more_vert, color: Colors.black,),
             ),
           ],
-          title: Text('Welcome back!', style: GoogleFonts.openSans(
-              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),),
+          title: Text(
+            'Welcome back!',
+            style: GoogleFonts.openSans(
+                fontSize: 29, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          centerTitle: true,
         ),
         body: SafeArea(
           child: Column(
             children: [
-              // const SizedBox(height: 10,),
               const Divider(height: 2, color: Colors.black,),
               TaskPlannerWidget(screenWidth: screenWidth),
               const Divider(height: 4, color: Colors.grey,),
               YourDayWidget(screenWidth: screenWidth),
               const Divider(height: 4, color: Colors.grey,),
-              ImportantTasksWidget(
-                screenWidth: screenWidth,
-                favouriteTasks: _favouriteTasks,
-              ),
+              ImportantTasksWidget(screenWidth: screenWidth,),
               const Divider(height: 4, color: Colors.grey,),
               TaskListWidget(screenWidth: screenWidth),
               const Divider(height: 4, color: Colors.grey,),
@@ -150,7 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: const BoxDecoration(
                     color: AppColors.bluePrimaryColor,
                     borderRadius: BorderRadius.all(Radius.circular(10)
-
                     ),
                   ),
                   child: Column(
@@ -161,45 +176,84 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             final task = _tasks[index];
                             return Card(
-                              color: AppColors.blueSecondaryColor,
-                              child: ListTile(
-                                title: Text(task),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => MiniTaskDetailScreen(taskTitle: task),
-                                    ),
-                                  );
-                                },
+                              color: AppColors.orangeTertiaryColor,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage("assets/images/cloudbackground.jpg"),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: ListTile(
+                                  trailing: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _tasks.removeAt(index);
+                                      });
+                                    },
+                                    icon: const Icon(Icons.delete_forever,
+                                      color: Colors.black,),
+                                  ),
+                                  title: Text(task),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MiniTaskDetailScreen(
+                                            taskTitle: task),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             );
                           },
                         ),
                       ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            // width: MediaQuery.of(context).size.width * 0.5,
-                            width: screenWidth,
-                            height: 30,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                _showAddTaskSheet(context);
-                              },
-                              child: Text('Create Task', style: GoogleFonts.openSans(fontSize: 24),),
-                            ),
-                          ),
-                        ],
+                      const Divider(
+                        height: 2,
+                        color: Colors.black,),
+                      TextFormField(
+                        onFieldSubmitted: (value) {
+                          final taskName = _taskController.text;
+                          setState(() {
+                            _tasks.add(taskName);
+                            _taskController.clear();
+                          });
+                          // Navigator.pop(context);
+                        },
+                        textInputAction: TextInputAction.done,
+                        style: GoogleFonts.openSans(
+                            fontSize: 20),
+                        controller: _taskController,
+                        decoration: const InputDecoration(
+                          label: Text('Add a mini task',
+                            style: TextStyle(color: AppColors.blueTertiaryColor),),
+                        prefixIcon: Icon(Icons.add,
+                          color: AppColors.blueSecondaryColor,),
+                        // hintText: "Add mini task",
+                        ),
                       ),
+                    // SizedBox(
+                    //   // width: MediaQuery.of(context).size.width * 0.5,
+                    //   width: screenWidth,
+                    //   height: 30,
+                    //   child: ElevatedButton(
+                    //     onPressed: () {
+                    //       _showAddTaskSheet(context);
+                    //     },
+                    //     child: Text('Create Task',
+                    //       style: GoogleFonts.openSans(fontSize: 24),),
+                    //   ),
+                    // ),
                     ],
                   ),
                 ),
               ),
-    ],
-    ),
+            ],
+          ),
         ),
-    ),
+      ),
     );
   }
 }
