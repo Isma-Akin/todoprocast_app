@@ -34,6 +34,85 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
     ));
   }
 
+  // void _addTodo(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     builder: (context) {
+  //       bool isExpanded = false;
+  //       TextEditingController taskController = TextEditingController();
+  //       TextEditingController detailsController = TextEditingController();
+  //
+  //       void _toggleExpansion() {
+  //         setState(() {
+  //           isExpanded = !isExpanded;
+  //         });
+  //       }
+  //
+  //       void _submitTodo() {
+  //         // Implement the logic to submit the to-do here
+  //       }
+  //
+  //       return SingleChildScrollView(
+  //         child: Container(
+  //           padding: EdgeInsets.only(
+  //               bottom: MediaQuery.of(context).viewInsets.bottom),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Row(
+  //                 children: [
+  //                   Expanded(
+  //                     child: TextField(
+  //                       controller: taskController,
+  //                       decoration: InputDecoration(hintText: 'Enter task'),
+  //                     ),
+  //                   ),
+  //                   SizedBox(
+  //                     width: 8,
+  //                   ),
+  //                   ElevatedButton(
+  //                     onPressed: _toggleExpansion,
+  //                     child: Text('More details'),
+  //                   ),
+  //                 ],
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //               ),
+  //               const Divider(
+  //                 thickness: 2,
+  //                 color: Colors.grey,
+  //               ),
+  //               SizedBox(
+  //                 height: 20,
+  //               ),
+  //               ElevatedButton(
+  //                 onPressed: _submitTodo,
+  //                 child: Text('Add to-do'),
+  //               ),
+  //               if (isExpanded) ...[
+  //                 SizedBox(height: 20),
+  //                 TextField(
+  //                   controller: detailsController,
+  //                   decoration: InputDecoration(
+  //                       hintText: 'Enter details',
+  //                       border: OutlineInputBorder()),
+  //                   minLines: 1,
+  //                   maxLines: 5,
+  //                 ),
+  //                 SizedBox(height: 20),
+  //                 ElevatedButton(
+  //                   onPressed: _submitTodo,
+  //                   child: Text('Add to-do with details'),
+  //                 ),
+  //               ]
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   void _showDeleteAllTodosDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -82,7 +161,7 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
           backgroundColor: Colors.blueGrey[50],
           extendBodyBehindAppBar: true,
           floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.blue[900],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
@@ -92,113 +171,114 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
             elevation: 0.1,
         ),
           body: Container(
-            decoration:  const BoxDecoration(
-              image: DecorationImage(
-                opacity: 0.4,
-                image: AssetImage("assets/images/cloudbackground.jpg"),
-                // image: NetworkImage('https://media.tenor.com/VXwpcfsk17UAAAAd/bubble-abth.gif'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  flexibleSpace: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      colorFilter: ColorFilter.mode(Colors.orange.withOpacity(0.5), BlendMode.dstATop),
-                      image: AssetImage('assets/images/cloudbackground.jpg'),
-                      fit: BoxFit.cover,
+            // decoration:  const BoxDecoration(
+            //   image: DecorationImage(
+            //     opacity: 0.4,
+            //     image: AssetImage("assets/images/cloudbackground.jpg"),
+            //     // image: NetworkImage('https://media.tenor.com/VXwpcfsk17UAAAAd/bubble-abth.gif'),
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
+            child: SafeArea(
+              child: CustomScrollView(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  SliverAppBar(
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.asset(
+                            'assets/images/cloudbackground.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                          Container(
+                            color: Colors.blue.withOpacity(0.6),
+                          ),
+                        ],
+                      )
+                    ),
+                  backgroundColor: Colors.blue,
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.home,
+                      color: Colors.blue[900],
+                      size: 30,
                     ),
                   ),
-                ),
-                backgroundColor: Colors.blue,
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.navigate_before,
-                    color: Colors.blueGrey,
-                    size: 30,
+                  title:  Center(
+                      child: Text('Task planner',
+                        style: GoogleFonts.openSans(
+                            fontSize: 29,
+                            fontWeight: FontWeight.bold,
+                            // fontStyle: FontStyle.italic,
+                            color: Colors.white),)),
+                    actions: [
+                      IconButton(
+                        icon: Icon(Icons.settings,
+                          color: Colors.blue[900],
+                        size: 30,),
+                        onPressed: () {
+                          // Code to open settings
+                        },
+                      ),
+                    ],
+                    floating: true,
+                    snap: true,
                   ),
-                ),
-                title:  Center(
-                    child: Text('Task planner',
-                      style: GoogleFonts.openSans(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.white),)),
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.settings,
-                        color: Colors.blueGrey,
-                      size: 30,),
-                      onPressed: () {
-                        // Code to open settings
+                  SliverToBoxAdapter(
+                    child: BlocBuilder<TodosStatusBloc, TodosStatusState>(
+                      builder: (context, state) {
+                        BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
+                        print('Current TodosStatusState: $state');
+                        if (state is TodosStatusLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (state is TodosStatusLoaded) {
+                          return _todoPending(
+                            state.pendingTodos,
+                            'Active',
+                          );
+                        }
+                        return const SizedBox.shrink();
                       },
                     ),
-                  ],
-                  floating: true,
-                  snap: true,
-                ),
-                SliverToBoxAdapter(
-                  child: BlocBuilder<TodosStatusBloc, TodosStatusState>(
-                    builder: (context, state) {
-                      BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
-                      print('Current TodosStatusState: $state');
-                      if (state is TodosStatusLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      if (state is TodosStatusLoaded) {
-                        return CustomScrollView(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          slivers: [
-                            SliverPadding(
-                              padding: const EdgeInsets.all(6.0),
-                              sliver: SliverList(
-                                delegate: SliverChildListDelegate([
-                                  _todoPending(
-                                    state.pendingTodos,
-                                    'Active',
-                                  ),
-                                  if (state.pendingTodos.isEmpty)
-                                    Column(
-                                      children: const [
-                                        Text('Add a task by clicking the + button below.',
-                                          style: TextStyle(
-                                              color: AppColors.blueSecondaryColor,
-                                              fontSize: 20.2,
-                                              fontWeight: FontWeight.bold),),
-                                      ],
-                                    ),
-                                  _todoCompleted(
-                                    state.completedTodos,
-                                    'Completed',
-                                  ),
-                                  // if (state.completedTodos.isEmpty)
-                                  //  const Text('You have no completed tasks.',
-                                  //     style: TextStyle(
-                                  //     color: AppColors.blueSecondaryColor,
-                                  //     fontSize: 27,
-                                  //     fontWeight: FontWeight.bold),),
-                                ]),
-                              ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return const Text('Something went wrong.');
-                      }
-                    },
                   ),
+                  SliverToBoxAdapter(
+                    child: BlocBuilder<TodosStatusBloc, TodosStatusState>(
+                      builder: (context, state) {
+                        if (state is TodosStatusLoaded) {
+                          return state.pendingTodos.isEmpty
+                              ? Column(
+                            children: const [
+                              Text(
+                                'Add a task by clicking the + button below.',
+                                style: TextStyle(
+                                  color: AppColors.blueSecondaryColor,
+                                  fontSize: 20.2,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          )
+                              : _todoCompleted(
+                            state.completedTodos,
+                            'Completed',
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                  ],
                 ),
-                ],
-              ),
+            ),
           ),
           ),
         );
