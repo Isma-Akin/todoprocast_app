@@ -500,7 +500,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> with TickerProvider
                             margin: EdgeInsets.zero,
                             child: Row(
                               children:  [
-                                Icon(Icons.upload_file_outlined, color: Colors.blue[900],),
+                                Icon(Icons.attach_file, color: Colors.blue[900],),
                                 const SizedBox(width: 10,),
                                 Text('Add a file: ', style: GoogleFonts.openSans(
                                     fontSize: 18,

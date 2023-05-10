@@ -11,13 +11,14 @@ class Todo extends Equatable {
   final String task;
   final String description;
   final DateTime dateCreated;
-  final DateTime dueDate;
+  final DateTime? dueDate;
   bool? taskCompleted;
   bool? taskCancelled;
   bool? isFavourite;
   bool isSynced;
   bool isTempId;
   bool isApplied;
+  bool isSelected;
   String groupId;
   List<String> steps;
 
@@ -26,13 +27,14 @@ class Todo extends Equatable {
     required this.task,
     required this.description,
     required this.dateCreated,
-    required this.dueDate,
+    this.dueDate,
     this.taskCompleted,
     this.taskCancelled,
     this.isFavourite,
     this.isSynced = false,
     this.isTempId = false,
     this.isApplied = false,
+    this.isSelected = false,
     this.groupId = '',
     this.steps = const <String>[],
   }) {
@@ -61,7 +63,7 @@ class Todo extends Equatable {
       'task': task,
       'description': description,
       'dateCreated': _dateTimeToJson(dateCreated),
-      'dueDate': _dateTimeToJson(dueDate),
+      'dueDate': _dateTimeToJson(dueDate!),
       'taskCompleted': taskCompleted,
       'taskCancelled': taskCancelled,
       'isFavourite': isFavourite,
@@ -86,7 +88,9 @@ class Todo extends Equatable {
       const DateTimeConverter().toJson(object);
 
   String get formattedDateCreated => DateFormat('dd-MM-yyy HH:mm').format(dateCreated.toLocal());
-  String get formattedDueDate => DateFormat.yMMMEd().format(dueDate.toLocal());
+  // String get formattedDueDate => DateFormat.yMMMEd().format(dueDate?.toLocal());
+  String get formattedDueDate =>
+      dueDate != null ? DateFormat.yMMMEd().format(dueDate!.toLocal()) : '';
 
 
   Todo copyWith({
@@ -100,6 +104,7 @@ class Todo extends Equatable {
     bool? isFavourite,
     bool? isSynced,
     bool? isTempId,
+    bool isSelected = false,
     List<String>? steps,
     String? groupId,
   }) {
@@ -114,6 +119,7 @@ class Todo extends Equatable {
       isFavourite: isFavourite ?? this.isFavourite,
       isSynced: isSynced ?? this.isSynced,
       isTempId: isTempId ?? this.isTempId,
+      isApplied: isApplied,
       groupId: groupId ?? this.groupId,
       steps: steps as List<String>? ?? this.steps,
     );
@@ -131,6 +137,7 @@ class Todo extends Equatable {
         isFavourite,
         isSynced,
         isTempId,
+        isApplied,
         steps,
         groupId,
       ];
