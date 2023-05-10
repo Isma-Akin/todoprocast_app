@@ -29,14 +29,30 @@ class _CalendarPageState extends State<CalendarPage> {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  colorFilter: ColorFilter.mode(
+                      Colors.purple.withOpacity(0.5), BlendMode.dstATop),
+                  image: AssetImage('assets/images/cloudbackground.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             backgroundColor: Colors.purple,
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon:  Icon(Icons.arrow_back, color: Colors.purple[800]),
+              icon:  Icon(Icons.home, color: Colors.purple[800]),
             ),
-            title:  Text('Your Day', style: GoogleFonts.openSans(fontSize: 24)),
+            title:  Center(child: Text('Your day',
+              style: GoogleFonts.openSans(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.white),)),
+            centerTitle: true,
           ),
           body: BlocBuilder<TimeBloc, DateTime>(
             builder: (context, state) {
