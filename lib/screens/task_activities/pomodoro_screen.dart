@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
+import 'package:todoprocast_app/screens/task_activities/pomodoro_timer.dart';
 
 import '../../blocs/todos/todos_bloc.dart';
 import '../../blocs/todos_status/todos_status_bloc.dart';
@@ -169,7 +170,14 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
                 customBorder: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PomodoroTimer(),
+                    ),
+                  );
+                },
                 splashColor: Colors.orange[900],
                 child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -192,19 +200,107 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
                 customBorder: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                onTap: () {},
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return BlocBuilder<TodosStatusBloc, TodosStatusState>(
+                        builder: (context, state) {
+                          if (state is TodosStatusLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          if (state is TodosStatusLoaded) {
+                            return Container(
+                              height: MediaQuery.of(context).size.height * 0.6,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 10,
+                                      horizontal: 20,
+                                    ),
+                                    child: Text(
+                                      'Select Todo',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: StatefulBuilder(
+                                      builder: (BuildContext context, StateSetter setState) {
+                                        return ListView.builder(
+                                          itemCount: state.pendingTodos.length,
+                                          itemBuilder: (context, index) {
+                                            final todo = state.pendingTodos[index];
+                                            return CheckboxListTile(
+                                              title: Text(todo.task),
+                                              value: todo.isSelected,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  // Update the selected state of the todo
+                                                  state.pendingTodos[index].isSelected = value!;
+                                                });
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          // final List<Todo> selectedTodos =
+                                          // state.pendingTodos.where((todo) => todo.isSelected ?? false).toList();
+                                          // for (final todo in selectedTodos) {
+                                          //   todo.pomodoros++;
+                                          // }
+                                          // for (final todo in state.pendingTodos) {
+                                          //   todo.isSelected = false;
+                                          // }
+                                          // Navigator.pop(context);
+                                        },
+                                        child: const Text('Apply Pomodoro'),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return const Text('Something went wrong.');
+                          }
+                        },
+                      );
+                    },
+                  );
+                },
                 splashColor: Colors.orange[900],
                 child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    margin: EdgeInsets.zero,
-                    child: Row(
-                      children:  [
-                        Icon(Icons.task_outlined, color: Colors.orange[900],),
-                        const SizedBox(width: 10,),
-                        Text('Active pomodoros: ', style: GoogleFonts.openSans(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold)),],)
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  margin: EdgeInsets.zero,
+                  child: Row(
+                    children: [
+                      Icon(Icons.task_outlined, color: Colors.orange[900]),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                          'Active pomodoros: ',
+                          style: GoogleFonts.openSans(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -557,7 +653,8 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
 //   ],
 // )
 
-// BlocBuilder<TodosStatusBloc, TodosStatusState>(
+// BlocBuilder<TodosStatusBloc, TodosStatusState>
+// (
 // builder: (context, state) {
 // if (state is TodosStatusLoading) {
 // return const Center(
@@ -576,5 +673,5 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
 // return const Text('Something went wrong.');
 // }
 // },
-// ),
-
+// )
+// ,
