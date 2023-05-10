@@ -8,7 +8,6 @@ import 'package:todoprocast_app/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/todo_repository.dart';
-import 'logic/navigation/navigation_cubit.dart';
 
 
 Future<void> main() async {
@@ -61,15 +60,16 @@ class TodoApp extends StatelessWidget {
             todosBloc: BlocProvider.of<TodosBloc>(context),
           )..add(const UpdateTodosStatus()),
         ),
-        BlocProvider<NavigationCubit>(
-          create: (context) => NavigationCubit(),
-        ),
+        // BlocProvider<NavigationCubit>(
+        //   create: (context) => NavigationCubit(),
+        // ),
       ],
       child: MaterialApp(
         title: 'Todo App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          useMaterial3: true,
         ),
         home: const HomeScreen(),
       ),
