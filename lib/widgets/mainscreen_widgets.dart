@@ -4,7 +4,6 @@ import 'package:todoprocast_app/screens/grouped_tasks_screen.dart';
 import 'package:todoprocast_app/screens/task_activity_screen.dart';
 
 import '../blocs/todos/todos_bloc.dart';
-import '../constants.dart';
 import '../models/todo_models.dart';
 import '../screens/calendar_screen.dart';
 import '../screens/favourite_tasks_screen.dart';
@@ -26,6 +25,7 @@ class TaskPlannerWidget extends StatelessWidget {
     return Row(
         children: [
           InkWell(
+            highlightColor: Colors.blue[900],
             onTap: () {
               Navigator.push(
                 context,
@@ -45,7 +45,7 @@ class TaskPlannerWidget extends StatelessWidget {
                 ),
               );
             },
-            splashColor: Colors.orange,
+            splashColor: Colors.blue[900],
             child: Container(
                 width: screenWidth,
                 height: 50,
@@ -53,7 +53,7 @@ class TaskPlannerWidget extends StatelessWidget {
                 child: Row(
                   children:  [
                     const SizedBox(width: 10,),
-                    const Icon(Icons.sticky_note_2, color: Colors.orange,),
+                    Icon(Icons.sticky_note_2_outlined, color: Colors.blue[900],),
                     const SizedBox(width: 10,),
                     Text('Task Planner', style: GoogleFonts.openSans(fontSize: 24)),],)
             ),
@@ -76,6 +76,7 @@ class YourDayWidget extends StatelessWidget {
     return Row(
       children: [
         InkWell(
+          highlightColor: Colors.purple,
           onTap: () {
             Navigator.push(
               context,
@@ -116,21 +117,16 @@ class ImportantTasksWidget extends StatelessWidget {
   const ImportantTasksWidget({
     Key? key,
     required this.screenWidth,
-    required this.favouriteTasks,
   }) : super(key: key);
 
   final double screenWidth;
-  final List<Todo> favouriteTasks;
-
-  int getNumFavouriteTasks(List<Todo> todos) {
-    return todos.where((todo) => todo.isFavourite ?? false).length;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         InkWell(
+          highlightColor: Colors.teal,
           onTap: () {
             Navigator.push(
               context,
@@ -172,19 +168,27 @@ class ImportantTasksWidget extends StatelessWidget {
                   'Important Tasks',
                   style: GoogleFonts.openSans(fontSize: 24),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          '${getNumFavouriteTasks(favouriteTasks)}',
-                          style: GoogleFonts.openSans(fontSize: 24, color: Colors.teal),
-                        ),
-                      ],
+                BlocBuilder<TodosBloc, TodosState>(
+                  builder: (context, state) {
+                    int favoriteCount = 0;
+                      if (state is TodosLoaded) {
+                        favoriteCount = state.todos.where((todo) => todo.isFavourite == true).toList().length;
+                      }
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                            Text(
+                            '$favoriteCount',
+                            style: GoogleFonts.openSans(fontSize: 24, color: Colors.teal),
+                          ),
+                        ],
                     ),
                   ),
+                      );
+                 },
                 ),
               ],
             ),
@@ -209,6 +213,7 @@ class TaskListWidget extends StatelessWidget {
     return Row(
       children: [
         InkWell(
+          highlightColor: Colors.limeAccent,
           onTap: () {
             Navigator.push(
               context,
@@ -258,6 +263,7 @@ class TaskActivityWidget extends StatelessWidget {
     return Row(
       children: [
         InkWell(
+          highlightColor: Colors.pinkAccent,
           onTap: () {
             Navigator.push(
               context,
