@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
+import 'package:todoprocast_app/screens/task_activities/timeblocking_page.dart';
 
 import '../../blocs/todos/todos_bloc.dart';
 import '../../constants.dart';
@@ -55,7 +56,7 @@ class _TimeBlockingScreenState extends State<TimeBlockingScreen> {
               Divider(
                 height: 10,
                 thickness: 2,
-                color: Colors.pinkAccent[900],),
+                color: Colors.pink[900],),
               Column(
                 children: [
                   Container(
@@ -66,7 +67,7 @@ class _TimeBlockingScreenState extends State<TimeBlockingScreen> {
                             image: DecorationImage(
                               image: const AssetImage('assets/images/time_blocking.jpg'),
                               colorFilter: ColorFilter.mode(
-                                Colors.orange.withOpacity(0.7),
+                                Colors.pink.withOpacity(0.7),
                                 BlendMode.dstATop,
                               ),
                               fit: BoxFit.cover,
@@ -90,7 +91,7 @@ class _TimeBlockingScreenState extends State<TimeBlockingScreen> {
                         Divider(
                           height: 10,
                           thickness: 2,
-                          color: Colors.pinkAccent[900],),
+                          color: Colors.pink[900],),
                         Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Container(
@@ -130,15 +131,23 @@ class _TimeBlockingScreenState extends State<TimeBlockingScreen> {
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  onTap: () {},
-                  splashColor: Colors.pinkAccent[900],
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TimeBlockingPage(
+                            title: 'Time blocking screen'),
+                      ),
+                    );
+                  },
+                  splashColor: Colors.pink[900],
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       margin: EdgeInsets.zero,
                       child: Row(
                         children:  [
-                          Icon(Icons.timer, color: Colors.pinkAccent[900],),
+                          Icon(Icons.timer, color: Colors.pink[900],),
                           const SizedBox(width: 10,),
                           Text('Time blocking screen ', style: GoogleFonts.openSans(
                               fontSize: 18,
@@ -161,7 +170,7 @@ class _TimeBlockingScreenState extends State<TimeBlockingScreen> {
                       margin: EdgeInsets.zero,
                       child: Row(
                         children:  [
-                          Icon(Icons.task_outlined, color: Colors.pinkAccent[900],),
+                          Icon(Icons.task_outlined, color: Colors.pink[900],),
                           const SizedBox(width: 10,),
                           Text('Active time blocks: ', style: GoogleFonts.openSans(
                               fontSize: 18,
@@ -172,7 +181,7 @@ class _TimeBlockingScreenState extends State<TimeBlockingScreen> {
               Card(
                 elevation: 2,
                 child: InkWell(
-                  highlightColor: Colors.pinkAccent[900],
+                  highlightColor: Colors.pink[900],
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -184,7 +193,7 @@ class _TimeBlockingScreenState extends State<TimeBlockingScreen> {
                       margin: EdgeInsets.zero,
                       child: Row(
                         children:  [
-                          Icon(Icons.info_outline, color: Colors.pinkAccent[900],),
+                          Icon(Icons.info_outline, color: Colors.pink[900],),
                           const SizedBox(width: 10,),
                           Text('Time blocking information ', style: GoogleFonts.openSans(
                               fontSize: 18,
@@ -195,7 +204,7 @@ class _TimeBlockingScreenState extends State<TimeBlockingScreen> {
               Divider(
                 height: 10,
                 thickness: 0.5,
-                color: Colors.pinkAccent[900],),
+                color: Colors.grey[900],),
               const SizedBox(height: 10,),
               Card(
                 elevation: 2,
