@@ -5,6 +5,7 @@ import 'package:todoprocast_app/models/todo_models.dart';
 
 class SharedPreferencesHelper {
   static const String _kTodosKey = 'todos';
+  static const String _kLastUsedIdKey = 'last_used_id';
 
   static Future<List<Todo>> getTodos() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -32,6 +33,16 @@ class SharedPreferencesHelper {
       todos.add(todo);
     }
     return saveTodos(todos);
+  }
+
+  static Future<bool> saveLastUsedId(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setInt(_kLastUsedIdKey, id);
+  }
+
+  static Future<int> getLastUsedId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_kLastUsedIdKey) ?? 0; // return 0 if no id has been stored yet
   }
 
   static Future<bool> removeTodoFromLocal(Todo todo) async {
