@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
 import 'package:todoprocast_app/screens/task_activities/timeblocking_page.dart';
 
 import '../../blocs/todos/todos_bloc.dart';
+import '../../blocs/todos_status/todos_status_bloc.dart';
 import '../../constants.dart';
 import '../../models/todo_models.dart';
 import '../todo_detail_screen.dart';
@@ -18,6 +20,50 @@ class TimeBlockingScreen extends StatefulWidget {
 }
 
 class _TimeBlockingScreenState extends State<TimeBlockingScreen> {
+
+  late final Todo todo;
+
+  void _applyTimeBlock(Todo todo) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => TimeBlockingPage(todo: todo)),
+    );
+  }
+
+  void _showTimeBlockModal() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return BlocBuilder<TodosStatusBloc, TodosStatusState>(
+          builder: (context, state) {
+            if (state is TodosStatusLoaded) {
+              return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return ListView.builder(
+                    itemCount: state.pendingTodos.length,
+                    itemBuilder: (context, index) {
+                      final todo = state.pendingTodos[index];
+                      return ListTile(
+                        title: Text(todo.task),
+                        subtitle: Text(DateFormat.yMd().format(todo.deadline)),
+                        onTap: () {
+                          Navigator.pop(context);
+                          _applyTimeBlock(todo);
+                        },
+                      );
+                    },
+                  );
+                },
+              );
+            } else {
+              return const CircularProgressIndicator();
+            }
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,13 +178,7 @@ class _TimeBlockingScreenState extends State<TimeBlockingScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TimeBlockingPage(
-                            title: 'Time blocking screen'),
-                      ),
-                    );
+                    _showTimeBlockModal();
                   },
                   splashColor: Colors.pink[900],
                   child: Container(
