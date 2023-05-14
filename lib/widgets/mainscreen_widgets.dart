@@ -15,50 +15,73 @@ import 'dart:typed_data';
 class TaskPlannerWidget extends StatelessWidget {
   const TaskPlannerWidget({
     Key? key,
-    required this.screenWidth,
   }) : super(key: key);
 
-  final double screenWidth;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        children: [
-          InkWell(
-            highlightColor: Colors.blue[900],
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: const Duration(milliseconds: 500),
-                  pageBuilder: (context, animation, secondaryAnimation) => TaskPlanner(todosBloc: context.read<TodosBloc>()),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    var begin = const Offset(1.0, 0.0);
-                    var end = Offset.zero;
-                    var curve = Curves.ease;
-                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
-                    );
-                  },
-                ),
-              );
-            },
-            splashColor: Colors.blue[900],
-            child: Container(
-                width: screenWidth,
-                height: 50,
-                margin: EdgeInsets.zero,
-                child: Row(
-                  children:  [
-                    const SizedBox(width: 10,),
-                    Icon(Icons.sticky_note_2_outlined, color: Colors.blue[900],),
-                    const SizedBox(width: 10,),
-                    Text('Task Planner', style: GoogleFonts.openSans(fontSize: 24)),],)
+    return Card(
+      elevation: 5,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+              TaskPlanner(todosBloc: context.read<TodosBloc>()),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                var begin = const Offset(1.0, 0.0);
+                var end = Offset.zero;
+                var curve = Curves.ease;
+                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                return SlideTransition(
+                  position: animation.drive(tween),
+                  child: child,
+                );
+              },
+            ),
+          );
+        },
+        splashFactory: InkRipple.splashFactory,
+        highlightColor: Colors.blue[900],
+        splashColor: Colors.blue[900],
+        child: Container(
+          height: 100,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/cloudbackground.jpg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.blue.withOpacity(0.5),
+                BlendMode.darken,
+              ),
             ),
           ),
-        ]
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.sticky_note_2_outlined,
+                  color: Colors.white,
+                  size: 40,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    'Task planner',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -66,49 +89,72 @@ class TaskPlannerWidget extends StatelessWidget {
 class YourDayWidget extends StatelessWidget {
   const YourDayWidget({
     Key? key,
-    required this.screenWidth,
   }) : super(key: key);
 
-  final double screenWidth;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        InkWell(
-          highlightColor: Colors.purple,
-          onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) => const CalendarPage(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  var begin = const Offset(1.0, 0.0);
-                  var end = Offset.zero;
-                  var curve = Curves.ease;
-                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                  return SlideTransition(
-                    position: animation.drive(tween),
-                    child: child,
-                  );
-                },
+    return Card(
+      elevation: 5,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+              const CalendarPage(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                var begin = const Offset(1.0, 0.0);
+                var end = Offset.zero;
+                var curve = Curves.ease;
+                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                return SlideTransition(
+                  position: animation.drive(tween),
+                  child: child,
+                );
+              },
+            ),
+          );
+        },
+        highlightColor: Colors.purple,
+        splashColor: Colors.purple,
+        child: Container(
+          height: 100,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/cloudbackground.jpg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.purple.withOpacity(0.5),
+                BlendMode.darken,
               ),
-            );},
-          splashColor: Colors.purple,
-          child: Container(
-              width: screenWidth,
-              height: 50,
-              margin: EdgeInsets.zero,
-              child: Row(
-                children: [
-                  const SizedBox(width: 10,),
-                  const Icon(Icons.calendar_today, color: Colors.purple,),
-                  const SizedBox(width: 10,),
-                  Text('Your Day', style: GoogleFonts.openSans(fontSize: 24),),],)
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.calendar_today,
+                  color: Colors.white,
+                  size: 40,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    'Your day',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
@@ -116,10 +162,175 @@ class YourDayWidget extends StatelessWidget {
 class ImportantTasksWidget extends StatelessWidget {
   const ImportantTasksWidget({
     Key? key,
-    required this.screenWidth,
   }) : super(key: key);
 
-  final double screenWidth;
+@override
+Widget build(BuildContext context) {
+return Card(
+    elevation: 5,
+    child: InkWell(
+      onTap: () {
+      Navigator.push(
+       context,
+       PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 500),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+      const FavouriteTasksScreen(),
+       transitionsBuilder: (context, animation, secondaryAnimation, child) {
+       var begin = const Offset(1.0, 0.0);
+       var end = Offset.zero;
+       var curve = Curves.ease;
+       var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return SlideTransition(
+         position: animation.drive(tween),
+          child: child,
+        );
+       },
+      ),
+     );
+    },
+   highlightColor: Colors.teal,
+   splashColor: Colors.teal,
+   child: Container(
+   height: 100,
+   decoration: BoxDecoration(
+        image: DecorationImage(
+        image: AssetImage('assets/images/cloudbackground.jpg'),
+         fit: BoxFit.cover,
+         colorFilter: ColorFilter.mode(
+          Colors.green.withOpacity(0.5),
+            BlendMode.darken,
+         ),
+        ),
+      ),
+      child: Padding(
+         padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                            children: [
+                  const Icon(
+                      Icons.all_inbox,
+                      color: Colors.white,
+                      size: 40,
+                      ),
+                  const SizedBox(width: 16),
+                        Expanded(
+                        child: Text(
+                          'Important Tasks',
+                          style: TextStyle(
+                          fontSize: 20,
+                        color: Colors.white,
+                       ),
+                    ),
+                 ),
+                              BlocBuilder<TodosBloc, TodosState>(
+                                builder: (context, state) {
+                                  int favoriteCount = 0;
+                                  if (state is TodosLoaded) {
+                                    favoriteCount = state.todos.where((todo) => todo.isFavourite == true).toList().length;
+                                  }
+                                  return Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 15),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            '$favoriteCount',
+                                            style: GoogleFonts.openSans(fontSize: 24, color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                ],
+                ),
+             ),
+            ),
+          ),
+          );
+      }
+    }
+
+class TaskActivityWidget extends StatelessWidget {
+  final List<Todo> todos;
+  const TaskActivityWidget({Key? key,
+    required this.todos}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  TaskActivityScreen(todos: todos),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                var begin = const Offset(1.0, 0.0);
+                var end = Offset.zero;
+                var curve = Curves.ease;
+                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                return SlideTransition(
+                  position: animation.drive(tween),
+                  child: child,
+                );
+              },
+            ),
+          );
+        },
+        highlightColor: Colors.pinkAccent,
+        splashColor: Colors.pinkAccent,
+        child: Container(
+          height: 100,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/cloudbackground.jpg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.pink.withOpacity(0.9),
+                BlendMode.darken,
+              ),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.airplay,
+                  color: Colors.white,
+                  size: 40,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    'Task Activity',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ImportantTasksWidgetOld extends StatelessWidget {
+  const ImportantTasksWidgetOld({
+    Key? key,
+  }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +360,6 @@ class ImportantTasksWidget extends StatelessWidget {
           },
           splashColor: Colors.teal,
           child: Container(
-            width: screenWidth,
             height: 50,
             margin: EdgeInsets.zero,
             child: Row(
@@ -171,24 +381,24 @@ class ImportantTasksWidget extends StatelessWidget {
                 BlocBuilder<TodosBloc, TodosState>(
                   builder: (context, state) {
                     int favoriteCount = 0;
-                      if (state is TodosLoaded) {
-                        favoriteCount = state.todos.where((todo) => todo.isFavourite == true).toList().length;
-                      }
-                      return Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 15),
-                          child: Row(
+                    if (state is TodosLoaded) {
+                      favoriteCount = state.todos.where((todo) => todo.isFavourite == true).toList().length;
+                    }
+                    return Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
+                          children: [
                             Text(
-                            '$favoriteCount',
-                            style: GoogleFonts.openSans(fontSize: 24, color: Colors.teal),
-                          ),
-                        ],
-                    ),
-                  ),
-                      );
-                 },
+                              '$favoriteCount',
+                              style: GoogleFonts.openSans(fontSize: 24, color: Colors.teal),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -197,16 +407,12 @@ class ImportantTasksWidget extends StatelessWidget {
       ],
     );
   }
-
 }
-
 class TaskListWidget extends StatelessWidget {
   const TaskListWidget({
     Key? key,
-    required this.screenWidth,
   }) : super(key: key);
 
-  final double screenWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +440,6 @@ class TaskListWidget extends StatelessWidget {
             );},
           splashColor: Colors.limeAccent,
           child: Container(
-              width: screenWidth,
               height: 50,
               margin: EdgeInsets.zero,
               child: Row(
@@ -243,56 +448,6 @@ class TaskListWidget extends StatelessWidget {
                   const Icon(Icons.all_inbox, color: Colors.limeAccent,),
                   const SizedBox(width: 10,),
                   Text('Grouped Tasks', style: GoogleFonts.openSans(fontSize: 24),),],)
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class TaskActivityWidget extends StatelessWidget {
-  final List<Todo> todos;
-  const TaskActivityWidget({Key? key,
-    required this.screenWidth,
-    required this.todos}) : super(key: key);
-
-  final double screenWidth;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        InkWell(
-          highlightColor: Colors.pinkAccent,
-          onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) => TaskActivityScreen(todos: todos,),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  var begin = const Offset(1.0, 0.0);
-                  var end = Offset.zero;
-                  var curve = Curves.ease;
-                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                  return SlideTransition(
-                    position: animation.drive(tween),
-                    child: child,
-                  );
-                },
-              ),
-            );},
-          splashColor: Colors.pinkAccent,
-          child: Container(
-              width: screenWidth,
-              height: 50,
-              margin: EdgeInsets.zero,
-              child: Row(
-                children: [
-                  const SizedBox(width: 10,),
-                  const Icon(Icons.airplay, color: Colors.pinkAccent,),
-                  const SizedBox(width: 10,),
-                  Text('Task Activity', style: GoogleFonts.openSans(fontSize: 24),),],)
           ),
         ),
       ],
