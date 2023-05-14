@@ -49,6 +49,7 @@ class TodoRepository {
           'taskCancelled': todo.taskCancelled,
           'isFavourite': todo.isFavourite,
           'steps': todo.steps,
+          'group': todo.group?.toJson(), // Add this line
         }),
       );
       if (response.statusCode == 201) {
@@ -101,6 +102,7 @@ class TodoRepository {
           'isFavourite': todo.isFavourite,
           'id': todo.id,
           'steps': todo.steps,
+          'group': todo.group?.toJson(), // Add this line
         }),
       );
       if (response.statusCode == 200) {
