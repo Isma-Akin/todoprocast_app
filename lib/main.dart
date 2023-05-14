@@ -8,6 +8,7 @@ import 'package:todoprocast_app/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/todo_repository.dart';
+import 'blocs/task_activities/pomodoro_bloc.dart';
 
 
 Future<void> main() async {
@@ -60,6 +61,8 @@ class TodoApp extends StatelessWidget {
             todosBloc: BlocProvider.of<TodosBloc>(context),
           )..add(const UpdateTodosStatus()),
         ),
+        BlocProvider<PomodoroBloc>(
+          create: (context) => PomodoroBloc(),),
         // BlocProvider<NavigationCubit>(
         //   create: (context) => NavigationCubit(),
         // ),
@@ -68,6 +71,7 @@ class TodoApp extends StatelessWidget {
         title: 'Todo App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
           primarySwatch: Colors.blue,
           useMaterial3: true,
         ),
