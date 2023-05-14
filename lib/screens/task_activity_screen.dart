@@ -5,6 +5,8 @@ import 'package:like_button/like_button.dart';
 import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/screens/task_activities/eatthatfrog_screen.dart';
 import 'package:todoprocast_app/screens/task_activities/eisenhower_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/paretoanalysis_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/parkinsonslaw_screen.dart';
 import 'package:todoprocast_app/screens/task_activities/pomodoro_screen.dart';
 import 'package:todoprocast_app/screens/task_activities/timeblocking_screen.dart';
 import 'package:todoprocast_app/screens/todo_detail_screen.dart';
@@ -313,6 +315,80 @@ class _TaskActivityScreenState extends State<TaskActivityScreen>
                         child: Row(
                           children:  [
                             Text('Eat that frog',
+                                style: GoogleFonts.openSans(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold)),],)
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 2,
+                  child: InkWell(
+                    highlightColor: Colors.blue[900],
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ParetoAnalysisScreen(),
+                        ),
+                      );
+                    },
+                    splashColor: Colors.blue[900],
+                    child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            colorFilter: ColorFilter.mode(
+                                Colors.red.withOpacity(0.2), BlendMode.dstATop),
+                            image: const AssetImage('assets/images/pareto_1.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        margin: EdgeInsets.zero,
+                        child: Row(
+                          children:  [
+                            Text('Pareto analysis',
+                                style: GoogleFonts.openSans(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold)),],)
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 2,
+                  child: InkWell(
+                    highlightColor: Colors.blue[900],
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ParkinsonsLawScreen(),
+                        ),
+                      );
+                    },
+                    splashColor: Colors.blue[900],
+                    child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            colorFilter: ColorFilter.mode(
+                                Colors.red.withOpacity(0.2), BlendMode.dstATop),
+                            image: const AssetImage('assets/images/Parkinsons-Law-min-1.jpg'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        margin: EdgeInsets.zero,
+                        child: Row(
+                          children:  [
+                            Text('Parkinsons law',
                                 style: GoogleFonts.openSans(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold)),],)
