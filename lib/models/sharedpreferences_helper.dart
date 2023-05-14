@@ -14,12 +14,29 @@ class SharedPreferencesHelper {
       return [];
     }
     final List<dynamic> todoListJson = json.decode(todosJson);
-    return todoListJson.map((json) => Todo.fromJson(json)).toList();
+
+    return todoListJson.map((json) {
+      try {
+        return Todo.fromJson(json);
+      } catch (e) {
+        print('Error converting todo from JSON: $e');
+        return null;
+      }
+    }).whereType<Todo>().toList(); // Only include todos that were successfully converted from JSON
   }
 
   static Future<bool> saveTodos(List<Todo> todos) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final todosJson = json.encode(todos.map((todo) => todo.toJson()).toList());
+
+    final todosJson = json.encode(todos.map((todo) {
+      try {
+        return todo.toJson();
+      } catch (e) {
+        print('Error converting todo to JSON: $e');
+        return null;
+      }
+    }).where((todo) => todo != null).toList()); // Only include todos that were successfully converted to JSON
+
     return prefs.setString(_kTodosKey, todosJson);
   }
 
@@ -32,7 +49,7 @@ class SharedPreferencesHelper {
     } else {
       todos.add(todo);
     }
-    return saveTodos(todos);
+    return saveTodos(todos.whereType<Todo>().toList());  // Only include non-null todos
   }
 
   static Future<bool> saveLastUsedId(int id) async {
@@ -51,7 +68,7 @@ class SharedPreferencesHelper {
     final index = todos.indexWhere((t) => t.id == todo.id);
     if (index != -1) {
       todos.removeAt(index);
-      return saveTodos(todos);
+      return saveTodos(todos.whereType<Todo>().toList());  // Only include non-null todos
     }
     return false;
   }
@@ -63,16 +80,27 @@ class SharedPreferencesHelper {
       return false;
     }
     final List<dynamic> todoListJson = json.decode(todosJson);
-    final List<Todo> todos =
-    todoListJson.map((json) => Todo.fromJson(json)).toList();
-    final int index =
-    todos.indexWhere((todo) => todo.id != null && todo.id == id);
+    final List<Todo> todos = todoListJson.map((json) {
+      try {
+        return Todo.fromJson(json);
+      } catch (e) {
+        print('Error converting todo from JSON: $e');
+        return null;
+      }
+    }).whereType<Todo>().toList();  // Only include todos that were successfully converted from JSON
+    final int index = todos.indexWhere((todo) => todo.id != null && todo.id == id);
     if (index == -1) {
       return false;
     }
     todos.removeAt(index);
-    final updatedTodosJson =
-    json.encode(todos.map((todo) => todo.toJson()).toList());
+    final updatedTodosJson = json.encode(todos.map((todo) {
+      try {
+        return todo.toJson();
+      } catch (e) {
+        print('Error converting todo to JSON: $e');
+        return null;
+      }
+    }).whereType<Map<String, dynamic>>().toList());  // Only include todos that were successfully converted to JSON
     return prefs.setString(_kTodosKey, updatedTodosJson);
   }
 
