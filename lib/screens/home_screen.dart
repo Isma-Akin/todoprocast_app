@@ -19,15 +19,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   late final TodoRepository repository;
   late final TodosBloc todosBloc;
 
   final List _tasks = [];
   final List<Todo> _favouriteTasks = [];
-
   final TextEditingController _taskController = TextEditingController();
-
 
   void _showAddTaskSheet(BuildContext context) {
     showModalBottomSheet(
@@ -66,32 +63,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
-// void _showMiniTaskDetailSheet(BuildContext context, Todo todo) {
-//     showModalBottomSheet(
-//       context: context,
-//       isScrollControlled: true,
-//       builder: (BuildContext context) {
-//         return MiniTaskDetailScreen(todo: todo);
-//       },
-//     );
-//   }
-
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
+  }
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        extendBodyBehindAppBar: true,
         appBar: AppBar(
           flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -147,117 +138,97 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           centerTitle: true,
         ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              const Divider(height: 2, color: Colors.black,),
-              TaskPlannerWidget(screenWidth: screenWidth),
-              const Divider(height: 4, color: Colors.grey,),
-              YourDayWidget(screenWidth: screenWidth),
-              const Divider(height: 4, color: Colors.grey,),
-              ImportantTasksWidget(screenWidth: screenWidth,),
-              const Divider(height: 4, color: Colors.grey,),
-              TaskListWidget(screenWidth: screenWidth),
-              const Divider(height: 4, color: Colors.grey,),
-              TaskActivityWidget(screenWidth: screenWidth, todos: const [],),
-              const Divider(height: 4, color: Colors.grey,),
-              Expanded(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: AppColors.bluePrimaryColor,
-                    borderRadius: BorderRadius.all(Radius.circular(10)
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: _tasks.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final task = _tasks[index];
-                            return Card(
-                              color: AppColors.orangeTertiaryColor,
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage("assets/images/cloudbackground.jpg"),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: ListTile(
-                                  trailing: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _tasks.removeAt(index);
-                                      });
-                                    },
-                                    icon: const Icon(Icons.delete_forever,
-                                      color: Colors.black,),
-                                  ),
-                                  title: Text(task),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MiniTaskDetailScreen(
-                                            taskTitle: task),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      const Divider(
-                        height: 2,
-                        color: Colors.black,),
-                      TextFormField(
-                        onFieldSubmitted: (value) {
-                          final taskName = _taskController.text;
-                          setState(() {
-                            _tasks.add(taskName);
-                            _taskController.clear();
-                          });
-                          // Navigator.pop(context);
-                        },
-                        textInputAction: TextInputAction.done,
-                        style: GoogleFonts.openSans(
-                            fontSize: 20),
-                        controller: _taskController,
-                        decoration: const InputDecoration(
-                          label: Text('Add a mini task',
-                            style: TextStyle(color: AppColors.blueTertiaryColor),),
-                        prefixIcon: Icon(Icons.add,
-                          color: AppColors.blueSecondaryColor,),
-                        // hintText: "Add mini task",
-                        ),
-                      ),
-                    // SizedBox(
-                    //   // width: MediaQuery.of(context).size.width * 0.5,
-                    //   width: screenWidth,
-                    //   height: 30,
-                    //   child: ElevatedButton(
-                    //     onPressed: () {
-                    //       _showAddTaskSheet(context);
-                    //     },
-                    //     child: Text('Create Task',
-                    //       style: GoogleFonts.openSans(fontSize: 24),),
-                    //   ),
-                    // ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+        body: Column(
+          children: [
+            GridView.count(
+              padding: const EdgeInsets.all(1),
+              primary: false,
+              childAspectRatio: 1.1,
+              shrinkWrap: true,
+              crossAxisSpacing: 1,
+              crossAxisCount: 2,
+              children: const [
+                TaskPlannerWidget(),
+                YourDayWidget(),
+                ImportantTasksWidget(),
+                TaskActivityWidget(todos: [],),
+                // const TaskListWidget(),
+              ],
+            ),
+            _buildTaskList(),
+            _buildTaskInput(),
+          ],
         ),
       ),
     );
   }
-}
 
+  Widget _buildTaskList() {
+    return Expanded(
+      child: Container(
+        decoration: const BoxDecoration(
+        color: AppColors.bluePrimaryColor,
+        borderRadius: BorderRadius.all(Radius.circular(10)
+       ),
+      ),
+      child: ListView.builder(
+        itemCount: _tasks.length,
+        itemBuilder: (BuildContext context, int index) {
+          final task = _tasks[index];
+          return Card(
+              child: Container(
+              decoration: const BoxDecoration(
+              image: DecorationImage(
+              image: AssetImage("assets/images/cloudbackground.jpg"),
+          fit: BoxFit.cover,
+          ),
+          ),
+            child: ListTile(
+              trailing: IconButton(
+                onPressed: () {
+                  setState(() {
+                    _tasks.removeAt(index);
+                  });
+                },
+                icon: const Icon(Icons.delete_forever),
+              ),
+              title: Text(task),
+              onTap: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (context) => MiniTaskDetailScreen(
+                      taskTitle: task),
+               ),
+               );
+              },
+            ),
+          ),
+          );
+        },
+      ),
+    ),
+    );
+
+  }
+
+  Widget _buildTaskInput() {
+    return TextFormField(
+      onFieldSubmitted: (value) {
+        final taskName = _taskController.text;
+        setState(() {
+          _tasks.add(taskName);
+          _taskController.clear();
+        });
+      },
+      controller: _taskController,
+      decoration: const InputDecoration(
+        labelText: 'Add a mini task',
+        prefixIcon: Icon(Icons.add),
+      ),
+    );
+  }
+}
 class HomeScreenCard extends StatelessWidget {
   const HomeScreenCard({
     Key? key,
