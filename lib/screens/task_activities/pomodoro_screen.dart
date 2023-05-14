@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
 import 'package:todoprocast_app/screens/task_activities/pomodoro_timer.dart';
 
+import '../../blocs/task_activities/pomodoro_bloc.dart';
 import '../../blocs/todos/todos_bloc.dart';
 import '../../blocs/todos_status/todos_status_bloc.dart';
 import '../../constants.dart';
@@ -55,6 +57,14 @@ class PomodoroScreen extends StatefulWidget {
 }
 
 class _PomodoroScreenState extends State<PomodoroScreen> {
+  // late PomodoroBloc _pomodoroBloc;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _pomodoroBloc = BlocProvider.of<PomodoroBloc>(context);
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,37 +173,118 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
               height: 10,
               thickness: 0.5,
               color: Colors.grey[900],),
-            Card(
-              elevation: 2,
-              child: InkWell(
-                highlightColor: Colors.orange[900],
-                customBorder: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                onTap: () {
+            // onTap: () async {
+            //   // Filter the list of todos to get only those with the pomodoro applied
+            //   List<Todo> todosWithPomodoro = _pomodoroBloc.state.pendingTodos.where((todo) => todo.isPomodoroApplied).toList();
+            //
+            //   // Show a dialog with a list of todos
+            //   Todo selectedTodo = await showDialog(
+            //     context: context,
+            //     builder: (BuildContext context) {
+            //       return SimpleDialog(
+            //         title: Text('Select a Todo'),
+            //         children: todosWithPomodoro.map((todo) {
+            //           return SimpleDialogOption(
+            //             child: Text(todo.task),
+            //             onPressed: () {
+            //               Navigator.pop(context, todo);
+            //             },
+            //           );
+            //         }).toList(),
+            //       );
+            //     },
+            //   );
+            //
+            //   // If a todo is selected, navigate to the PomodoroTimer screen with that todo
+            //   if (selectedTodo != null) {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => PomodoroTimer(todo: selectedTodo),
+            //       ),
+            //     );
+            //   }
+            // },
+        Card(
+          elevation: 2,
+          child: InkWell(
+            highlightColor: Colors.orange[900],
+            customBorder: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlocBuilder<TodosStatusBloc, TodosStatusState>(
+                    builder: (context, state) {
+                      if (state is TodosStatusLoaded) {
+                        return StatefulBuilder(
+                          builder: (BuildContext context, StateSetter setState) {
+                            return ListView.builder(
+                              itemCount: state.pendingTodos.length,
+                              itemBuilder: (context, index) {
+                                final todo = state.pendingTodos[index];
+                                return CheckboxListTile(
+                                  title: Text(todo.task),
+                                  value: todo.isSelected,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      state.pendingTodos[index].isSelected = value!;
+                                      if (value) {
+                                        state.pendingTodos[index].updateTaskActivity('Pomodoro');
+                                      } else {
+                                        state.pendingTodos[index].updateTaskActivity('');
+                                      }
+                                    });
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    },
+                  );
+                },
+              ).then((value) {
+                // Handle the selected todos here and navigate to the pomodoro timer page.
+                final state = context.read<TodosStatusBloc>().state;
+                if (state is TodosStatusLoaded) {
+                  final selectedTodos = state.pendingTodos.where((todo) => todo.isSelected).toList();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PomodoroTimer(),
+                      builder: (context) => PomodoroTimer(todos: selectedTodos),
                     ),
                   );
-                },
-                splashColor: Colors.orange[900],
-                child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    margin: EdgeInsets.zero,
-                    child: Row(
-                      children:  [
-                        Icon(Icons.timer, color: Colors.orange[900],),
-                        const SizedBox(width: 10,),
-                        Text('Pomodoro screen ', style: GoogleFonts.openSans(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold)),],)
-                ),
+                }
+              });
+            },
+            splashColor: Colors.orange[900],
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              margin: EdgeInsets.zero,
+              child: Row(
+                children: [
+                  Icon(Icons.timer, color: Colors.orange[900]),
+                  const SizedBox(width: 10),
+                  Text(
+                    'Pomodoro screen',
+                    style: GoogleFonts.openSans(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Card(
+          ),
+        ),
+        Card(
               elevation: 2,
               child: InkWell(
                 highlightColor: Colors.orange[900],
@@ -240,151 +331,177 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
                                             return CheckboxListTile(
                                               title: Text(todo.task),
                                               value: todo.isSelected,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  // Update the selected state of the todo
-                                                  state.pendingTodos[index].isSelected = value!;
-                                                });
-                                              },
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    // Update the selected state of the todo
+                                                    state.pendingTodos[index].isSelected = value!;
+                                                    if (value) {
+                                                      state.pendingTodos[index].updateTaskActivity('Pomodoro');
+                                                    } else {
+                                                      state.pendingTodos[index].updateTaskActivity('');
+                                                    }
+                                                  });
+                                                }
+
                                             );
                                           },
                                         );
                                       },
                                     ),
                                   ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          // final List<Todo> selectedTodos =
-                                          // state.pendingTodos.where((todo) => todo.isSelected ?? false).toList();
-                                          // for (final todo in selectedTodos) {
-                                          //   todo.pomodoros++;
-                                          // }
-                                          // for (final todo in state.pendingTodos) {
-                                          //   todo.isSelected = false;
-                                          // }
-                                          // Navigator.pop(context);
-                                        },
-                                        child: const Text('Apply Pomodoro'),
-                                      ),
-                                    ),
+                                  // final List<Todo> selectedTodos =
+                                  // state.pendingTodos.where((todo) => todo.isSelected ?? false).toList();
+                                  // for (final todo in selectedTodos) {
+                                  //   todo.pomodoros++;
+                                  // }
+                                  // for (final todo in state.pendingTodos) {
+                                  //   todo.isSelected = false;
+                                  // }
+                                  // Navigator.pop(context);
+                              Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    // onPressed: () {
+                                    //   final selectedTodos = state.pendingTodos.where((todo) => todo.isSelected).toList();
+                                    //   Navigator.pop(context);
+                                    //   Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //       builder: (context) => PomodoroTimer(todos: selectedTodos),
+                                    //     ),
+                                    //   );
+                                    // },
+                                    onPressed: () {
+                                      final selectedTodos = state.pendingTodos.where((todo) => todo.isSelected).toList();
+                                      for (var todo in selectedTodos) {
+                                        context.read<TodosBloc>().add(UpdateTodo(todo: todo));
+                                      }
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PomodoroTimer(todos: selectedTodos),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text('Apply Pomodoro'),
                                   ),
-                                ],
+                                ),
                               ),
-                            );
-                          } else {
-                            return const Text('Something went wrong.');
-                          }
-                        },
-                      );
+                            ],
+                          ),
+                        );
+                      } else {
+                        return const Text('Something went wrong.');
+                      }
                     },
                   );
                 },
-                splashColor: Colors.orange[900],
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  margin: EdgeInsets.zero,
-                  child: Row(
-                    children: [
-                      Icon(Icons.task_outlined, color: Colors.orange[900]),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                          'Active pomodoros: ',
-                          style: GoogleFonts.openSans(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                    ],
+              );
+            },
+            splashColor: Colors.orange[900],
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              margin: EdgeInsets.zero,
+              child: Row(
+                children: [
+                  Icon(Icons.task_outlined, color: Colors.orange[900]),
+                  const SizedBox(
+                    width: 10,
                   ),
-                ),
+                  Text(
+                      'Active pomodoros: ',
+                      style: GoogleFonts.openSans(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
+                ],
               ),
             ),
-            Card(
-              elevation: 2,
-              child: InkWell(
-                highlightColor: Colors.orange[900],
-                customBorder: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                onTap: () {},
-                splashColor: Colors.orange[900],
-                child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    margin: EdgeInsets.zero,
-                    child: Row(
-                      children:  [
-                        Icon(Icons.info_outline, color: Colors.orange[900],),
-                        const SizedBox(width: 10,),
-                        Text('Press to know more about Pomodoro ', style: GoogleFonts.openSans(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold)),],)
-                ),
-              ),
+          ),
+        ),
+        Card(
+          elevation: 2,
+          child: InkWell(
+            highlightColor: Colors.orange[900],
+            customBorder: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            Divider(
-              height: 10,
-              thickness: 0.5,
-              color: Colors.grey[900],),
-            const SizedBox(height: 10,),
-            Card(
-              elevation: 2,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Row(
-                    children: [
-                      Text("Eisenhower matrix",
-                        style: GoogleFonts.openSans(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),),
-                    ],
-                  ),
-                )
-              ),
+            onTap: () {},
+            splashColor: Colors.orange[900],
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                margin: EdgeInsets.zero,
+                child: Row(
+                  children:  [
+                    Icon(Icons.info_outline, color: Colors.orange[900],),
+                    const SizedBox(width: 10,),
+                    Text('Press to know more about Pomodoro ', style: GoogleFonts.openSans(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold)),],)
             ),
-            Card(
-              elevation: 2,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Row(
-                    children: [
-                      Text("Eat that frog",
-                        style: GoogleFonts.openSans(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),),
-                    ],
-                  ),
-                )
+          ),
+        ),
+        Divider(
+          height: 10,
+          thickness: 0.5,
+          color: Colors.grey[900],),
+        const SizedBox(height: 10,),
+        Card(
+          elevation: 2,
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Row(
+                children: [
+                  Text("Eisenhower matrix",
+                    style: GoogleFonts.openSans(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),),
+                ],
               ),
-            ),
-            // BlocBuilder<TodosStatusBloc, TodosStatusState>(
-            //   builder: (context, state) {
-            //     if (state is TodosStatusLoading) {
-            //       return const Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     }
-            //     if (state is TodosStatusLoaded) {
-            //       return Expanded(
-            //           child: ListView(children: [
-            //             _todo(
-            //               state.pendingTodos,
-            //               ' ',
-            //             )
-            //           ]));
-            //     } else {
-            //       return const Text('Something went wrong.');
-            //     }
-            //   },
-            // ),
-          ],
+            )
+          ),
+        ),
+        Card(
+          elevation: 2,
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Row(
+                children: [
+                  Text("Eat that frog",
+                    style: GoogleFonts.openSans(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),),
+                ],
+              ),
+            )
+          ),
+        ),
+        // BlocBuilder<TodosStatusBloc, TodosStatusState>(
+        //   builder: (context, state) {
+        //     if (state is TodosStatusLoading) {
+        //       return const Center(
+        //         child: CircularProgressIndicator(),
+        //       );
+        //     }
+        //     if (state is TodosStatusLoaded) {
+        //       return Expanded(
+        //           child: ListView(children: [
+        //             _todo(
+        //               state.pendingTodos,
+        //               ' ',
+        //             )
+        //           ]));
+        //     } else {
+        //       return const Text('Something went wrong.');
+        //     }
+        //   },
+        // ),
+      ],
         ),
       )
 
