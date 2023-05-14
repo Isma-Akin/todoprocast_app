@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
+import 'package:todoprocast_app/screens/task_activities/eisenhower_page.dart';
 
 import '../../blocs/todos/todos_bloc.dart';
 
+import '../../blocs/todos_status/todos_status_bloc.dart';
 import '../../constants.dart';
 import '../../models/todo_models.dart';
 import '../todo_detail_screen.dart';
@@ -19,6 +22,88 @@ class EisenHowerScreen extends StatefulWidget {
 }
 
 class _EisenHowerScreenState extends State<EisenHowerScreen> {
+
+  void _applyEisenhower(List<Todo> todo) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => EisenhowerPage(todos: todo)),
+    );
+  }
+
+  void _showEisenhowerModal() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return BlocBuilder<TodosStatusBloc, TodosStatusState>(
+          builder: (context, state) {
+            if (state is TodosStatusLoaded) {
+              final selectedTodos = <Todo>[];
+              return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          'Select Todos for Eisenhower Matrix',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: state.pendingTodos.length,
+                          itemBuilder: (context, index) {
+                            final todo = state.pendingTodos[index];
+                            return CheckboxListTile(
+                              title: Text(todo.task),
+                              subtitle: Text(DateFormat.yMd().format(todo.deadline)),
+                              value: selectedTodos.contains(todo),
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value!) {
+                                    selectedTodos.add(todo);
+                                  } else {
+                                    selectedTodos.remove(todo);
+                                  }
+                                });
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            child: Text('Cancel'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ElevatedButton(
+                            child: Text('Apply'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              _applyEisenhower(selectedTodos);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              return const CircularProgressIndicator();
+            }
+          },
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,7 +221,9 @@ class _EisenHowerScreenState extends State<EisenHowerScreen> {
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    _showEisenhowerModal();
+                  },
                   splashColor: Colors.blue[900],
                   child: Container(
                       width: MediaQuery.of(context).size.width,
