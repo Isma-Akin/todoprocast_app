@@ -52,6 +52,10 @@ class TodoRepository {
         }),
       );
       if (response.statusCode == 201) {
+        final lastUsedId = await SharedPreferencesHelper.getLastUsedId();
+        final newId = lastUsedId + 1;
+        await SharedPreferencesHelper.saveLastUsedId(newId);
+        todo.id = newId;
         final dynamic todoJson = json.decode(response.body);
         final createdTodo = Todo.fromJson(todoJson);
         final todos = await SharedPreferencesHelper.getTodos();
