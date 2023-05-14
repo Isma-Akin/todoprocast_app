@@ -183,10 +183,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> with TickerProvider
     return DateFormat('dd-MM-yyyy – kk:mm').format(todo.dateCreated);
   }
 
-  // String formattedDueDate = DateFormat('yyyy-MM-dd – kk:mm').format(
-  //     DateTime.now());
-  String formattedDueDate = DateFormat('EEEE, d MMMM y').format(
-      DateTime.now());
+
   final List<String> _newSteps = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -448,7 +445,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> with TickerProvider
                                   animation: _animationController,
                                   builder: (context, child) {
                                     return Text(
-                                      'Due date: $formattedDueDate',
+                                      'Due date: ${todo.formattedDueDate}',
                                       style: GoogleFonts.openSans(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -479,9 +476,23 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> with TickerProvider
                               children:  [
                                 Icon(Icons.airplay, color: Colors.blue[900],),
                                 const SizedBox(width: 10,),
-                                Text('Task activity: ', style: GoogleFonts.openSans(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold)),],)
+                                BlocBuilder<TodosBloc, TodosState>(
+                                builder: (context, state) {
+                                  if (state is TodosLoaded) {
+                                    final todo = state.todos.firstWhere((
+                                        todo) => todo.id == widget.todo.id);
+                                    return Text(
+                                        'Task activity: ${todo.taskActivity
+                                            .isNotEmpty
+                                            ? todo.taskActivity
+                                            : 'No task activity'}',
+                                        style: GoogleFonts.openSans(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)
+                                    );
+                                  } else { return const Text(''); }
+                            },
+                          ),],)
                         ),
                       ),
                     ),
