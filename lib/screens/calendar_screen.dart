@@ -28,6 +28,7 @@ class _CalendarPageState extends State<CalendarPage> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
+          // backgroundColor: Colors.deepPurple[100],
           appBar: AppBar(
             flexibleSpace: Container(
               decoration: BoxDecoration(
@@ -165,15 +166,25 @@ class _CalendarPageState extends State<CalendarPage> {
                               );
                             },
                             child: Card(
-                              elevation: 5,
+                              elevation: 2,
                               color: AppColors.blueSecondaryColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
-                              child: ListTile(
-                                textColor: Colors.white,
-                                title: Text(task.task + " is due today!"),
-                                subtitle: Text(task.description),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    colorFilter: ColorFilter.mode(
+                                        Colors.purple.withOpacity(0.3), BlendMode.dstATop),
+                                    image: AssetImage('assets/images/cloudbackground.jpg'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: ListTile(
+                                  textColor: Colors.white,
+                                  title: Text(task.task + " is due today!", style: TextStyle(color: Colors.black),),
+                                  subtitle: Text(task.description, style: TextStyle(color: Colors.white70),),
+                                ),
                               ),
                             ),
                           );
