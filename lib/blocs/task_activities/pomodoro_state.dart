@@ -24,3 +24,16 @@ class PomodoroStopped extends PomodoroState {
   PomodoroStopped() : super();
 }
 
+class PomodoroNotStarted extends PomodoroState {
+
+  PomodoroNotStarted() : super();
+}
+
+
+class Break extends PomodoroState {
+  final int secondsRemaining;
+
+  Break(this.secondsRemaining);
+}
+
+
