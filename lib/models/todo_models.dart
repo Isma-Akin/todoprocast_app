@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
-import 'package:todoprocast_app/models/timeblock_models.dart';
 
 import '../api/custom_serializer.dart';
 import 'group_models.dart';
@@ -18,8 +17,8 @@ class Todo extends Equatable {
   final DateTime? dueDate;
   final DateTime deadline;
   Duration timer;
-  final bool isImportant;
-  final bool isUrgent;
+  late bool isImportant;
+  late bool isUrgent;
   bool? taskCompleted;
   bool? taskCancelled;
   bool? isFavourite;
@@ -200,4 +199,28 @@ class Todo extends Equatable {
         groupId,
         taskActivity,
       ];
+
+  Todo copy() {
+    return Todo(
+      id: id,
+      task: task,
+      deadline: deadline,
+      timer: timer,
+      isImportant: isImportant,
+      isUrgent: isUrgent,
+      description: description,
+      group: group,
+      dateCreated: dateCreated,
+      dueDate: dueDate,
+      taskCompleted: taskCompleted,
+      taskCancelled: taskCancelled,
+      isFavourite: isFavourite,
+      isSynced: isSynced,
+      isTempId: isTempId,
+      isApplied: isApplied,
+      steps: steps,
+      taskActivity: taskActivity,
+      groupId: groupId,
+    );
+  }
 }
