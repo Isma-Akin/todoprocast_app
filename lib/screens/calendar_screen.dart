@@ -165,28 +165,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 ),
                               );
                             },
-                            child: Card(
-                              elevation: 2,
-                              color: AppColors.blueSecondaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    colorFilter: ColorFilter.mode(
-                                        Colors.purple.withOpacity(0.3), BlendMode.dstATop),
-                                    image: AssetImage('assets/images/cloudbackground.jpg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: ListTile(
-                                  textColor: Colors.white,
-                                  title: Text(task.task + " is due today!", style: TextStyle(color: Colors.black),),
-                                  subtitle: Text(task.description, style: TextStyle(color: Colors.white70),),
-                                ),
-                              ),
-                            ),
+                            child: _calendartodoscard(task: task),
                           );
                         },
                       ),
@@ -195,6 +174,46 @@ class _CalendarPageState extends State<CalendarPage> {
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _calendartodoscard extends StatelessWidget {
+  const _calendartodoscard({
+    Key? key,
+    required this.task,
+  }) : super(key: key);
+
+  final Todo task;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      color: AppColors.blueSecondaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 1),
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.purple,
+          image: DecorationImage(
+            image: const AssetImage('assets/images/cloudbackground.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.purple.withOpacity(0.5),
+              BlendMode.dstATop,
+            ),
+          ),
+        ),
+        child: ListTile(
+          textColor: Colors.white,
+          title: Text(task.task + " is due today!", style: const TextStyle(color: Colors.black),),
+          subtitle: Text(task.description, style: const TextStyle(color: Colors.white70),),
         ),
       ),
     );
