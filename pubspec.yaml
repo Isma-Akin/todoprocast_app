@@ -32,7 +32,6 @@ dependencies:
   json_annotation: ^4.1.0
   http: ^0.13.3
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -55,6 +54,10 @@ dependencies:
   uuid: ^3.0.5
   timer_count_down: ^2.2.0
   time_planner: ^0.1.1
+  drag_and_drop_lists: ^0.3.2+2
+  fl_chart: ^0.36.4
+  flutter_colorpicker: ^1.0.3
+#  flutter_slidable: ^0.6.0
 
 dev_dependencies:
   flutter_test:
