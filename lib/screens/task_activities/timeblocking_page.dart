@@ -1,20 +1,20 @@
-import 'dart:math';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:todoprocast_app/models/todo_models.dart';
-import 'package:todoprocast_app/models/timeblock_models.dart';
 import 'package:time_planner/time_planner.dart';
 
-import '../../blocs/todos/todos_bloc.dart';
-
+import '../../blocs/timeblocks/time_block_bloc.dart';
+import '../../blocs/timeblocks/time_block_event.dart';
+import '../../blocs/timeblocks/time_block_state.dart';
+import '../../blocs/todos_status/todos_status_bloc.dart';
+import '../../models/timeblock_models.dart';
+import '../../models/todo_models.dart';
 
 class TimeBlockingPage extends StatefulWidget {
-  const TimeBlockingPage({Key? key, required this.todo}) : super(key: key);
-
-  final Todo todo;
+  const TimeBlockingPage({Key? key}) : super(key: key);
 
   @override
   _TimeBlockingPageState createState() => _TimeBlockingPageState();
@@ -22,215 +22,230 @@ class TimeBlockingPage extends StatefulWidget {
 
 class _TimeBlockingPageState extends State<TimeBlockingPage> {
   List<TimePlannerTask> tasks = [];
+  Color pickerColor = Colors.blue;
+  Todo? selectedTodo;
 
-  final now = DateTime.now();
-  final dateFormat = DateFormat('M/d/yyyy');
-  final dayFormat = DateFormat('EEEE');
-
-  List<TimePlannerTitle> getHeaders() {
-    return List.generate(
-      7,
-          (index) => TimePlannerTitle(
-        date: dateFormat.format(now.add(Duration(days: index))),
-        title: dayFormat.format(now.add(Duration(days: index))).toLowerCase(),
-      ),
-    );
+  List<TimePlannerTitle> _generateHeaders() {
+    List<TimePlannerTitle> headers = [];
+    var now = DateTime.now();
+    for (int i = 0; i < 7; i++) {
+      var date = now.add(Duration(days: i));
+      headers.add(
+        TimePlannerTitle(
+          date: DateFormat("dd/MM/yyyy").format(date),
+          title: DateFormat('EEEE').format(date), // EEEE will give full day name
+        ),
+      );
+    }
+    return headers;
   }
 
-  void _addObject(BuildContext context) async {
-    List<Color?> colors = [
-      Colors.purple,
-      Colors.blue,
-      Colors.green,
-      Colors.orange,
-      Colors.lime[600]
-    ];
+  void _showAddTaskDialog(BuildContext context) {
+    String taskName = '';
+    int day = 0;
+    TimeOfDay selectedTime = TimeOfDay.now();
+    double duration = 0.0;
+    Color pickerColor = const Color(0xff443a49);
+    Color currentColor = const Color(0xff443a49);
 
-    // show dialog box to prompt user for task details
-    String? taskName = await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          TextEditingController _taskNameController = TextEditingController();
-          TimeOfDay? _startTime;
-          int _duration = 60;
+    void changeColor(Color? color) {
+      if (color != null) {
+        setState(() => pickerColor = color);
+      }
+    }
 
-          // update start time when user selects a new time
-          void _selectTime() async {
-            TimeOfDay? newTime = await showTimePicker(
-                context: context, initialTime: TimeOfDay.now());
-            if (newTime != null) {
-              setState(() {
-                _startTime = newTime;
-              });
-            }
-          }
-
+    showDialog<TaskModel>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
             title: const Text('Add Task'),
             content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+              child: ListBody(
+                children: <Widget>[
                   TextField(
-                    controller: _taskNameController,
-                    decoration: const InputDecoration(
-                        hintText: 'Enter task name'),
-                  ),
-                  ListTile(
-                    title: const Text('Start Time'),
-                    subtitle: _startTime == null
-                        ? const Text('Select a time')
-                        : Text('${_startTime!.format(context)}'),
-                    onTap: _selectTime,
-                  ),
-                  Slider(
-                    min: 30,
-                    max: 240,
-                    divisions: 6,
-                    value: _duration.toDouble(),
                     onChanged: (value) {
+                      taskName = value;
+                    },
+                    decoration: const InputDecoration(hintText: "Task Name"),
+                  ),
+                  const SizedBox(height: 10),
+                  ColorPicker(
+                    pickerColor: pickerColor,
+                    onColorChanged: changeColor,
+                    pickerAreaHeightPercent: 0.8,
+                  ),
+                  const SizedBox(height: 10),
+                  DropdownButton(
+                    value: day,
+                    items: const <DropdownMenuItem<int>>[
+                      DropdownMenuItem(value: 0, child: Text('Sunday')),
+                      DropdownMenuItem(value: 1, child: Text('Monday')),
+                      DropdownMenuItem(value: 2, child: Text('Tuesday')),
+                      DropdownMenuItem(value: 3, child: Text('Wednesday')),
+                      DropdownMenuItem(value: 4, child: Text('Thursday')),
+                      DropdownMenuItem(value: 5, child: Text('Friday')),
+                      DropdownMenuItem(value: 6, child: Text('Saturday')),
+                    ],
+                    onChanged: (int? newValue) {
                       setState(() {
-                        _duration = value.round();
+                        day = newValue!;
                       });
                     },
-                    label: '${_duration} min',
                   ),
-                  const Text('Duration'),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final TimeOfDay? picked = await showTimePicker(
+                        context: context,
+                        initialTime: selectedTime,
+                      );
+                      if (picked != null) {
+                        setState(() {
+                          selectedTime = picked;
+                        });
+                      }
+                    },
+                    child: Text("Select time: ${selectedTime.format(context)}"),
+                  ),
+                  Slider(
+                    value: duration,
+                    min: 0.0,
+                    max: 120.0, // adjust the max value as needed
+                    divisions: 120,
+                    label: duration.round().toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        duration = value;
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
             actions: [
               TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, null);
-                  },
-                  child: const Text('Cancel')),
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
               TextButton(
-                  onPressed: () {
-                    String taskName = _taskNameController.text;
-                    if (taskName.isNotEmpty && _startTime != null) {
-                      DateTime now = DateTime.now();
-                      DateTime taskStartTime = DateTime(
-                          now.year, now.month, now.day, _startTime!.hour, _startTime!.minute);
-                      setState(() {
-                        tasks.add(
-                          TimePlannerTask(
-                            color: colors[Random().nextInt(colors.length)],
-                            dateTime: TimePlannerDateTime(
-                                day: taskStartTime.weekday - 1,
-                                hour: taskStartTime.hour,
-                                minutes: taskStartTime.minute),
-                            minutesDuration: _duration,
-                            daysDuration: 1,
-                            onTap: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                      Text('You clicked on a task!')));
-                            },
-                            child: Text(
-                              taskName,
-                              style: const TextStyle(
-                                  color: Colors.grey, fontSize: 12),
-                            ),
-                          ),
-                        );
-                      });
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Task added to time planner!')));
-                      Navigator.pop(context, taskName);
-                    }
-                  },
-                  child: const Text('Add')),
+                child: const Text('Confirm Color'),
+                onPressed: () {
+                  setState(() => currentColor = pickerColor);
+                },
+              ),
+              TextButton(
+                child: const Text('Add'),
+                onPressed: () {
+                  String colorString = '#${currentColor.value.toRadixString(16).substring(2)}';
+                  TaskModel taskModel = TaskModel(
+                    taskName: taskName,
+                    day: day,
+                    hour: selectedTime.hour,
+                    minutes: selectedTime.minute,
+                    minutesDuration: duration.toInt(),
+                    id: '1',
+                    daysDuration: 1,
+                    color: colorString,
+                  );
+                  Navigator.of(context).pop(taskModel);
+                },
+              ),
             ],
           );
         });
-
-    if (taskName != null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Task added to time planner!')));
-    }
+      },
+    ).then((taskModel) {
+      if (taskModel != null) {
+        context.read<TimeBlocksBloc>().add(
+            AddTimeBlock(
+            todo: selectedTodo!,
+            taskModel: taskModel));
+        if (kDebugMode) {
+          print('add taskModel: $taskModel');
+        }
+      }
+    });
   }
 
-  // void _addObject(BuildContext context) {
-  //   List<Color?> colors = [
-  //     Colors.purple,
-  //     Colors.blue,
-  //     Colors.green,
-  //     Colors.orange,
-  //     Colors.lime[600]
-  //   ];
-  //
-  //   setState(() {
-  //     tasks.add(
-  //       TimePlannerTask(
-  //         color: colors[Random().nextInt(colors.length)],
-  //         dateTime: TimePlannerDateTime(
-  //             day: Random().nextInt(14),
-  //             hour: Random().nextInt(18) + 6,
-  //             minutes: Random().nextInt(60)),
-  //         minutesDuration: Random().nextInt(90) + 30,
-  //         daysDuration: Random().nextInt(4) + 1,
-  //         onTap: () {
-  //           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //               content: Text('You click on time planner object')));
-  //         },
-  //         child: Text(
-  //           'this is a demo',
-  //           style: TextStyle(color: Colors.grey[350], fontSize: 12),
-  //         ),
-  //       ),
-  //     );
-  //   });
-  //
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Random task added to time planner!')));
-  // }
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: FlexibleSpaceBar(
-            background: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset(
-                  'assets/images/cloudbackground.jpg',
-                  fit: BoxFit.cover,
-                ),
-                Container(
-                  color: Colors.pink[900]?.withOpacity(0.6),
-                ),
-              ],
-            )
-        ),
-        title: Text(widget.todo.task),
-        centerTitle: true,
-        titleTextStyle: GoogleFonts.openSans(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
-            color: Colors.white),
-      ),
-      body: Center(
-        child: TimePlanner(
-          startHour: 6,
-          endHour: 23,
-          style: TimePlannerStyle(
-            // cellHeight: 60,
-            // cellWidth: 60,
-            showScrollBar: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.deepPurple.withOpacity(0.2), BlendMode.dstATop),
+              image: const AssetImage('assets/images/cloudbackground.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
-          headers: getHeaders(),
-          tasks: tasks,
         ),
+        actions: [
+          BlocBuilder<TodosStatusBloc, TodosStatusState>(
+            builder: (context, state) {
+              if (state is TodosStatusLoaded) {
+                return DropdownButton(
+                  value: selectedTodo,
+                  items: state.pendingTodos.map((Todo todo) {
+                    return DropdownMenuItem(
+                      value: todo,
+                      child: Text(todo.task),
+                    );
+                  }).toList(),
+                  onChanged: (Todo? newValue) {
+                    setState(() {
+                      selectedTodo = newValue;
+                      context.read<TimeBlocksBloc>().add(LoadTimeBlocks(selectedTodo!));
+                    });
+                  },
+                );
+              }
+              return const CircularProgressIndicator();
+            },
+          ),
+        ],
+        title: Text(selectedTodo?.task ?? "Time blocks"),
+        centerTitle: true,
+      ),
+      body: BlocBuilder<TimeBlocksBloc, TimeBlocksState>(
+        builder: (context, state) {
+          if (state is TimeBlocksLoadSuccess) {
+            tasks = state.tasks;
+            return Center(
+              child: TimePlanner(
+                startHour: 6,
+                endHour: 23,
+                style: TimePlannerStyle(
+                  // cellHeight: 60,
+                  // cellWidth: 60,
+                  showScrollBar: true,
+                ),
+                headers: _generateHeaders(),
+                tasks: tasks,
+              ),
+            );
+          }
+          else if (state is TimeBlocksInitial) {
+            return Center(
+              child: Text("Welcome to the Time Blocking page!",
+                style: GoogleFonts.openSans(fontSize: 26),),
+            );
+          }
+          else {
+            return Center(
+              child: Text("Welcome to the Time Blocking page!",
+                style: GoogleFonts.openSans(fontSize: 26),),
+            );
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _addObject(context),
-        tooltip: 'Add Task',
+        onPressed: () => _showAddTaskDialog(context),
+        tooltip: 'Add task',
         child: const Icon(Icons.add),
-        backgroundColor: Colors.purple[800],
       ),
     );
   }
