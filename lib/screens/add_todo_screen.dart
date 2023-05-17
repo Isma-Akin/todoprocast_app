@@ -34,7 +34,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
         steps: [],
       ),
       Todo(
-    deadline: DateTime.now().add(const Duration(days: 2)),
+        deadline: DateTime.now().add(const Duration(days: 2)),
         dateCreated: DateTime.now(),
         task: 'Study for exams',
         id: 2,
