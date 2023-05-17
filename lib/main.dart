@@ -1,14 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoprocast_app/blocs/paretos/pareto_bloc.dart';
 
 import 'package:todoprocast_app/blocs/todos/todos_bloc.dart';
 import 'package:todoprocast_app/blocs/todos_status/todos_status_bloc.dart';
 import 'package:todoprocast_app/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'api/time_blocks_repository.dart';
 import 'api/todo_repository.dart';
-import 'blocs/task_activities/pomodoro_bloc.dart';
+import 'blocs/blocs.dart';
+import 'blocs/groups/group_bloc.dart';
+import 'blocs/pomodoros/pomodoro_bloc.dart';
+import 'blocs/timeblocks/time_block_bloc.dart';
 
 
 Future<void> main() async {
@@ -66,6 +71,16 @@ class TodoApp extends StatelessWidget {
         // BlocProvider<NavigationCubit>(
         //   create: (context) => NavigationCubit(),
         // ),
+        BlocProvider<GroupBloc>(
+          create: (context) => GroupBloc(TodoRepository(prefs: prefs), prefs),
+        ),
+        BlocProvider<ParetoBloc>(
+          create: (context) => ParetoBloc(),
+        ),
+        BlocProvider<TimeBlocksBloc>(
+          create: (context) => TimeBlocksBloc(TimeBlocksRepository()),
+        ),
+
       ],
       child: MaterialApp(
         title: 'Todo App',
