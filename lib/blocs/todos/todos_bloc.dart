@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoprocast_app/blocs/blocs.dart';
 
@@ -14,10 +13,11 @@ part 'todos_event.dart';
 part 'todos_state.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
+
   final TodoRepository _todoRepository;
   final SharedPreferences _prefs;
 
-  TodosBloc(this._todoRepository, this._prefs) : super(TodosInitial()) {
+  TodosBloc(this._todoRepository, this._prefs,) : super(TodosInitial()) {
     print('TodosBloc constructor called');
     on<LoadTodos>(_onLoadTodos);
     // on<SearchTodos>(_onSearchTodos);
