@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
+import 'package:todoprocast_app/screens/task_activities/paretoanalysis_page.dart';
 
 import '../../blocs/todos/todos_bloc.dart';
 
@@ -135,12 +136,12 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => EisenhowerPage(),
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ParetoAnalysisPage(),
+                      ),
+                    );
                   },
                   splashColor: Colors.cyan[200],
                   child: Container(
