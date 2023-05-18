@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todoprocast_app/blocs/paretos/pareto_bloc.dart';
+import 'package:todoprocast_app/blocs/parkinsons_cubit/parkinsons_law_bloc.dart';
 
 import 'package:todoprocast_app/blocs/todos/todos_bloc.dart';
 import 'package:todoprocast_app/blocs/todos_status/todos_status_bloc.dart';
@@ -79,6 +80,9 @@ class TodoApp extends StatelessWidget {
         ),
         BlocProvider<TimeBlocksBloc>(
           create: (context) => TimeBlocksBloc(TimeBlocksRepository()),
+        ),
+        BlocProvider<ParkinsonBloc>(
+          create: (context) => ParkinsonBloc(),
         ),
 
       ],
