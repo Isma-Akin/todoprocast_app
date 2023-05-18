@@ -6,12 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:time_planner/time_planner.dart';
 
-import '../../blocs/timeblocks/time_block_bloc.dart';
-import '../../blocs/timeblocks/time_block_event.dart';
-import '../../blocs/timeblocks/time_block_state.dart';
-import '../../blocs/todos_status/todos_status_bloc.dart';
-import '../../models/timeblock_models.dart';
-import '../../models/todo_models.dart';
+import '../../../blocs/timeblocks/time_block_bloc.dart';
+import '../../../blocs/timeblocks/time_block_event.dart';
+import '../../../blocs/timeblocks/time_block_state.dart';
+import '../../../blocs/todos_status/todos_status_bloc.dart';
+import '../../../models/timeblock_models.dart';
+import '../../../models/todo_models.dart';
 
 class TimeBlockingPage extends StatefulWidget {
   const TimeBlockingPage({Key? key}) : super(key: key);

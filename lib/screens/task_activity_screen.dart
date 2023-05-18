@@ -3,18 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
 import 'package:todoprocast_app/constants.dart';
-import 'package:todoprocast_app/screens/task_activities/eatthatfrog_screen.dart';
-import 'package:todoprocast_app/screens/task_activities/eisenhower_screen.dart';
-import 'package:todoprocast_app/screens/task_activities/paretoanalysis_screen.dart';
-import 'package:todoprocast_app/screens/task_activities/parkinsonslaw_screen.dart';
-import 'package:todoprocast_app/screens/task_activities/pomodoro_screen.dart';
-import 'package:todoprocast_app/screens/task_activities/timeblocking_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/eat_that_frog/eatthatfrog_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/eisenhower/eisenhower_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/pareto_analysis/paretoanalysis_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/parkinsons_law/parkinsonslaw_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/pomodoro/pomodoro_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/time_blocking/timeblocking_screen.dart';
 import 'package:todoprocast_app/screens/todo_detail_screen.dart';
 
 import '../blocs/todos/todos_bloc.dart';
-import '../blocs/todos_status/todos_status_bloc.dart';
 import '../models/todo_models.dart';
-import '../widgets/todos_card.dart';
 import 'package:todoprocast_app/blocs/todos/todos_bloc.dart';
 
 class TaskActivityScreen extends StatefulWidget {
@@ -132,7 +130,7 @@ class _TaskActivityScreenState extends State<TaskActivityScreen>
               image: DecorationImage(
                 colorFilter: ColorFilter.mode(
                     Colors.red.withOpacity(0.5), BlendMode.dstATop),
-                image: AssetImage('assets/images/cloudbackground.jpg'),
+                image: const AssetImage('assets/images/cloudbackground.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -167,234 +165,613 @@ class _TaskActivityScreenState extends State<TaskActivityScreen>
                 //     ),
                 //   ),
                 // ),
-                Container(
-                  child: const Text('Apply a task activity to a todo',
-                    style: TextStyle(fontSize: 25),
-                  ),
-                ),
-                const SizedBox(height: 30,),
-                Card(
-                  elevation: 2,
+                const SizedBox(height: 10,),
+                GridView.count(
+                  padding: const EdgeInsets.all(1),
+                  primary: false,
+                  childAspectRatio: 1.1,
+                  shrinkWrap: true,
+                  crossAxisSpacing: 1,
+                  crossAxisCount: 2,
+                  children: [
+                  Card(
+                  elevation: 5,
                   child: InkWell(
-                    highlightColor: Colors.blue[900],
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const PomodoroScreen(),
+                        PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 500),
+                          pageBuilder: (context, animation, secondaryAnimation) =>
+                              const PomodoroScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            var begin = const Offset(1.0, 0.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
                         ),
                       );
                     },
+                    splashFactory: InkRipple.splashFactory,
+                    highlightColor: Colors.blue[900],
                     splashColor: Colors.blue[900],
                     child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            colorFilter: ColorFilter.mode(
-                                Colors.red.withOpacity(0.5), BlendMode.dstATop),
-                            image: const AssetImage('assets/images/pomodoro.png'),
-                            fit: BoxFit.cover,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: const AssetImage('assets/images/pomodoro.png'),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            Colors.green.withOpacity(0.5),
+                            BlendMode.darken,
                           ),
                         ),
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        margin: EdgeInsets.zero,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Row(
                           children: [
-                            Text('Pomodoro',
-                                style: GoogleFonts.openSans(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),],)
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  'Pomodoro',
+                                  style: GoogleFonts.openSans(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Card(
-                  elevation: 2,
+                  Card(
+                  elevation: 5,
                   child: InkWell(
-                    highlightColor: Colors.blue[900],
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const TimeBlockingScreen(),
+                        PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 500),
+                          pageBuilder: (context, animation, secondaryAnimation) =>
+                              const TimeBlockingScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            var begin = const Offset(1.0, 0.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
                         ),
                       );
                     },
+                    splashFactory: InkRipple.splashFactory,
+                    highlightColor: Colors.blue[900],
                     splashColor: Colors.blue[900],
                     child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            colorFilter: ColorFilter.mode(
-                                Colors.red.withOpacity(0.5), BlendMode.dstATop),
-                            image: const AssetImage('assets/images/time_blocking.jpg'),
-                            fit: BoxFit.cover,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: const AssetImage('assets/images/time_blocking.jpg'),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            Colors.purple.withOpacity(0.5),
+                            BlendMode.darken,
                           ),
                         ),
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        margin: EdgeInsets.zero,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Row(
-                          children: [
-                            Text('Time blocking',
-                                style: GoogleFonts.openSans(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),],)
+                          children: const [
+                            Icon(
+                              Icons.sticky_note_2_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                'Time blocking',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Card(
-                  elevation: 2,
+                  Card(
+                  elevation: 5,
                   child: InkWell(
-                    highlightColor: Colors.blue[900],
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const EisenHowerScreen(),
+                        PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 500),
+                          pageBuilder: (context, animation, secondaryAnimation) =>
+                              const EisenHowerScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            var begin = const Offset(1.0, 0.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
                         ),
                       );
                     },
+                    splashFactory: InkRipple.splashFactory,
+                    highlightColor: Colors.blue[900],
                     splashColor: Colors.blue[900],
                     child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            colorFilter: ColorFilter.mode(
-                                Colors.red.withOpacity(0.2), BlendMode.dstATop),
-                            image: const AssetImage('assets/images/eisenhower.png'),
-                            fit: BoxFit.contain,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: const AssetImage('assets/images/eisenhower.png'),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            Colors.yellow.withOpacity(0.5),
+                            BlendMode.darken,
                           ),
                         ),
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        margin: EdgeInsets.zero,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Row(
-                          children:  [
-                            Text('Eisenhower matrix',
-                                style: GoogleFonts.openSans(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),],)
+                          children: const [
+                            Icon(
+                              Icons.sticky_note_2_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                'Eisenhower',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Card(
-                  elevation: 2,
+                  Card(
+                  elevation: 5,
                   child: InkWell(
-                    highlightColor: Colors.blue[900],
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const EatThatFrogScreen(),
+                        PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 500),
+                          pageBuilder: (context, animation, secondaryAnimation) =>
+                              const EatThatFrogScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            var begin = const Offset(1.0, 0.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
                         ),
                       );
                     },
+                    splashFactory: InkRipple.splashFactory,
+                    highlightColor: Colors.blue[900],
                     splashColor: Colors.blue[900],
                     child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            colorFilter: ColorFilter.mode(
-                                Colors.red.withOpacity(0.2), BlendMode.dstATop),
-                            image: const AssetImage('assets/images/eat-that-frog-2.png'),
-                            fit: BoxFit.cover,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: const AssetImage('assets/images/eat-that-frog-2.png'),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            Colors.yellow.withOpacity(0.5),
+                            BlendMode.darken,
                           ),
                         ),
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        margin: EdgeInsets.zero,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Row(
-                          children:  [
-                            Text('Eat that frog',
-                                style: GoogleFonts.openSans(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),],)
+                          children: const [
+                            Icon(
+                              Icons.sticky_note_2_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                'Eat that frog',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Card(
-                  elevation: 2,
+                  Card(
+                  elevation: 5,
                   child: InkWell(
-                    highlightColor: Colors.blue[900],
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const ParetoAnalysisScreen(),
+                        PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 500),
+                          pageBuilder: (context, animation, secondaryAnimation) =>
+                              const ParetoAnalysisScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            var begin = const Offset(1.0, 0.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
                         ),
                       );
                     },
+                    splashFactory: InkRipple.splashFactory,
+                    highlightColor: Colors.blue[900],
                     splashColor: Colors.blue[900],
                     child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            colorFilter: ColorFilter.mode(
-                                Colors.red.withOpacity(0.2), BlendMode.dstATop),
-                            image: const AssetImage('assets/images/pareto_1.png'),
-                            fit: BoxFit.cover,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: const AssetImage('assets/images/pareto_1.png'),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            Colors.orange.withOpacity(0.5),
+                            BlendMode.darken,
                           ),
                         ),
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        margin: EdgeInsets.zero,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Row(
-                          children:  [
-                            Text('Pareto analysis',
-                                style: GoogleFonts.openSans(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),],)
+                          children: const [
+                            Icon(
+                              Icons.sticky_note_2_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                'Parero Analysis',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Card(
-                  elevation: 2,
+                  Card(
+                  elevation: 5,
                   child: InkWell(
-                    highlightColor: Colors.blue[900],
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const ParkinsonsLawScreen(),
+                        PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 500),
+                          pageBuilder: (context, animation, secondaryAnimation) =>
+                              const ParkinsonsLawScreen(),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            var begin = const Offset(1.0, 0.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
                         ),
                       );
                     },
+                    splashFactory: InkRipple.splashFactory,
+                    highlightColor: Colors.blue[900],
                     splashColor: Colors.blue[900],
                     child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            colorFilter: ColorFilter.mode(
-                                Colors.red.withOpacity(0.2), BlendMode.dstATop),
-                            image: const AssetImage('assets/images/Parkinsons-Law-min-1.jpg'),
-                            fit: BoxFit.cover,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: const AssetImage('assets/images/Parkinsons-Law-min-1.jpg'),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                            Colors.red.withOpacity(0.5),
+                            BlendMode.darken,
                           ),
                         ),
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        margin: EdgeInsets.zero,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Row(
-                          children:  [
-                            Text('Parkinsons law',
-                                style: GoogleFonts.openSans(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),],)
+                          children: const [
+                            Icon(
+                              Icons.sticky_note_2_outlined,
+                              color: Colors.white,
+                              size: 40,
+                            ),
+                            SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                'Parkinsons Law',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
+                  // Card(
+                  //   elevation: 2,
+                  //   child: InkWell(
+                  //     highlightColor: Colors.blue[900],
+                  //     customBorder: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     onTap: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => const PomodoroScreen(),
+                  //         ),
+                  //       );
+                  //     },
+                  //     splashColor: Colors.blue[900],
+                  //     child: Container(
+                  //         decoration: BoxDecoration(
+                  //           image: DecorationImage(
+                  //             colorFilter: ColorFilter.mode(
+                  //                 Colors.red.withOpacity(0.5), BlendMode.dstATop),
+                  //             image: const AssetImage('assets/images/pomodoro.png'),
+                  //             fit: BoxFit.cover,
+                  //           ),
+                  //         ),
+                  //         width: MediaQuery.of(context).size.width,
+                  //         height: 50,
+                  //         margin: EdgeInsets.zero,
+                  //         child: Row(
+                  //           children: [
+                  //             Text('Pomodoro',
+                  //                 style: GoogleFonts.openSans(
+                  //                     fontSize: 18,
+                  //                     fontWeight: FontWeight.bold)),],)
+                  //     ),
+                  //   ),
+                  // ),
+                  // Card(
+                  //   elevation: 2,
+                  //   child: InkWell(
+                  //     highlightColor: Colors.blue[900],
+                  //     customBorder: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     onTap: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => const TimeBlockingScreen(),
+                  //         ),
+                  //       );
+                  //     },
+                  //     splashColor: Colors.blue[900],
+                  //     child: Container(
+                  //         decoration: BoxDecoration(
+                  //           image: DecorationImage(
+                  //             colorFilter: ColorFilter.mode(
+                  //                 Colors.red.withOpacity(0.5), BlendMode.dstATop),
+                  //             image: const AssetImage('assets/images/time_blocking.jpg'),
+                  //             fit: BoxFit.cover,
+                  //           ),
+                  //         ),
+                  //         width: MediaQuery.of(context).size.width,
+                  //         height: 50,
+                  //         margin: EdgeInsets.zero,
+                  //         child: Row(
+                  //           children: [
+                  //             Text('Time blocking',
+                  //                 style: GoogleFonts.openSans(
+                  //                     fontSize: 18,
+                  //                     fontWeight: FontWeight.bold)),],)
+                  //     ),
+                  //   ),
+                  // ),
+                  // Card(
+                  //   elevation: 2,
+                  //   child: InkWell(
+                  //     highlightColor: Colors.blue[900],
+                  //     customBorder: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     onTap: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => const EisenHowerScreen(),
+                  //         ),
+                  //       );
+                  //     },
+                  //     splashColor: Colors.blue[900],
+                  //     child: Container(
+                  //         decoration: BoxDecoration(
+                  //           image: DecorationImage(
+                  //             colorFilter: ColorFilter.mode(
+                  //                 Colors.red.withOpacity(0.2), BlendMode.dstATop),
+                  //             image: const AssetImage('assets/images/eisenhower.png'),
+                  //             fit: BoxFit.contain,
+                  //           ),
+                  //         ),
+                  //         width: MediaQuery.of(context).size.width,
+                  //         height: 50,
+                  //         margin: EdgeInsets.zero,
+                  //         child: Row(
+                  //           children:  [
+                  //             Text('Eisenhower matrix',
+                  //                 style: GoogleFonts.openSans(
+                  //                     fontSize: 18,
+                  //                     fontWeight: FontWeight.bold)),],)
+                  //     ),
+                  //   ),
+                  // ),
+                  // Card(
+                  //   elevation: 2,
+                  //   child: InkWell(
+                  //     highlightColor: Colors.blue[900],
+                  //     customBorder: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     onTap: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => const EatThatFrogScreen(),
+                  //         ),
+                  //       );
+                  //     },
+                  //     splashColor: Colors.blue[900],
+                  //     child: Container(
+                  //         decoration: BoxDecoration(
+                  //           image: DecorationImage(
+                  //             colorFilter: ColorFilter.mode(
+                  //                 Colors.red.withOpacity(0.2), BlendMode.dstATop),
+                  //             image: const AssetImage('assets/images/eat-that-frog-2.png'),
+                  //             fit: BoxFit.cover,
+                  //           ),
+                  //         ),
+                  //         width: MediaQuery.of(context).size.width,
+                  //         height: 50,
+                  //         margin: EdgeInsets.zero,
+                  //         child: Row(
+                  //           children:  [
+                  //             Text('Eat that frog',
+                  //                 style: GoogleFonts.openSans(
+                  //                     fontSize: 18,
+                  //                     fontWeight: FontWeight.bold)),],)
+                  //     ),
+                  //   ),
+                  // ),
+                  // Card(
+                  //   elevation: 2,
+                  //   child: InkWell(
+                  //     highlightColor: Colors.blue[900],
+                  //     customBorder: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     onTap: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => const ParetoAnalysisScreen(),
+                  //         ),
+                  //       );
+                  //     },
+                  //     splashColor: Colors.blue[900],
+                  //     child: Container(
+                  //         decoration: BoxDecoration(
+                  //           image: DecorationImage(
+                  //             colorFilter: ColorFilter.mode(
+                  //                 Colors.red.withOpacity(0.2), BlendMode.dstATop),
+                  //             image: const AssetImage('assets/images/pareto_1.png'),
+                  //             fit: BoxFit.cover,
+                  //           ),
+                  //         ),
+                  //         width: MediaQuery.of(context).size.width,
+                  //         height: 50,
+                  //         margin: EdgeInsets.zero,
+                  //         child: Row(
+                  //           children:  [
+                  //             Text('Pareto analysis',
+                  //                 style: GoogleFonts.openSans(
+                  //                     fontSize: 18,
+                  //                     fontWeight: FontWeight.bold)),],)
+                  //     ),
+                  //   ),
+                  // ),
+                  // Card(
+                  //   elevation: 2,
+                  //   child: InkWell(
+                  //     highlightColor: Colors.blue[900],
+                  //     customBorder: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     onTap: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => const ParkinsonsLawScreen(),
+                  //         ),
+                  //       );
+                  //     },
+                  //     splashColor: Colors.blue[900],
+                  //     child: Container(
+                  //         decoration: BoxDecoration(
+                  //           image: DecorationImage(
+                  //             colorFilter: ColorFilter.mode(
+                  //                 Colors.red.withOpacity(0.2), BlendMode.dstATop),
+                  //             image: const AssetImage('assets/images/Parkinsons-Law-min-1.jpg'),
+                  //             fit: BoxFit.cover,
+                  //           ),
+                  //         ),
+                  //         width: MediaQuery.of(context).size.width,
+                  //         height: 50,
+                  //         margin: EdgeInsets.zero,
+                  //         child: Row(
+                  //           children:  [
+                  //             Text('Parkinsons law',
+                  //                 style: GoogleFonts.openSans(
+                  //                     fontSize: 18,
+                  //                     fontWeight: FontWeight.bold)),],)
+                  //     ),
+                  //   ),
+                  // ),
+                ],),
                 const SizedBox(height: 30,),
               ],
             ),
@@ -565,7 +942,7 @@ class _TaskActivityScreenState extends State<TaskActivityScreen>
           borderRadius: BorderRadius.circular(10),
           color: Colors.blue,
           image: DecorationImage(
-            image: AssetImage('assets/images/cloudbackground.jpg'),
+            image: const AssetImage('assets/images/cloudbackground.jpg'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.2),
