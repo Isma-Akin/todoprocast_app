@@ -29,7 +29,7 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
           child: Container(
             padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: AddTodoScreen(todosBloc: context.read<TodosBloc>()),
+            child: AddTodoScreen(todosBloc: context.read<TodosBloc>(), isFromFavouritesScreen: false,),
       ),
     ));
   }
@@ -233,7 +233,6 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
                   SliverToBoxAdapter(
                     child: BlocBuilder<TodosStatusBloc, TodosStatusState>(
                       builder: (context, state) {
-                        BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
                         print('Current TodosStatusState: $state');
                         if (state is TodosStatusLoading) {
                           return const Center(
@@ -348,7 +347,11 @@ Column _todoPending(List<Todo> todos, String status) {
           itemCount: todos.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: const EdgeInsets.only(bottom: 2.0, left: 3.0, right: 3.0, top: 8.0),
+              padding: const EdgeInsets.only(
+                  bottom: 2.0,
+                  left: 3.0,
+                  right: 3.0,
+                  top: 8.0),
               child: todosCard(
                 context, todos[index],
               ),
