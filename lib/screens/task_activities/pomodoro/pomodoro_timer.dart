@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todoprocast_app/blocs/todos_status/todos_status_bloc.dart';
 
-import '../../blocs/task_activities/pomodoro_bloc.dart';
-import '../../blocs/todos/todos_bloc.dart';
-import '../../models/todo_models.dart';
+import '../../../blocs/pomodoros/pomodoro_bloc.dart';
+import '../../../models/todo_models.dart';
 
 
 class PomodoroTimer extends StatefulWidget {

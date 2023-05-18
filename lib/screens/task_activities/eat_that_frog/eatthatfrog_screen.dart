@@ -3,23 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
-import 'package:todoprocast_app/screens/task_activities/paretoanalysis_page.dart';
 
-import '../../blocs/todos/todos_bloc.dart';
+import '../../../blocs/todos/todos_bloc.dart';
+import '../../../constants.dart';
+import '../../../models/todo_models.dart';
+import '../../todo_detail_screen.dart';
+import 'eatthatfrog_page.dart';
 
-import '../../constants.dart';
-import '../../models/todo_models.dart';
-import '../todo_detail_screen.dart';
 
-
-class ParetoAnalysisScreen extends StatefulWidget {
-  const ParetoAnalysisScreen({Key? key}) : super(key: key);
+class EatThatFrogScreen extends StatefulWidget {
+  const EatThatFrogScreen({Key? key}) : super(key: key);
 
   @override
-  State<ParetoAnalysisScreen> createState() => _ParetoAnalysisScreenState();
+  State<EatThatFrogScreen> createState() => _EatThatFrogScreenState();
 }
 
-class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
+class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,14 +36,14 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
                     fit: BoxFit.cover,
                   ),
                   Container(
-                    color: Colors.cyanAccent[200]?.withOpacity(0.6),
+                    color: Colors.green[900]?.withOpacity(0.6),
                   ),
                 ],
               )
           ),
           centerTitle: true,
           title: Text(
-            'Pareto anaylsis',
+            'Eat that frog',
             style: GoogleFonts.openSans(
               color: Colors.white,
               fontSize: 32,
@@ -58,7 +57,7 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
               Divider(
                 height: 10,
                 thickness: 2,
-                color: Colors.cyan[200],),
+                color: Colors.green[900],),
               Column(
                 children: [
                   Container(
@@ -67,12 +66,12 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
                         Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: const AssetImage('assets/images/pareto_1.png'),
+                              image: const AssetImage('assets/images/eat-that-frog-2.png'),
                               colorFilter: ColorFilter.mode(
-                                Colors.orange.withOpacity(0.5),
+                                Colors.orange.withOpacity(0.7),
                                 BlendMode.dstATop,
                               ),
-                              fit: BoxFit.contain,
+                              fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -93,7 +92,7 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
                         Divider(
                           height: 10,
                           thickness: 2,
-                          color: Colors.cyan[200],),
+                          color: Colors.green[900],),
                         Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Container(
@@ -106,12 +105,17 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             padding: const EdgeInsets.all(20),
-                            child: const Text('1. List problems you are facing\n'
-                                              '2. Identify the root cause\n'
-                                              '3. Assign a score to each problem\n'
-                                              '4. Group problems together by cause\n'
-                                              '5. Add up the score of each group\n'
-                                              '6. Take action',
+                            child: const Text(
+                              '1. Find out what you want to achieve most\n'
+                              '2. Write down your goals\n'
+                              '3. Set deadlines\n'
+                              '4. Make a list of everything you need to do\n'
+                              '5. Prioritize your list\n'
+                              '6. Start with the most important task\n'
+                              '7. Do the hardest task first\n'
+                              '8. Make a habit of eating that frog\n'
+                              '9. Review your goals daily\n'
+                              '10. Celebrate your success!\n',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
@@ -131,7 +135,7 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
               Card(
                 elevation: 2,
                 child: InkWell(
-                  highlightColor: Colors.cyan[200],
+                  highlightColor: Colors.green[900],
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -139,20 +143,20 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ParetoAnalysisPage(),
+                        builder: (context) => const EatThatFrogPage(),
                       ),
                     );
                   },
-                  splashColor: Colors.cyan[200],
+                  splashColor: Colors.green[900],
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       margin: EdgeInsets.zero,
                       child: Row(
                         children:  [
-                          Icon(Icons.timer, color: Colors.cyan[200],),
+                          Icon(Icons.alarm_add_outlined, color: Colors.green[900],),
                           const SizedBox(width: 10,),
-                          Text('Pareto screen ', style: GoogleFonts.openSans(
+                          Text('Eat that frog ', style: GoogleFonts.openSans(
                               fontSize: 18,
                               fontWeight: FontWeight.bold)),],)
                   ),
@@ -161,44 +165,23 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
               Card(
                 elevation: 2,
                 child: InkWell(
-                  highlightColor: Colors.cyan[200],
+                  highlightColor: Colors.green[900],
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   onTap: () {},
-                  splashColor: Colors.cyan[200],
+                  splashColor: Colors.green[900],
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       margin: EdgeInsets.zero,
                       child: Row(
                         children:  [
-                          Icon(Icons.task_outlined, color: Colors.cyan[200],),
+                          Icon(Icons.info_outline,
+                            color: Colors.green[900],),
                           const SizedBox(width: 10,),
-                          Text('Active Pareto analysis: ', style: GoogleFonts.openSans(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),],)
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 2,
-                child: InkWell(
-                  highlightColor: Colors.cyan[200],
-                  customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  onTap: () {},
-                  splashColor: Colors.cyan[200],
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      margin: EdgeInsets.zero,
-                      child: Row(
-                        children:  [
-                          Icon(Icons.info_outline, color: Colors.cyan[200],),
-                          const SizedBox(width: 10,),
-                          Text('Press to know more about Pareto', style: GoogleFonts.openSans(
+                          Text('Eat that frog information ',
+                              style: GoogleFonts.openSans(
                               fontSize: 18,
                               fontWeight: FontWeight.bold)),],)
                   ),
@@ -216,7 +199,7 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
                       padding: const EdgeInsets.all(2.0),
                       child: Row(
                         children: [
-                          Text("Pomodoro",
+                          Text("Eisenhower matrix",
                             style: GoogleFonts.openSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),),
@@ -232,7 +215,7 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
                       padding: const EdgeInsets.all(2.0),
                       child: Row(
                         children: [
-                          Text("Eat that frog",
+                          Text("Pomodoro",
                             style: GoogleFonts.openSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),),
@@ -449,6 +432,16 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
   }
 }
 
+// Card(
+//   child: ListTile(
+//     leading: const Icon(Icons.timer),
+//     title: const Text('Pomodoro Timer'),
+//     trailing: const Icon(Icons.navigate_next),
+//     onTap: () {
+//       Navigator.pushNamed(context, '/pomodoro_timer');
+//     },
+//   ),
+// ),
 // Column(
 //   children: [
 //     const SizedBox(height: 20),
@@ -519,3 +512,25 @@ class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
 //     ),
 //   ],
 // )
+
+// BlocBuilder<TodosStatusBloc, TodosStatusState>(
+// builder: (context, state) {
+// if (state is TodosStatusLoading) {
+// return const Center(
+// child: CircularProgressIndicator(),
+// );
+// }
+// if (state is TodosStatusLoaded) {
+// return Expanded(
+// child: ListView(children: [
+// _todo(
+// state.pendingTodos,
+// ' ',
+// )
+// ]));
+// } else {
+// return const Text('Something went wrong.');
+// }
+// },
+// ),
+

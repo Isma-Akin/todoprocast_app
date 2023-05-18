@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
-import 'package:todoprocast_app/screens/task_activities/pomodoro_timer.dart';
+import 'package:todoprocast_app/screens/task_activities/pomodoro/pomodoro_timer.dart';
 
-import '../../blocs/todos/todos_bloc.dart';
-import '../../constants.dart';
-import '../../models/todo_models.dart';
-import '../todo_detail_screen.dart';
+import '../../../blocs/todos/todos_bloc.dart';
+import '../../../constants.dart';
+import '../../../models/todo_models.dart';
+import '../../todo_detail_screen.dart';
 
 
 class PomodoroScreen extends StatefulWidget {

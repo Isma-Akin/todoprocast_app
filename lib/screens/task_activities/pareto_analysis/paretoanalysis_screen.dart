@@ -2,129 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
-import 'package:todoprocast_app/screens/task_activities/eisenhower_page.dart';
-import 'package:todoprocast_app/screens/task_activities/parkinsonslaw_page.dart';
+import 'package:todoprocast_app/screens/task_activities/pareto_analysis/paretoanalysis_page.dart';
 
-import '../../blocs/todos/todos_bloc.dart';
+import '../../../blocs/todos/todos_bloc.dart';
 
-import '../../blocs/todos_status/todos_status_bloc.dart';
-import '../../constants.dart';
-import '../../models/todo_models.dart';
-import '../todo_detail_screen.dart';
+import '../../../constants.dart';
+import '../../../models/todo_models.dart';
+import '../../todo_detail_screen.dart';
 
 
-class ParkinsonsLawScreen extends StatefulWidget {
-  const ParkinsonsLawScreen({
-    Key? key,
-    // required Todo todo
-    }) : super(key: key);
+class ParetoAnalysisScreen extends StatefulWidget {
+  const ParetoAnalysisScreen({Key? key}) : super(key: key);
 
   @override
-  State<ParkinsonsLawScreen> createState() => _ParkinsonsLawScreenState();
+  State<ParetoAnalysisScreen> createState() => _ParetoAnalysisScreenState();
 }
 
-class _ParkinsonsLawScreenState extends State<ParkinsonsLawScreen> {
-  // late List<Todo> _todos;
-
-  void _applyParkinsonsLaw(Todo todo) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => ParkinsonsLawPage(todo: todo)),
-    );
-  }
-
-  // void _showParkinsonsLawModal() {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     builder: (context) {
-  //       return ListView.builder(
-  //         itemCount: _todos.length,
-  //         itemBuilder: (context, index) {
-  //           final todo = _todos[index];
-  //           return ListTile(
-  //             title: Text(todo.task),
-  //             subtitle: Text(DateFormat.yMd().format(todo.deadline)),
-  //             onTap: () {
-  //               Navigator.pop(context);
-  //               _applyParkinsonsLaw(todo);
-  //             },
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-
-  void _showParkinsonsLawModal() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return BlocBuilder<TodosStatusBloc, TodosStatusState>(
-          builder: (context, state) {
-            if (state is TodosStatusLoaded) {
-              return StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-                  return ListView.builder(
-                    itemCount: state.pendingTodos.length,
-                    itemBuilder: (context, index) {
-                      final todo = state.pendingTodos[index];
-                      return ListTile(
-                        title: Text(todo.task),
-                        subtitle: Text(DateFormat.yMd().format(todo.deadline)),
-                        onTap: () {
-                          Navigator.pop(context);
-                          _applyParkinsonsLaw(todo);
-                        },
-                      );
-                    },
-                  );
-                },
-              );
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
-        );
-      },
-    );
-  }
-
-  void _showParkinsonsLawModalTodos() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return BlocBuilder<TodosStatusBloc, TodosStatusState>(
-          builder: (context, state) {
-            if (state is TodosStatusLoaded) {
-              return StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-                  return ListView.builder(
-                    itemCount: state.pendingTodos.length,
-                    itemBuilder: (context, index) {
-                      final todo = state.pendingTodos[index];
-                      return ListTile(
-                        title: Text(todo.task),
-                        subtitle: Text(DateFormat.yMd().format(todo.deadline)),
-                        onTap: () {
-                          Navigator.pop(context);
-                          _applyParkinsonsLaw(todo);
-                        },
-                      );
-                    },
-                  );
-                },
-              );
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
-        );
-      },
-    );
-  }
-
+class _ParetoAnalysisScreenState extends State<ParetoAnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,7 +44,7 @@ class _ParkinsonsLawScreenState extends State<ParkinsonsLawScreen> {
           ),
           centerTitle: true,
           title: Text(
-            'Parkinsons Law',
+            'Pareto anaylsis',
             style: GoogleFonts.openSans(
               color: Colors.white,
               fontSize: 32,
@@ -172,7 +67,7 @@ class _ParkinsonsLawScreenState extends State<ParkinsonsLawScreen> {
                         Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: const AssetImage('assets/images/Parkinsons-Law-min-1.jpg'),
+                              image: const AssetImage('assets/images/pareto_1.png'),
                               colorFilter: ColorFilter.mode(
                                 Colors.orange.withOpacity(0.5),
                                 BlendMode.dstATop,
@@ -211,10 +106,12 @@ class _ParkinsonsLawScreenState extends State<ParkinsonsLawScreen> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             padding: const EdgeInsets.all(20),
-                            child: const Text(
-                                '1. Attempt to get your task done early\n'
-                                '2. Set a deadline for yourself\n'
-                                '3. Limit time for your tasks\n',
+                            child: const Text('1. List problems you are facing\n'
+                                              '2. Identify the root cause\n'
+                                              '3. Assign a score to each problem\n'
+                                              '4. Group problems together by cause\n'
+                                              '5. Add up the score of each group\n'
+                                              '6. Take action',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
@@ -239,13 +136,12 @@ class _ParkinsonsLawScreenState extends State<ParkinsonsLawScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => EisenhowerPage(),
-                    //   ),
-                    // );
-                    _showParkinsonsLawModal();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ParetoAnalysisPage(),
+                      ),
+                    );
                   },
                   splashColor: Colors.cyan[200],
                   child: Container(
@@ -256,30 +152,7 @@ class _ParkinsonsLawScreenState extends State<ParkinsonsLawScreen> {
                         children:  [
                           Icon(Icons.timer, color: Colors.cyan[200],),
                           const SizedBox(width: 10,),
-                          Text('Parkinsons law screen ', style: GoogleFonts.openSans(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),],)
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 2,
-                child: InkWell(
-                  highlightColor: Colors.cyan[200],
-                  customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  onTap: () {},
-                  splashColor: Colors.cyan[200],
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      margin: EdgeInsets.zero,
-                      child: Row(
-                        children:  [
-                          Icon(Icons.task_outlined, color: Colors.cyan[200],),
-                          const SizedBox(width: 10,),
-                          Text('Active Parkinsons laws: ', style: GoogleFonts.openSans(
+                          Text('Pareto screen ', style: GoogleFonts.openSans(
                               fontSize: 18,
                               fontWeight: FontWeight.bold)),],)
                   ),
@@ -302,7 +175,7 @@ class _ParkinsonsLawScreenState extends State<ParkinsonsLawScreen> {
                         children:  [
                           Icon(Icons.info_outline, color: Colors.cyan[200],),
                           const SizedBox(width: 10,),
-                          Text('Press to know more about Parkinsons', style: GoogleFonts.openSans(
+                          Text('Press to know more about Pareto', style: GoogleFonts.openSans(
                               fontSize: 18,
                               fontWeight: FontWeight.bold)),],)
                   ),

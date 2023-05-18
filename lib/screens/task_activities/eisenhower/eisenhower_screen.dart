@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:todoprocast_app/screens/task_activities/eisenhower_page.dart';
+import 'package:todoprocast_app/screens/task_activities/eisenhower/eisenhower_page.dart';
 
 class EisenHowerScreen extends StatefulWidget {
   const EisenHowerScreen({Key? key}) : super(key: key);

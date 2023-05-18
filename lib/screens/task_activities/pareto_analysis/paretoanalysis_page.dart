@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uuid/uuid.dart';
-import '../../blocs/paretos/pareto_bloc.dart';
-import '../../blocs/paretos/pareto_event.dart';
-import '../../blocs/paretos/pareto_state.dart';
+import '../../../blocs/paretos/pareto_bloc.dart';
+import '../../../blocs/paretos/pareto_event.dart';
+import '../../../blocs/paretos/pareto_state.dart';
+import '../../../models/pareto_models.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import '../../models/pareto_models.dart';
 
 class ParetoAnalysisPage extends StatelessWidget {
   const ParetoAnalysisPage({Key? key}) : super(key: key);

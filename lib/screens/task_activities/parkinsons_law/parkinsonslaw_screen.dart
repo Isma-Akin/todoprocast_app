@@ -2,22 +2,129 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
+import 'package:todoprocast_app/screens/task_activities/eisenhower/eisenhower_page.dart';
+import 'package:todoprocast_app/screens/task_activities/parkinsons_law/parkinsonslaw_page.dart';
 
-import '../../blocs/todos/todos_bloc.dart';
-import '../../constants.dart';
-import '../../models/todo_models.dart';
-import '../todo_detail_screen.dart';
+import '../../../blocs/todos/todos_bloc.dart';
+
+import '../../../blocs/todos_status/todos_status_bloc.dart';
+import '../../../constants.dart';
+import '../../../models/todo_models.dart';
+import '../../todo_detail_screen.dart';
 
 
-class EatThatFrogScreen extends StatefulWidget {
-  const EatThatFrogScreen({Key? key}) : super(key: key);
+class ParkinsonsLawScreen extends StatefulWidget {
+  const ParkinsonsLawScreen({
+    Key? key,
+    // required Todo todo
+    }) : super(key: key);
 
   @override
-  State<EatThatFrogScreen> createState() => _EatThatFrogScreenState();
+  State<ParkinsonsLawScreen> createState() => _ParkinsonsLawScreenState();
 }
 
-class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
+class _ParkinsonsLawScreenState extends State<ParkinsonsLawScreen> {
+  // late List<Todo> _todos;
+
+  // void _applyParkinsonsLaw(Todo todo) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (_) => ParkinsonsLawPage(todo: todo)),
+  //   );
+  // }
+
+  // void _showParkinsonsLawModal() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (context) {
+  //       return ListView.builder(
+  //         itemCount: _todos.length,
+  //         itemBuilder: (context, index) {
+  //           final todo = _todos[index];
+  //           return ListTile(
+  //             title: Text(todo.task),
+  //             subtitle: Text(DateFormat.yMd().format(todo.deadline)),
+  //             onTap: () {
+  //               Navigator.pop(context);
+  //               _applyParkinsonsLaw(todo);
+  //             },
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+
+  // void _showParkinsonsLawModal() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return BlocBuilder<TodosStatusBloc, TodosStatusState>(
+  //         builder: (context, state) {
+  //           if (state is TodosStatusLoaded) {
+  //             return StatefulBuilder(
+  //               builder: (BuildContext context, StateSetter setState) {
+  //                 return ListView.builder(
+  //                   itemCount: state.pendingTodos.length,
+  //                   itemBuilder: (context, index) {
+  //                     final todo = state.pendingTodos[index];
+  //                     return ListTile(
+  //                       title: Text(todo.task),
+  //                       subtitle: Text(DateFormat.yMd().format(todo.deadline)),
+  //                       onTap: () {
+  //                         Navigator.pop(context);
+  //                         _applyParkinsonsLaw(todo);
+  //                       },
+  //                     );
+  //                   },
+  //                 );
+  //               },
+  //             );
+  //           } else {
+  //             return const CircularProgressIndicator();
+  //           }
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+
+  // void _showParkinsonsLawModalTodos() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return BlocBuilder<TodosStatusBloc, TodosStatusState>(
+  //         builder: (context, state) {
+  //           if (state is TodosStatusLoaded) {
+  //             return StatefulBuilder(
+  //               builder: (BuildContext context, StateSetter setState) {
+  //                 return ListView.builder(
+  //                   itemCount: state.pendingTodos.length,
+  //                   itemBuilder: (context, index) {
+  //                     final todo = state.pendingTodos[index];
+  //                     return ListTile(
+  //                       title: Text(todo.task),
+  //                       subtitle: Text(DateFormat.yMd().format(todo.deadline)),
+  //                       onTap: () {
+  //                         Navigator.pop(context);
+  //                         _applyParkinsonsLaw(todo);
+  //                       },
+  //                     );
+  //                   },
+  //                 );
+  //               },
+  //             );
+  //           } else {
+  //             return const CircularProgressIndicator();
+  //           }
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,14 +142,14 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
                     fit: BoxFit.cover,
                   ),
                   Container(
-                    color: Colors.green[900]?.withOpacity(0.6),
+                    color: Colors.cyanAccent[200]?.withOpacity(0.6),
                   ),
                 ],
               )
           ),
           centerTitle: true,
           title: Text(
-            'Eat that frog',
+            'Parkinsons Law',
             style: GoogleFonts.openSans(
               color: Colors.white,
               fontSize: 32,
@@ -56,7 +163,7 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
               Divider(
                 height: 10,
                 thickness: 2,
-                color: Colors.green[900],),
+                color: Colors.cyan[200],),
               Column(
                 children: [
                   Container(
@@ -65,12 +172,12 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
                         Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: const AssetImage('assets/images/eat-that-frog-2.png'),
+                              image: const AssetImage('assets/images/Parkinsons-Law-min-1.jpg'),
                               colorFilter: ColorFilter.mode(
-                                Colors.orange.withOpacity(0.7),
+                                Colors.orange.withOpacity(0.5),
                                 BlendMode.dstATop,
                               ),
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -91,7 +198,7 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
                         Divider(
                           height: 10,
                           thickness: 2,
-                          color: Colors.green[900],),
+                          color: Colors.cyan[200],),
                         Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: Container(
@@ -105,16 +212,9 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
                             ),
                             padding: const EdgeInsets.all(20),
                             child: const Text(
-                              '1. Find out what you want to achieve most\n'
-                              '2. Write down your goals\n'
-                              '3. Set deadlines\n'
-                              '4. Make a list of everything you need to do\n'
-                              '5. Prioritize your list\n'
-                              '6. Start with the most important task\n'
-                              '7. Do the hardest task first\n'
-                              '8. Make a habit of eating that frog\n'
-                              '9. Review your goals daily\n'
-                              '10. Celebrate your success!\n',
+                                '1. Attempt to get your task done early\n'
+                                '2. Set a deadline for yourself\n'
+                                '3. Limit time for your tasks\n',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
@@ -134,21 +234,29 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
               Card(
                 elevation: 2,
                 child: InkWell(
-                  highlightColor: Colors.green[900],
+                  highlightColor: Colors.cyan[200],
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  onTap: () {},
-                  splashColor: Colors.green[900],
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ParkinsonsLawPage(),
+                      ),
+                    );
+                    // _showParkinsonsLawModal();
+                  },
+                  splashColor: Colors.cyan[200],
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       margin: EdgeInsets.zero,
                       child: Row(
                         children:  [
-                          Icon(Icons.alarm_add_outlined, color: Colors.green[900],),
+                          Icon(Icons.timer, color: Colors.cyan[200],),
                           const SizedBox(width: 10,),
-                          Text('Eat that frog ', style: GoogleFonts.openSans(
+                          Text('Parkinsons law screen ', style: GoogleFonts.openSans(
                               fontSize: 18,
                               fontWeight: FontWeight.bold)),],)
                   ),
@@ -157,48 +265,21 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
               Card(
                 elevation: 2,
                 child: InkWell(
-                  highlightColor: Colors.green[900],
+                  highlightColor: Colors.cyan[200],
                   customBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   onTap: () {},
-                  splashColor: Colors.green[900],
+                  splashColor: Colors.cyan[200],
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       margin: EdgeInsets.zero,
                       child: Row(
                         children:  [
-                          Icon(Icons.task_outlined,
-                            color: Colors.green[900],),
+                          Icon(Icons.info_outline, color: Colors.cyan[200],),
                           const SizedBox(width: 10,),
-                          Text('Active eat that frogs: ',
-                              style: GoogleFonts.openSans(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),],)
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 2,
-                child: InkWell(
-                  highlightColor: Colors.green[900],
-                  customBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  onTap: () {},
-                  splashColor: Colors.green[900],
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      margin: EdgeInsets.zero,
-                      child: Row(
-                        children:  [
-                          Icon(Icons.info_outline,
-                            color: Colors.green[900],),
-                          const SizedBox(width: 10,),
-                          Text('Eat that frog information ',
-                              style: GoogleFonts.openSans(
+                          Text('Press to know more about Parkinsons', style: GoogleFonts.openSans(
                               fontSize: 18,
                               fontWeight: FontWeight.bold)),],)
                   ),
@@ -216,7 +297,7 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
                       padding: const EdgeInsets.all(2.0),
                       child: Row(
                         children: [
-                          Text("Eisenhower matrix",
+                          Text("Pomodoro",
                             style: GoogleFonts.openSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),),
@@ -232,7 +313,7 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
                       padding: const EdgeInsets.all(2.0),
                       child: Row(
                         children: [
-                          Text("Pomodoro",
+                          Text("Eat that frog",
                             style: GoogleFonts.openSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),),
@@ -449,16 +530,6 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
   }
 }
 
-// Card(
-//   child: ListTile(
-//     leading: const Icon(Icons.timer),
-//     title: const Text('Pomodoro Timer'),
-//     trailing: const Icon(Icons.navigate_next),
-//     onTap: () {
-//       Navigator.pushNamed(context, '/pomodoro_timer');
-//     },
-//   ),
-// ),
 // Column(
 //   children: [
 //     const SizedBox(height: 20),
@@ -529,25 +600,3 @@ class _EatThatFrogScreenState extends State<EatThatFrogScreen> {
 //     ),
 //   ],
 // )
-
-// BlocBuilder<TodosStatusBloc, TodosStatusState>(
-// builder: (context, state) {
-// if (state is TodosStatusLoading) {
-// return const Center(
-// child: CircularProgressIndicator(),
-// );
-// }
-// if (state is TodosStatusLoaded) {
-// return Expanded(
-// child: ListView(children: [
-// _todo(
-// state.pendingTodos,
-// ' ',
-// )
-// ]));
-// } else {
-// return const Text('Something went wrong.');
-// }
-// },
-// ),
-

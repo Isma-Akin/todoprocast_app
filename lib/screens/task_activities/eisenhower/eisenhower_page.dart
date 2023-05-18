@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todoprocast_app/models/models.dart';
 
-import '../../blocs/todos/todos_bloc.dart';
-import '../../blocs/todos_status/todos_status_bloc.dart';
+import '../../../blocs/todos/todos_bloc.dart';
+import '../../../blocs/todos_status/todos_status_bloc.dart';
 
 class EisenhowerPage extends StatefulWidget {
   const EisenhowerPage({Key? key}) : super(key: key);
