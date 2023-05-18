@@ -9,7 +9,6 @@ import 'group_models.dart';
 
 class Todo extends Equatable {
   late int id;
-  // int pomodoros;
   final String task;
   final String description;
   final Group? group;
@@ -19,6 +18,7 @@ class Todo extends Equatable {
   Duration timer;
   late bool isImportant;
   late bool isUrgent;
+  late bool isFrog;
   bool? taskCompleted;
   bool? taskCancelled;
   bool? isFavourite;
@@ -39,6 +39,7 @@ class Todo extends Equatable {
     this.timer = const Duration(seconds: 0),
     this.isImportant = false,
     this.isUrgent = false,
+    this.isFrog = false,
     required this.description,
     this.group,
     required this.dateCreated,
@@ -68,6 +69,7 @@ class Todo extends Equatable {
       timer: Duration(seconds: json['timer']),
       isImportant: json['isImportant'],
       isUrgent: json['isUrgent'],
+      isFrog: json['isFrog'],
       description: json['description'],
       group: json['group'] != null ? Group.fromJson(json['group']) : null,
       dateCreated: _dateTimeFromJson(json['dateCreated']),
@@ -90,6 +92,7 @@ class Todo extends Equatable {
       'timer': timer.inSeconds,
       'isImportant': isImportant,
       'isUrgent': isUrgent,
+      'isFrog': isFrog,
       'description': description,
       'group': group != null ? group!.toJson() : null,
       'dateCreated': _dateTimeToJson(dateCreated),
@@ -108,6 +111,7 @@ class Todo extends Equatable {
     String? description,
     DateTime? dateCreated,
     DateTime? dueDate,
+    bool? isFrog,
     bool? taskCompleted,
     bool? taskCancelled,
     Group? group,
@@ -131,6 +135,7 @@ class Todo extends Equatable {
       group: group,
       dateCreated: dateCreated ?? this.dateCreated,
       dueDate: dueDate ?? this.dueDate,
+      isFrog: isFrog ?? this.isFrog,
       taskCompleted: taskCompleted ?? this.taskCompleted,
       taskCancelled: taskCancelled ?? this.taskCancelled,
       isFavourite: isFavourite ?? this.isFavourite,
@@ -138,7 +143,7 @@ class Todo extends Equatable {
       isTempId: isTempId ?? this.isTempId,
       isApplied: isApplied,
       groupId: groupId ?? this.groupId,
-      steps: steps as List<String>? ?? this.steps,
+      steps: steps ?? this.steps,
       taskActivity: taskActivity ?? this.taskActivity,
       // timeBlocks: timeBlocks,
     );
@@ -185,6 +190,7 @@ class Todo extends Equatable {
         dateCreated,
         dueDate,
         deadline,
+        isFrog,
         group,
         timer,
         isImportant,
