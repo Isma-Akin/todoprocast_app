@@ -30,6 +30,16 @@ class _CalendarPageState extends State<CalendarPage> {
         home: Scaffold(
           // backgroundColor: Colors.deepPurple[100],
           appBar: AppBar(
+            actions: [
+              IconButton(
+                icon: Icon(Icons.settings,
+                  color: Colors.purple[800],
+                  size: 30,),
+                onPressed: () {
+                  // Code to open settings
+                },
+              ),
+            ],
             flexibleSpace: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -45,13 +55,12 @@ class _CalendarPageState extends State<CalendarPage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon:  Icon(Icons.home, color: Colors.purple[800]),
+              icon:  Icon(Icons.home, size: 30, color: Colors.purple[800]),
             ),
             title:  Center(child: Text('Your day',
               style: GoogleFonts.openSans(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
                   color: Colors.white),)),
             centerTitle: true,
           ),
