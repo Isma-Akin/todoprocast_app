@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:todoprocast_app/blocs/paretos/pareto_bloc.dart';
 import 'package:todoprocast_app/blocs/parkinsons_cubit/parkinsons_law_bloc.dart';
 
@@ -15,6 +16,7 @@ import 'blocs/blocs.dart';
 import 'blocs/groups/group_bloc.dart';
 import 'blocs/pomodoros/pomodoro_bloc.dart';
 import 'blocs/timeblocks/time_block_bloc.dart';
+import 'blocs/todos/selected_todos/selected_todo_bloc.dart';
 
 
 Future<void> main() async {
@@ -69,6 +71,7 @@ class TodoApp extends StatelessWidget {
         ),
         BlocProvider<PomodoroBloc>(
           create: (context) => PomodoroBloc(),),
+        BlocProvider<SelectedTodoBloc>(create: (_) => SelectedTodoBloc(),),
         // BlocProvider<NavigationCubit>(
         //   create: (context) => NavigationCubit(),
         // ),
@@ -81,15 +84,19 @@ class TodoApp extends StatelessWidget {
         BlocProvider<TimeBlocksBloc>(
           create: (context) => TimeBlocksBloc(TimeBlocksRepository()),
         ),
-        BlocProvider<ParkinsonBloc>(
-          create: (context) => ParkinsonBloc(),
-        ),
-
+        // BlocProvider<ParkinsonBloc>(
+        //   create: (context) => ParkinsonBloc(),
+        // ),
       ],
       child: MaterialApp(
         title: 'Todo App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          textTheme: GoogleFonts.openSansTextTheme(
+            Theme.of(context).textTheme,
+          ).copyWith(
+            headline4: const TextStyle(color: Colors.white),
+          ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
           primarySwatch: Colors.blue,
           useMaterial3: true,
