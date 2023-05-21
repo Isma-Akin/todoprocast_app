@@ -19,6 +19,11 @@ class Todo extends Equatable {
   late bool isImportant;
   late bool isUrgent;
   late bool isFrog;
+  late bool isParkinson;
+  late bool isEisenhower;
+  late bool isPomodoro;
+  late bool isTimeBlock;
+  late bool isPareto;
   bool? taskCompleted;
   bool? taskCancelled;
   bool? isFavourite;
@@ -28,7 +33,7 @@ class Todo extends Equatable {
   bool isSelected;
   String groupId;
   List<String> steps;
-  String taskActivity;
+  List<String> taskActivity;
   // final List<TimeBlock> timeBlocks;
 
   Todo({
@@ -40,6 +45,11 @@ class Todo extends Equatable {
     this.isImportant = false,
     this.isUrgent = false,
     this.isFrog = false,
+    this.isParkinson = false,
+    this.isEisenhower = false,
+    this.isPomodoro = false,
+    this.isTimeBlock = false,
+    this.isPareto = false,
     required this.description,
     this.group,
     required this.dateCreated,
@@ -53,7 +63,7 @@ class Todo extends Equatable {
     this.isSelected = false,
     this.groupId = '',
     this.steps = const <String>[],
-    this.taskActivity = '',
+    this.taskActivity = const <String>[],
     // this.timeBlocks = const <TimeBlock>[],
   }) {
     taskCompleted = taskCompleted ?? false;
@@ -70,6 +80,11 @@ class Todo extends Equatable {
       isImportant: json['isImportant'],
       isUrgent: json['isUrgent'],
       isFrog: json['isFrog'],
+      isParkinson: json['isParkinson'],
+      isEisenhower: json['isEisenhower'],
+      isPomodoro: json['isPomodoro'],
+      isTimeBlock: json['isTimeBlock'],
+      isPareto: json['isPareto'],
       description: json['description'],
       group: json['group'] != null ? Group.fromJson(json['group']) : null,
       dateCreated: _dateTimeFromJson(json['dateCreated']),
@@ -79,7 +94,8 @@ class Todo extends Equatable {
       taskCancelled: json['taskCancelled'],
       isFavourite: json['isFavourite'],
       steps: json['steps'] != null ? List<String>.from(json['steps']) : [],
-      taskActivity: json['taskActivity'],
+      taskActivity: json['taskActivity'] != null ? List<String>.from(json['taskActivity']) : [],
+      // taskActivity: json['taskActivity'],
       // taskActivity: 'No task activity applied',
     );
   }
@@ -93,6 +109,11 @@ class Todo extends Equatable {
       'isImportant': isImportant,
       'isUrgent': isUrgent,
       'isFrog': isFrog,
+      'isParkinson': isParkinson,
+      'isEisenhower': isEisenhower,
+      'isPomodoro': isPomodoro,
+      'isTimeBlock': isTimeBlock,
+      'isPareto': isPareto,
       'description': description,
       'group': group != null ? group!.toJson() : null,
       'dateCreated': _dateTimeToJson(dateCreated),
@@ -112,6 +133,13 @@ class Todo extends Equatable {
     DateTime? dateCreated,
     DateTime? dueDate,
     bool? isFrog,
+    bool? isImportant,
+    bool? isUrgent,
+    bool? isParkinson,
+    bool? isEisenhower,
+    bool? isPomodoro,
+    bool? isTimeBlock,
+    bool? isPareto,
     bool? taskCompleted,
     bool? taskCancelled,
     Group? group,
@@ -122,15 +150,13 @@ class Todo extends Equatable {
     List<String>? steps,
     // List<TimeBlock> timeBlocks = const <TimeBlock>[],
     String? groupId,
-    String? taskActivity,
+    List<String>? taskActivity,
   }) {
     return Todo(
       id: id ?? this.id,
       task: task ?? this.task,
       deadline: deadline,
       timer: timer,
-      isImportant: isImportant,
-      isUrgent: isUrgent,
       description: description ?? this.description,
       group: group,
       dateCreated: dateCreated ?? this.dateCreated,
@@ -178,8 +204,62 @@ class Todo extends Equatable {
   //   id = newId;
   // }
 
+  // void updateTaskActivity(String activityName) {
+  //   taskActivity = activityName as List<String>;
+  // }
+
   void updateTaskActivity(String activityName) {
-    taskActivity = activityName;
+    taskActivity.add(activityName);
+  }
+  void removeTaskActivity(String activityName) {
+    taskActivity.remove(activityName);
+  }
+
+  void setFrog(bool newValue) {
+    isFrog = newValue;
+  }
+
+  void setParkinson(bool newValue) {
+    isParkinson = newValue;
+  }
+
+  void setEisenhower(bool newValue) {
+    isEisenhower = newValue;
+  }
+
+  void setPomodoro(bool newValue) {
+    isPomodoro = newValue;
+  }
+
+  void setTimeBlock(bool newValue) {
+    isTimeBlock = newValue;
+  }
+
+  void setPareto(bool newValue) {
+    isPareto = newValue;
+  }
+
+  List<String> getTaskActivities() {
+    List<String> activities = [];
+    if (isFrog) {
+      activities.add('Eat that Frog');
+    }
+    if (isParkinson) {
+      activities.add('Parkinsons Law');
+    }
+    if (isEisenhower) {
+      activities.add('Eisenhower Matrix');
+    }
+    if (isPomodoro) {
+      activities.add('Pomodoro');
+    }
+    if (isTimeBlock) {
+      activities.add('Time Block');
+    }
+    if (isPareto) {
+      activities.add('Pareto Analysis');
+    }
+    return activities;
   }
 
   @override
