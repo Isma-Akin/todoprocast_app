@@ -9,7 +9,6 @@ import '../screens/calendar_screen.dart';
 import '../screens/favourite_tasks_screen.dart';
 import '../screens/task_planner_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:typed_data';
 
 
 class TaskPlannerWidget extends StatelessWidget {
@@ -43,14 +42,11 @@ class TaskPlannerWidget extends StatelessWidget {
             ),
           );
         },
-        splashFactory: InkRipple.splashFactory,
-        highlightColor: Colors.blue[900],
         splashColor: Colors.blue[900],
-        child: Container(
-          height: 100,
+        child: Ink(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/cloudbackground.jpg'),
+              image: const AssetImage('assets/images/cloudbackground.jpg'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                 Colors.blue.withOpacity(0.5),
@@ -58,10 +54,12 @@ class TaskPlannerWidget extends StatelessWidget {
               ),
             ),
           ),
-          child: Padding(
+          child: Container(
+          height: 100,
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
               children: [
+                const SizedBox(height: 25),
                 const Icon(
                   Icons.sticky_note_2_outlined,
                   color: Colors.white,
@@ -71,10 +69,9 @@ class TaskPlannerWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     'Task planner',
-                    style: TextStyle(
-                      fontSize: 20,
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.white,
-                    ),
+                      fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -117,13 +114,11 @@ class YourDayWidget extends StatelessWidget {
             ),
           );
         },
-        highlightColor: Colors.purple,
         splashColor: Colors.purple,
-        child: Container(
-          height: 100,
-          decoration: BoxDecoration(
+        child: Ink(
+         decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/cloudbackground.jpg'),
+              image: const AssetImage('assets/images/cloudbackground.jpg'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                 Colors.purple.withOpacity(0.5),
@@ -131,10 +126,11 @@ class YourDayWidget extends StatelessWidget {
               ),
             ),
           ),
-          child: Padding(
+          child: Container(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
               children: [
+                const SizedBox(height: 25),
                 const Icon(
                   Icons.calendar_today,
                   color: Colors.white,
@@ -144,10 +140,9 @@ class YourDayWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     'Your day',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -189,13 +184,11 @@ return Card(
       ),
      );
     },
-   highlightColor: Colors.teal,
    splashColor: Colors.teal,
-   child: Container(
-   height: 100,
+   child: Ink(
    decoration: BoxDecoration(
         image: DecorationImage(
-        image: AssetImage('assets/images/cloudbackground.jpg'),
+        image: const AssetImage('assets/images/cloudbackground.jpg'),
          fit: BoxFit.cover,
          colorFilter: ColorFilter.mode(
           Colors.green.withOpacity(0.5),
@@ -203,50 +196,61 @@ return Card(
          ),
         ),
       ),
-      child: Padding(
-         padding: const EdgeInsets.all(16.0),
-                              child: Row(
-                            children: [
-                  const Icon(
-                      Icons.all_inbox,
-                      color: Colors.white,
-                      size: 40,
-                      ),
-                  const SizedBox(width: 16),
-                        Expanded(
-                        child: Text(
-                          'Important Tasks',
-                          style: TextStyle(
-                          fontSize: 20,
-                        color: Colors.white,
-                       ),
-                    ),
-                 ),
-                              BlocBuilder<TodosBloc, TodosState>(
-                                builder: (context, state) {
-                                  int favoriteCount = 0;
-                                  if (state is TodosLoaded) {
-                                    favoriteCount = state.todos.where((todo) => todo.isFavourite == true).toList().length;
-                                  }
-                                  return Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 15),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            '$favoriteCount',
-                                            style: GoogleFonts.openSans(fontSize: 24, color: Colors.white),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                ],
+     child: Container(
+     height: 100,
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 25),
+                const Icon(
+                  Icons.all_inbox,
+                  color: Colors.white,
+                  size: 40,
                 ),
-             ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    'Important Tasks',
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    BlocBuilder<TodosBloc, TodosState>(
+                      builder: (context, state) {
+                        int favoriteCount = 0;
+                        if (state is TodosLoaded) {
+                          favoriteCount = state.todos
+                              .where((todo) => todo.isFavourite == true)
+                              .toList()
+                              .length;
+                        }
+                        return Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '$favoriteCount',
+                                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
             ),
           ),
           );
@@ -284,13 +288,11 @@ class TaskActivityWidget extends StatelessWidget {
             ),
           );
         },
-        highlightColor: Colors.pinkAccent,
         splashColor: Colors.pinkAccent,
-        child: Container(
-          height: 100,
+        child: Ink(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/cloudbackground.jpg'),
+              image: const AssetImage('assets/images/cloudbackground.jpg'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                 Colors.pink.withOpacity(0.9),
@@ -298,10 +300,12 @@ class TaskActivityWidget extends StatelessWidget {
               ),
             ),
           ),
-          child: Padding(
+          child: Container(
+            height: 100,
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
               children: [
+                const SizedBox(height: 25),
                 const Icon(
                   Icons.airplay,
                   color: Colors.white,
@@ -311,9 +315,9 @@ class TaskActivityWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     'Task Activity',
-                    style: TextStyle(
-                      fontSize: 20,
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
