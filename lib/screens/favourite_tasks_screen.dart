@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoprocast_app/blocs/blocs.dart';
 import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/screens/todo_detail_screen.dart';
@@ -28,7 +26,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
   final List<Todo> _todos = [];
   List<Group> groups = [] ;
   List<Todo> favouriteTasks = [];
-  TodoSortCriteria _sortCriteria = TodoSortCriteria.dateCreated;
+  final TodoSortCriteria _sortCriteria = TodoSortCriteria.dateCreated;
   final TodoSortCriteria _sortCriteria2 = TodoSortCriteria.alphabetically;
 
 
@@ -63,7 +61,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<GroupBloc>(context).add(LoadGroups());
-    BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
+    // BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
   }
 
   @override
@@ -87,6 +85,16 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
           body: CustomScrollView(
                     slivers: [
                       SliverAppBar(
+                        actions: [
+                          IconButton(
+                            icon: const Icon(Icons.settings,
+                              color: Colors.lightGreenAccent,
+                              size: 30,),
+                            onPressed: () {
+                              // Code to open settings
+                            },
+                          ),
+                        ],
                         flexibleSpace: FlexibleSpaceBar(
                             background: Stack(
                               fit: StackFit.expand,
@@ -128,13 +136,27 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
                               final favouriteTodos = state.todos.where((todo) => todo.isFavourite ?? false).toList();
                               if (favouriteTodos.isEmpty) {
                                 return Center(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: const [
-                                        Text('No important tasks yet',
-                                          style: TextStyle(fontSize: 30),),
-                                        SizedBox(width: 10,),
-                                        Icon(Icons.sticky_note_2)
+                                    child: Column(
+                                      children: [
+                                        const SizedBox(height: 200,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: const [
+                                            Text('No important tasks yet',
+                                              style: TextStyle(fontSize: 30),),
+                                            SizedBox(width: 10,),
+                                            Icon(Icons.sticky_note_2)
+                                          ],
+                                        ),
+                                        const SizedBox(height: 30,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: const [
+                                            Text('Press + to add',
+                                              style: TextStyle(fontSize: 30),),
+                                            SizedBox(width: 10,),
+                                          ],
+                                        ),
                                       ],
                                     )
                                 );
@@ -147,7 +169,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
                                         child: Container(
                                           height: MediaQuery.of(context).size.height,  // Set height accordingly
                                           child: ListView.builder(
-                                            physics: NeverScrollableScrollPhysics(),
+                                            physics: const NeverScrollableScrollPhysics(),
                                             shrinkWrap: true,
                                             itemCount: _sortTodos(favouriteTodos).length,
                                             itemBuilder: (context, index) {
@@ -169,7 +191,7 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
                                   if (state is GroupsLoaded) {
                                     return ListView.builder(
                                       shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
+                                      physics: const NeverScrollableScrollPhysics(),
                                       itemCount: state.groups.length,
                                       itemBuilder: (context, index) {
                                         return GroupCard(
@@ -187,9 +209,9 @@ class _FavouriteTasksScreenState extends State<FavouriteTasksScreen> {
                                       },
                                     );
                                   } else if (state is GroupsLoading) {
-                                    return CircularProgressIndicator();
+                                    return const CircularProgressIndicator();
                                   } else {
-                                    return Text('Something went wrong!');
+                                    return const Text('Something went wrong!');
                                   }
                                 },
                               )
@@ -412,7 +434,7 @@ class GroupCard extends StatelessWidget {
   final Group group;
   final VoidCallback onTap;
 
-  GroupCard({required this.group, required this.onTap});
+  const GroupCard({Key? key, required this.group, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -433,7 +455,7 @@ class GroupDialog extends StatefulWidget {
   final Function(Group) onPressed;
   final Todo? todo;
 
-  GroupDialog({
+  const GroupDialog({
     required this.groups,
     required this.onPressed,
     this.todo,
