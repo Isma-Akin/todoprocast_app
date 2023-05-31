@@ -83,67 +83,141 @@ class _HomeScreenState extends State<HomeScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                colorFilter: ColorFilter.mode(Colors.indigo.withOpacity(0.3), BlendMode.dstATop),
-                image: AssetImage('assets/images/cloudbackground.jpg'),
-                fit: BoxFit.cover,
+        // appBar: AppBar(
+        //   flexibleSpace: Container(
+        //     decoration: BoxDecoration(
+        //       image: DecorationImage(
+        //         colorFilter: ColorFilter.mode(Colors.indigo.withOpacity(0.3), BlendMode.dstATop),
+        //         image: const AssetImage('assets/images/cloudbackground.jpg'),
+        //         fit: BoxFit.cover,
+        //       ),
+        //     ),
+        //   ),
+        //   backgroundColor: Colors.transparent,
+        //   elevation: 0,
+        //   actions: [
+        //     IconButton(
+        //       onPressed: () {
+        //         showSearch(context: context, delegate: SearchBar());
+        //       },
+        //       icon: const Icon(Icons.search, color: Colors.black,),
+        //     ),
+        //     PopupMenuButton(
+        //       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+        //         PopupMenuItem(
+        //           onTap: () {
+        //             Navigator.push(
+        //               context,
+        //               MaterialPageRoute(
+        //                 builder: (context) => const Settings(),
+        //               ),
+        //             );
+        //           },
+        //           value: 1,
+        //           child: const Text('Settings'),
+        //         ),
+        //         const PopupMenuItem(
+        //           value: 2,
+        //           child: Text('Change Theme'),
+        //         ),
+        //         const PopupMenuItem(
+        //           value: 3,
+        //           child: Text('View Profile'),
+        //         ),
+        //       ],
+        //       onSelected: (value) {
+        //         // Handle menu item selection here
+        //       },
+        //       icon: const Icon(Icons.more_vert, color: Colors.black,),
+        //     ),
+        //   ],
+        //   title: Text(
+        //     'Welcome back!',
+        //     style: GoogleFonts.openSans(
+        //         fontSize: 29, fontWeight: FontWeight.bold, color: Colors.black),
+        //   ),
+        //   centerTitle: true,
+        // ),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(70.0),
+          child: Container(
+            child: SafeArea(
+              child: Center(
+                  child: ListTile(
+                    leading: IconButton(
+                      icon: const Icon(Icons.search, size: 30,),
+                      onPressed: () {
+                        showSearch(context: context, delegate: SearchBar());
+                      },
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.more_vert),
+                      onPressed: () {
+                        PopupMenuButton(
+                                  itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                                    PopupMenuItem(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const Settings(),
+                                          ),
+                                        );
+                                      },
+                                      value: 1,
+                                      child: const Text('Settings'),
+                                    ),
+                                    const PopupMenuItem(
+                                      value: 2,
+                                      child: Text('Change Theme'),
+                                    ),
+                                    const PopupMenuItem(
+                                      value: 3,
+                                      child: Text('View Profile'),
+                                    ),
+                                  ],
+                                  onSelected: (value) {
+                                    // Handle menu item selection here
+                                  },
+
+                                );
+                      },
+                    ),
+                    title: Center(
+                      child: Text(
+                        'Welcome!',
+                        style: Theme.of(context).textTheme.headline4?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  )
               ),
             ),
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            IconButton(
-              onPressed: () {
-                showSearch(context: context, delegate: SearchBar());
-              },
-              icon: const Icon(Icons.search, color: Colors.black,),
+            height: 120,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: const AssetImage('assets/images/cloudbackground.jpg'),
+                colorFilter: ColorFilter.mode(
+                  Colors.grey.withOpacity(0.7),
+                  BlendMode.srcATop,
+                ),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
             ),
-            PopupMenuButton(
-              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                PopupMenuItem(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Settings(),
-                      ),
-                    );
-                  },
-                  value: 1,
-                  child: const Text('Settings'),
-                ),
-                const PopupMenuItem(
-                  value: 2,
-                  child: Text('Change Theme'),
-                ),
-                const PopupMenuItem(
-                  value: 3,
-                  child: Text('View Profile'),
-                ),
-              ],
-              onSelected: (value) {
-                // Handle menu item selection here
-              },
-              icon: const Icon(Icons.more_vert, color: Colors.black,),
-            ),
-          ],
-          title: Text(
-            'Welcome back!',
-            style: GoogleFonts.openSans(
-                fontSize: 29, fontWeight: FontWeight.bold, color: Colors.black),
-          ),
-          centerTitle: true,
+          ) ,
         ),
         body: Column(
           children: [
+            SizedBox(height: 10,),
             GridView.count(
               padding: const EdgeInsets.all(1),
               primary: false,
-              childAspectRatio: 1.1,
+              childAspectRatio: 1.3,
               shrinkWrap: true,
               crossAxisSpacing: 1,
               crossAxisCount: 2,
@@ -209,7 +283,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ),
     );
-
   }
 
   Widget _buildTaskInput() {
