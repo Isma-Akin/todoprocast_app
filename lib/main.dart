@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todoprocast_app/blocs/paretos/pareto_bloc.dart';
@@ -14,13 +15,26 @@ import 'api/time_blocks_repository.dart';
 import 'api/todo_repository.dart';
 import 'blocs/blocs.dart';
 import 'blocs/groups/group_bloc.dart';
+import 'blocs/parkinsons_cubit/parkinsonslaw_bloc.dart';
 import 'blocs/pomodoros/pomodoro_bloc.dart';
 import 'blocs/timeblocks/time_block_bloc.dart';
 import 'blocs/todos/selected_todos/selected_todo_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
   Bloc.observer = SimpleBlocObserver();
   final prefs = await SharedPreferences.getInstance();
   runApp(TodoApp(prefs: prefs));
@@ -84,9 +98,9 @@ class TodoApp extends StatelessWidget {
         BlocProvider<TimeBlocksBloc>(
           create: (context) => TimeBlocksBloc(TimeBlocksRepository()),
         ),
-        // BlocProvider<ParkinsonBloc>(
-        //   create: (context) => ParkinsonBloc(),
-        // ),
+        BlocProvider<ParkinsonsLawBloc>(
+          create: (context) => ParkinsonsLawBloc(),
+        ),
       ],
       child: MaterialApp(
         title: 'Todo App',
