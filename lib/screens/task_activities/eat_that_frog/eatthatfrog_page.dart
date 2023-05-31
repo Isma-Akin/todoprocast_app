@@ -11,26 +11,50 @@ class EatThatFrogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: FlexibleSpaceBar(
-            background: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.asset(
-                  'assets/images/cloudbackground.jpg',
-                  fit: BoxFit.cover,
-                ),
-                Container(
-                  color: Colors.green[900]?.withOpacity(0.6),
-                ),
-              ],
-            )
-        ),
-        title: Text(
-          'Eat that frog',
-          style: GoogleFonts.openSans(fontSize: 28),
-        ),
-        centerTitle: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(70.0),
+        child: Container(
+          child: SafeArea(
+            child: Center(
+                child: ListTile(
+                  leading: IconButton(
+                    icon: const Icon(Icons.navigate_before_rounded, size: 30,),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.table_rows_rounded),
+                    onPressed: () {
+                      // context.read<ParkinsonsLawBloc>().add(StopCountdownEvent());
+                    },
+                  ),
+                  title: Center(
+                    child: Text(
+                      'Eat that Frog',
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                )
+            ),),
+          height: 120,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: const AssetImage('assets/images/cloudbackground.jpg'),
+              colorFilter: ColorFilter.mode(
+                Colors.green.withOpacity(0.7),
+                BlendMode.srcATop,
+              ),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+          ),
+        ) ,
       ),
       body: Column(
         children: [
