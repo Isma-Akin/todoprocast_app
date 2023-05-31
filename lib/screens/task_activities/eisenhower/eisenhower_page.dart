@@ -26,20 +26,50 @@ class _EisenhowerPageState extends State<EisenhowerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(70.0),
+        child: Container(
+          child: SafeArea(
+            child: Center(
+                child: ListTile(
+                  leading: IconButton(
+                    icon: const Icon(Icons.navigate_before_rounded, size: 30,),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.table_rows_rounded),
+                    onPressed: () {
+                      // context.read<ParkinsonsLawBloc>().add(StopCountdownEvent());
+                    },
+                  ),
+                  title: Center(
+                    child: Text(
+                      'Eisenhower Matrix',
+                      style: Theme.of(context).textTheme.headline5?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                )
+            ),),
+          height: 120,
           decoration: BoxDecoration(
             image: DecorationImage(
-              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
-              fit: BoxFit.cover,
               image: const AssetImage('assets/images/cloudbackground.jpg'),
+              colorFilter: ColorFilter.mode(
+                Colors.blueGrey.withOpacity(0.7),
+                BlendMode.srcATop,
+              ),
+              fit: BoxFit.cover,
             ),
-          )
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+          ),
         ),
-        title: Text('Eisenhower Matrix',
-          style: GoogleFonts.openSans(
-              fontSize: 25),),
-        centerTitle: true,
       ),
       body: BlocBuilder<TodosStatusBloc, TodosStatusState>(
         builder: (context, state) {
@@ -70,6 +100,7 @@ class _EisenhowerPageState extends State<EisenhowerPage> {
                                   onTap: () {
                                     todo.isImportant = true;
                                     todo.isUrgent = true;
+                                    todo.updateTaskActivity('Eisenhower');
                                     context.read<TodosBloc>().add(UpdateTodo(todo: todo));
                                     Navigator.of(context).pop();
                                   },
@@ -79,6 +110,7 @@ class _EisenhowerPageState extends State<EisenhowerPage> {
                                   onTap: () {
                                     todo.isImportant = true;
                                     todo.isUrgent = false;
+                                    todo.updateTaskActivity('Eisenhower');
                                     context.read<TodosBloc>().add(UpdateTodo(todo: todo));
                                     Navigator.of(context).pop();
                                   },
@@ -88,6 +120,7 @@ class _EisenhowerPageState extends State<EisenhowerPage> {
                                   onTap: () {
                                     todo.isImportant = false;
                                     todo.isUrgent = true;
+                                    todo.updateTaskActivity('Eisenhower');
                                     context.read<TodosBloc>().add(UpdateTodo(todo: todo));
                                     Navigator.of(context).pop();
                                   },
@@ -97,6 +130,7 @@ class _EisenhowerPageState extends State<EisenhowerPage> {
                                   onTap: () {
                                     todo.isImportant = false;
                                     todo.isUrgent = false;
+                                    todo.updateTaskActivity('Eisenhower');
                                     context.read<TodosBloc>().add(UpdateTodo(todo: todo));
                                     Navigator.of(context).pop();
                                   },
