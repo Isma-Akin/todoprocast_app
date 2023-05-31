@@ -29,40 +29,71 @@ class _CalendarPageState extends State<CalendarPage> {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           // backgroundColor: Colors.deepPurple[100],
-          appBar: AppBar(
-            actions: [
-              IconButton(
-                icon: Icon(Icons.settings,
-                  color: Colors.purple[800],
-                  size: 30,),
-                onPressed: () {
-                  // Code to open settings
-                },
-              ),
-            ],
-            flexibleSpace: Container(
+          // appBar: PreferredSize(
+          //   preferredSize: const Size.fromHeight(50.0),
+          //   child: Stack(
+          //     fit: StackFit.expand,
+          //     children: [
+          //       Image.asset(
+          //         'assets/images/cloudbackground.jpg',
+          //         fit: BoxFit.cover,
+          //       ),
+          //       Container(
+          //         decoration: BoxDecoration(
+          //           color: Colors.purpleAccent[200]?.withOpacity(0.6),
+          //           borderRadius: BorderRadius.only(
+          //             bottomLeft: Radius.circular(20),
+          //             bottomRight: Radius.circular(20),
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(70.0),
+            child: Container(
+              child: SafeArea(
+                child: Center(
+                    child: ListTile(
+                      leading: IconButton(
+                        icon: const Icon(Icons.home, size: 30,),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.table_rows_rounded),
+                        onPressed: () {
+                          // context.read<ParkinsonsLawBloc>().add(StopCountdownEvent());
+                        },
+                      ),
+                      title: Center(
+                        child: Text(
+                          'Calendar Page',
+                          style: Theme.of(context).textTheme.headline5?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+                ),),
+              height: 120,
               decoration: BoxDecoration(
                 image: DecorationImage(
+                  image: const AssetImage('assets/images/cloudbackground.jpg'),
                   colorFilter: ColorFilter.mode(
-                      Colors.purple.withOpacity(0.5), BlendMode.dstATop),
-                  image: AssetImage('assets/images/cloudbackground.jpg'),
+                    Colors.purple.withOpacity(0.7),
+                    BlendMode.srcATop,
+                  ),
                   fit: BoxFit.cover,
                 ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
               ),
-            ),
-            backgroundColor: Colors.purple,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon:  Icon(Icons.home, size: 30, color: Colors.purple[800]),
-            ),
-            title:  Center(child: Text('Your day',
-              style: GoogleFonts.openSans(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),)),
-            centerTitle: true,
+            ) ,
           ),
           body: BlocBuilder<TimeBloc, DateTime>(
             builder: (context, state) {
@@ -199,9 +230,10 @@ class _calendartodoscard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isOverdue = DateTime.now().isAfter(task.dueDate!);
     return Card(
       elevation: 2,
-      color: AppColors.blueSecondaryColor,
+      color: isOverdue ? Colors.grey : AppColors.blueSecondaryColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -209,7 +241,7 @@ class _calendartodoscard extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 1),
           borderRadius: BorderRadius.circular(10),
-          color: Colors.purple,
+          color: isOverdue ? Colors.grey : Colors.purple,
           image: DecorationImage(
             image: const AssetImage('assets/images/cloudbackground.jpg'),
             fit: BoxFit.cover,
@@ -221,8 +253,14 @@ class _calendartodoscard extends StatelessWidget {
         ),
         child: ListTile(
           textColor: Colors.white,
-          title: Text(task.task + " is due today!", style: const TextStyle(color: Colors.black),),
-          subtitle: Text(task.description, style: const TextStyle(color: Colors.white70),),
+          title: Text(
+            task.task + " is due today!",
+            style: const TextStyle(color: Colors.black),
+          ),
+          subtitle: Text(
+            task.description,
+            style: const TextStyle(color: Colors.white70),
+          ),
         ),
       ),
     );
