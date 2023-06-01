@@ -20,9 +20,14 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
   bool _isCompletedListVisible = true;
   bool _isPendingListVisible = true;
   late TabController _tabController;
+  final List _tasks = [];
+  final TextEditingController _taskController = TextEditingController();
 
   void _addTodo(BuildContext context) {
     showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
+      ),
         context: context,
         isScrollControlled: true,
         builder: (context) => SingleChildScrollView(
@@ -142,6 +147,7 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
     _tabController = TabController(length: 1, vsync: this);
   }
 
@@ -168,7 +174,7 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
           onPressed: () {
             _addTodo(context);
           },child: const Icon(Icons.add, size: 30),
-            elevation: 0.1,
+            elevation: 4,
         ),
           body: Container(
             // decoration:  const BoxDecoration(
@@ -279,8 +285,76 @@ class _TaskPlannerState extends State<TaskPlanner> with TickerProviderStateMixin
                 ),
             ),
           ),
+          // bottomNavigationBar: BottomAppBar(
+          //   child: _buildTaskInput(),
+          // ),
           ),
         );
+  }
+
+  // Widget _buildTaskList() {
+  //   return Expanded(
+  //     child: Container(
+  //       decoration: const BoxDecoration(
+  //         color: AppColors.bluePrimaryColor,
+  //         borderRadius: BorderRadius.all(Radius.circular(10)
+  //         ),
+  //       ),
+  //       child: ListView.builder(
+  //         itemCount: _tasks.length,
+  //         itemBuilder: (BuildContext context, int index) {
+  //           final task = _tasks[index];
+  //           return Card(
+  //             child: Container(
+  //               decoration: const BoxDecoration(
+  //                 image: DecorationImage(
+  //                   image: AssetImage("assets/images/cloudbackground.jpg"),
+  //                   fit: BoxFit.cover,
+  //                 ),
+  //               ),
+  //               child: ListTile(
+  //                 trailing: IconButton(
+  //                   onPressed: () {
+  //                     setState(() {
+  //                       _tasks.removeAt(index);
+  //                     });
+  //                   },
+  //                   icon: const Icon(Icons.delete_forever),
+  //                 ),
+  //                 title: Text(task),
+  //                 onTap: () {
+  //                   Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                       builder: (context) => MiniTaskDetailScreen(
+  //                           taskTitle: task),
+  //                     ),
+  //                   );
+  //                 },
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Widget _buildTaskInput() {
+    return TextFormField(
+      onFieldSubmitted: (value) {
+        final taskName = _taskController.text;
+        setState(() {
+          _tasks.add(taskName);
+          _taskController.clear();
+        });
+      },
+      controller: _taskController,
+      decoration: const InputDecoration(
+        labelText: 'Add a mini task',
+        prefixIcon: Icon(Icons.add),
+      ),
+    );
   }
 
 

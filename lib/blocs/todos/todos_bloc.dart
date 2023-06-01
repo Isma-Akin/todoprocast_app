@@ -118,23 +118,20 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       final todo = await TodoRepository.createTodo(event.todo);
       final prefs = await SharedPreferences.getInstance();
       final todosJson = prefs.getString('todos');
+      List<Todo> todos;
       if (todosJson != null) {
-        final todos = (json.decode(todosJson) as List)
+        todos = (json.decode(todosJson) as List)
             .map((e) => Todo.fromJson(e))
             .toList();
-        if (todos.any((t) => t.id == todo.id)) {
-          // If the todo already exists, don't add it again
-          emit(TodosLoaded(todos: todos));
-        } else {
-          todos.add(todo);
-          prefs.setString('todos', json.encode(todos));
-          emit(TodosLoaded(todos: todos));
-        }
+        todos.removeWhere((t) => t.id == todo.id);
+        todos.add(todo);
       } else {
-        prefs.setString('todos', json.encode([todo]));
-        emit(TodosLoaded(todos: [todo]));
+        todos = [todo];
       }
+      prefs.setString('todos', json.encode(todos));
+      emit(TodosLoaded(todos: todos));
     } catch (error) {
+      print('Exception in _onAddTodos: $error');
       emit(TodosError(
           error: error.toString(),
           message: 'Error adding todo. Endpoint down?'));
