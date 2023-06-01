@@ -2,70 +2,43 @@ part of 'pomodoro_bloc.dart';
 
 abstract class PomodoroEvent {}
 
-// class StartPomodoro extends PomodoroEvent {
-//   final Todo todo;
-//   final String timerId;
-//
-//   StartPomodoro(this.todo, {required this.timerId});
-//
-//   @override
-//   List<Object> get props => [timerId, todo];
-// }
-class StartPomodoro extends PomodoroEvent {
-  final String timerId;
-  final String todoId;
+class StartPomodoroEvent extends PomodoroEvent {
+  final Todo todo;
 
-  StartPomodoro({required this.timerId, required this.todoId});
 
-  List<Object> get props => [timerId, todoId];
+  StartPomodoroEvent(this.todo);
 }
 
-class CreatePomodoro extends PomodoroEvent {
-  final String timerId;
-  final String todoId;
+class StopPomodoroEvent extends PomodoroEvent {
+  final Todo todo;
+  final int todoId;
 
-  CreatePomodoro({required this.timerId, required this.todoId});
+  StopPomodoroEvent(this.todoId, this.todo);
 }
 
-class LoadPomodoro extends PomodoroEvent {
-  final String timerId;
+class StopAllPomodorosEvent extends PomodoroEvent {}
 
-  LoadPomodoro({required this.timerId});
+class TickPomodoroEvent extends PomodoroEvent {
+  final int todoId;
+  final Duration duration;
+
+  TickPomodoroEvent(this.todoId, this.duration);
 }
 
-class PausePomodoro extends PomodoroEvent {
-  final String timerId;
+class PausePomodoroEvent extends PomodoroEvent {
+  final int todoId;
 
-  PausePomodoro(this.timerId);
+  PausePomodoroEvent(this.todoId);
 }
 
-class ResumePomodoro extends PomodoroEvent {
-  final String timerId;
+class ResumePomodoroEvent extends PomodoroEvent {
+  final int todoId;
 
-  ResumePomodoro({required this.timerId});
-
-  List<Object> get props => [timerId];
+  ResumePomodoroEvent(this.todoId);
 }
 
-class TickPomodoro extends PomodoroEvent {
-  final String timerId;
+class ResetPomodoroEvent extends PomodoroEvent {
+  final int todoId;
 
-  TickPomodoro(this.timerId);
+  ResetPomodoroEvent(this.todoId);
 }
-
-class TickBreak extends PomodoroEvent {}
-
-class PomodoroCompleted extends PomodoroEvent {}
-
-class ResetPomodoro extends PomodoroEvent {
-  final String timerId;
-
-  ResetPomodoro(this.timerId);
-}
-
-class StopPomodoro extends PomodoroEvent {
-  final String timerId;
-
-  StopPomodoro(this.timerId);
-}
-
