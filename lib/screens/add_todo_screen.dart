@@ -41,30 +41,37 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
         description: '',
         dueDate: DateTime.now().add(const Duration(days: 5)),
       ),
-      // Todo(
-      //   dateCreated: DateTime.now(),
-      //   task: 'Do laundry',
-      //   description: '',
-      //   dueDate: DateTime.now().add(const Duration(days: 2)), id: 3,
-      // ),
-      // Todo(
-      //   dateCreated: DateTime.now(),
-      //   task: 'Meal prep',
-      //   description: '',
-      //   dueDate: DateTime.now().add(const Duration(days: 3)), id: 4,
-      // ),
-      // Todo(
-      //   dateCreated: DateTime.now(),
-      //   task: 'Vacuum',
-      //   description: '',
-      //   dueDate: DateTime.now().add(const Duration(days: 7)), id: 5,
-      // ),
-      // Todo(
-      //   dateCreated: DateTime.now(),
-      //   task: 'Replace light-bulbs',
-      //   description: '',
-      //   dueDate: DateTime.now().add(const Duration(days: 2)), id: 6,
-      // ),
+      Todo(
+        dateCreated: DateTime.now(),
+        task: 'Do laundry',
+        description: '',
+        dueDate: DateTime.now().add(const Duration(days: 2)), id: 6000,
+        deadline: DateTime.now().add(const Duration(days: 5)),
+      ),
+      Todo(
+        dateCreated: DateTime.now(),
+        task: 'Meal prep',
+        description: '',
+        dueDate: DateTime.now().add(const Duration(days: 3)),
+        id: 6002,
+        deadline: DateTime.now().add(const Duration(days: 4)),
+      ),
+      Todo(
+        dateCreated: DateTime.now(),
+        task: 'Vacuum',
+        description: '',
+        dueDate: DateTime.now().add(const Duration(days: 7)),
+        deadline: DateTime.now().add(const Duration(days: 2)),
+        id: 6003,
+      ),
+      Todo(
+        dateCreated: DateTime.now(),
+        task: 'Replace light-bulbs',
+        description: '',
+        dueDate: DateTime.now().add(const Duration(days: 2)),
+        deadline: DateTime.now().add(const Duration(days: 3)),
+        id: 6004,
+      ),
     ];
 
     return Column(
@@ -142,7 +149,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
           ),
         ),
     // const SizedBox(height: 10,),
-        const Divider(thickness: 2,color: Colors.grey),
+        const Divider(thickness: 1,color: Colors.grey),
     SizedBox(
       height: 45.0,
       child: ListView.builder(
@@ -151,10 +158,16 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () async {
+              // gets the last used id and increment it to generate a new id
+              final lastUsedId = await SharedPreferencesHelper.getLastUsedId();
+              final newId = lastUsedId + 1;
+              // save the new id as the last used id
+              await SharedPreferencesHelper.saveLastUsedId(newId);
               context.read<TodosBloc>().add(AddTodo(todo: defaultTodos[index]));
               BlocProvider.of<TodosBloc>(context).add(const LoadTodos());
             },
             child: Card(
+              elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
