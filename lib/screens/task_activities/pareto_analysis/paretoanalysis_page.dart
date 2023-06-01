@@ -215,130 +215,134 @@ class _ParetoAnalysisPageState extends State<ParetoAnalysisPage> {
         if (todosState is TodosStatusLoaded) {
           sortedTodos = _sortTodos([...todosState.pendingTodos], _sortCriteria);
 
-          return Column(
-            children: [
-              const SizedBox(height: 5,),
-              Container(
-                child: Column(
-                  children: [
-                    Divider(
-                      height: 10,
-                      thickness: 2,
-                      color: Colors.purple[200],),
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: const AssetImage('assets/images/pareto-chart.png'),
-                          colorFilter: ColorFilter.mode(
-                            Colors.orange.withOpacity(0.7),
-                            BlendMode.dstATop,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        children: const [
-                          Text(
-                            ' ',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+          return SingleChildScrollView(
+            primary: false,
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                const SizedBox(height: 5,),
+                Container(
+                  child: Column(
+                    children: [
+                      Divider(
+                        height: 10,
+                        thickness: 2,
+                        color: Colors.purple[200],),
+                      Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: const AssetImage('assets/images/pareto-chart.png'),
+                            colorFilter: ColorFilter.mode(
+                              Colors.orange.withOpacity(0.7),
+                              BlendMode.dstATop,
                             ),
+                            fit: BoxFit.cover,
                           ),
-                        ],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          children: const [
+                            Text(
+                              ' ',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Divider(
-                      height: 10,
-                      thickness: 2,
-                      color: Colors.purple[200],),
-                    const ParetoInstructionsPanel(),
-                    const SizedBox(height: 10,),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Text("Select a todo", style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),),
-                          const Spacer(),
-                          DropdownButton<TodoSortCriteria>(
-                            value: _sortCriteria,
-                            items: <TodoSortCriteria>[
-                              TodoSortCriteria.favourites,
-                              TodoSortCriteria.dueDate,
-                              TodoSortCriteria.alphabetically
-                            ].map((TodoSortCriteria value) {
-                              return DropdownMenuItem<TodoSortCriteria>(
-                                value: value,
-                                child: Text(value.toString().split('.').last),
-                              );
-                            }).toList(),
-                            onChanged: (TodoSortCriteria? value) {
-                              setState(() {
-                                _sortCriteria = value!;
-                                sortedTodos = _sortTodos([...todosState.pendingTodos], _sortCriteria);
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: sortedTodos!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          leading: _sortCriteria == TodoSortCriteria.favourites
-                              ? const Icon(Icons.star, color: Colors.yellow,)
-                              : _sortCriteria == TodoSortCriteria.dueDate
-                              ? const Icon(Icons.access_time, color: Colors.blue,)
-                              : _sortCriteria == TodoSortCriteria.alphabetically
-                              ? const Icon(Icons.sort_by_alpha, color: Colors.deepOrange,)
-                              : null,
-                          title: Text(sortedTodos![index].task),
-                          onLongPress: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        TodoDetailScreen(todo: sortedTodos![index],)));
-                          },
-                          subtitle: Text("Due date: ${sortedTodos![index].formattedDueDate.toString()}",
-                            style: Theme.of(context).textTheme.caption?.copyWith(
+                      Divider(
+                        height: 10,
+                        thickness: 2,
+                        color: Colors.purple[200],),
+                      const ParetoInstructionsPanel(),
+                      const SizedBox(height: 10,),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 4,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Text("Select a todo", style: Theme.of(context).textTheme.headline6?.copyWith(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),),
-                          onTap: () {
-                            final todo = sortedTodos![index];
-                            if (todo.dueDate != null) {
-                              print('todo has been selected: $todo');
-                              print('todo id has been selected: ${todo.id}');
-                              context.read<SelectedTodoBloc>().add(SelectTodo(todo));
-                              _showParetoValueDialog(context, todo);
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ],
+                            const Spacer(),
+                            DropdownButton<TodoSortCriteria>(
+                              value: _sortCriteria,
+                              items: <TodoSortCriteria>[
+                                TodoSortCriteria.favourites,
+                                TodoSortCriteria.dueDate,
+                                TodoSortCriteria.alphabetically
+                              ].map((TodoSortCriteria value) {
+                                return DropdownMenuItem<TodoSortCriteria>(
+                                  value: value,
+                                  child: Text(value.toString().split('.').last),
+                                );
+                              }).toList(),
+                              onChanged: (TodoSortCriteria? value) {
+                                setState(() {
+                                  _sortCriteria = value!;
+                                  sortedTodos = _sortTodos([...todosState.pendingTodos], _sortCriteria);
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: sortedTodos!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            leading: _sortCriteria == TodoSortCriteria.favourites
+                                ? const Icon(Icons.star, color: Colors.yellow,)
+                                : _sortCriteria == TodoSortCriteria.dueDate
+                                ? const Icon(Icons.access_time, color: Colors.blue,)
+                                : _sortCriteria == TodoSortCriteria.alphabetically
+                                ? const Icon(Icons.sort_by_alpha, color: Colors.deepOrange,)
+                                : null,
+                            title: Text(sortedTodos![index].task),
+                            onLongPress: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          TodoDetailScreen(todo: sortedTodos![index],)));
+                            },
+                            subtitle: Text("Due date: ${sortedTodos![index].formattedDueDate.toString()}",
+                              style: Theme.of(context).textTheme.caption?.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),),
+                            onTap: () {
+                              final todo = sortedTodos![index];
+                              if (todo.dueDate != null) {
+                                print('todo has been selected: $todo');
+                                print('todo id has been selected: ${todo.id}');
+                                context.read<SelectedTodoBloc>().add(SelectTodo(todo));
+                                _showParetoValueDialog(context, todo);
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }
         return const Center(child: CircularProgressIndicator());
