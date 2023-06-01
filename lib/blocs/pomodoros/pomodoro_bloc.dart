@@ -6,297 +6,203 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/sharedpreferences_helper.dart';
-import '../../models/timer_models.dart';
+import '../../models/todo_models.dart';
+import '../blocs.dart';
 
 part 'pomodoro_event.dart';
 part 'pomodoro_state.dart';
 
-class PomodoroBloc extends Bloc<PomodoroEvent, PomodoroState> {
-  Timer? _timer;
-  String? _activeTimerId;
-  Map<String, String> todoTimerMap = {}; // Add this line here
-  final SharedPreferencesHelper _prefsHelper = SharedPreferencesHelper();
-
+class PomodoroBloc extends HydratedBloc<PomodoroEvent, PomodoroState> {
   PomodoroBloc() : super(PomodoroInitial()) {
-    on<StartPomodoro>(_mapStartPomodoroToState);
-    on<CreatePomodoro>(_mapCreatePomodoroToState);
-    on<LoadPomodoro>(_mapLoadPomodoroToState);
-    on<PausePomodoro>(_mapPausePomodoroToState);
-    on<ResumePomodoro>(_mapResumePomodoroToState);
-    on<ResetPomodoro>(_mapResetPomodoroToState);
-    on<StopPomodoro>(_mapStopPomodoroToState);
-    on<TickPomodoro>(_mapTickPomodoroToState);
-    on<PomodoroCompleted>(_mapPomodoroCompletedToState);
-    on<TickBreak>(_mapTickBreakToState);
-
+    on<StartPomodoroEvent>(_mapStartPomodoroToState);
+    on<StopPomodoroEvent>(_mapStopPomodoroToState);
+    on<StopAllPomodorosEvent>(_mapStopAllPomodorosToState);
+    on<TickPomodoroEvent>(_mapTickPomodoroToState);
+    on<PausePomodoroEvent>(_mapPausePomodoroToState);
+    on<ResumePomodoroEvent>(_mapResumePomodoroToState);
+    on<ResetPomodoroEvent>(_mapResetPomodoroToState);
   }
+  final Map<int, Timer> activePomodoros = {};
 
-  // void _mapStartPomodoroToState(StartPomodoro event, Emitter<PomodoroState> emit) async {
-  //   _timer?.cancel();
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     add(TickPomodoro(event.timerId));
-  //   });
-  //
-  //   var uuid = const Uuid();
-  //   String timerId = uuid.v4();
-  //   TimerModel timer = TimerModel(timerId, DateTime.now(), 25 * 60, TimerStatus.running);
-  //   await _prefsHelper.saveTimer(timer);
-  //
-  //   emit(PomodoroRunning(25 * 60));
-  // }
-  // void _mapStartPomodoroToState(StartPomodoro event, Emitter<PomodoroState> emit) async {
-  //   // Cancel the currently active timer
-  //   if (_activeTimerId != null) {
-  //     add(StopPomodoro(_activeTimerId!));
-  //   }
-  //
-  //   var uuid = const Uuid();
-  //   String timerId = uuid.v4();
-  //   TimerModel timer = TimerModel(timerId, DateTime.now(), 25 * 60, TimerStatus.running);
-  //   await _prefsHelper.saveTimer(timer);
-  //
-  //   // Save the ID of the currently active timer
-  //   _activeTimerId = timerId;
-  //
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     add(TickPomodoro(_activeTimerId!));
-  //   });
-  //
-  //   emit(PomodoroRunning(25 * 60));
-  // }
-  // void _mapStartPomodoroToState2(StartPomodoro event, Emitter<PomodoroState> emit) async {
-  //   // Cancel the currently active timer
-  //   if (_activeTimerId != null) {
-  //     add(StopPomodoro(_activeTimerId!));
-  //   }
-  //
-  //   var uuid = const Uuid();
-  //   String timerId = uuid.v4();
-  //   TimerModel timer = TimerModel(timerId, DateTime.now(), 25 * 60, TimerStatus.running);
-  //   await _prefsHelper.saveTimer(timer);
-  //
-  //   // Save the ID of the currently active timer
-  //   _activeTimerId = timerId;
-  //
-  //   // Save the todo ID for this timer in SharedPreferences
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString('selectedTodoId', event.todoId);
-  //
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     add(TickPomodoro(_activeTimerId!));
-  //   });
-  //
-  //   emit(PomodoroRunning(25 * 60));
-  // }
-  void _mapStartPomodoroToState(StartPomodoro event, Emitter<PomodoroState> emit) async {
-    // Cancel the currently active timer
-    if (_activeTimerId != null) {
-      add(StopPomodoro(_activeTimerId!));
-    }
-
-    TimerModel timer = TimerModel(event.timerId, event.todoId, DateTime.now(), 25 * 60, TimerStatus.running);
-    await _prefsHelper.saveTimer(timer);
-
-    // Save the ID of the currently active timer
-    _activeTimerId = event.timerId;
-
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      add(TickPomodoro(_activeTimerId!));
-    });
-
-    emit(PomodoroRunning(25 * 60));
-  }
-
-
-
-  void _mapCreatePomodoroToState(CreatePomodoro event, Emitter<PomodoroState> emit) async {
-    int duration = 25 * 60;
-
-    TimerModel timer = TimerModel(event.timerId, event.todoId, DateTime.now(), 25 * 60, TimerStatus.running);
-    await _prefsHelper.saveTimer(timer);
-
-    // Add the new timerId to the map
-    todoTimerMap[event.todoId] = event.timerId;
-
-    emit(PomodoroRunning(duration));
-  }
-
-  void _mapLoadPomodoroToState(LoadPomodoro event, Emitter<PomodoroState> emit) async {
-    TimerModel? timer = await _prefsHelper.getTimer(event.timerId);
-    if (timer != null) {
-      if (timer.status == TimerStatus.running) {
-        emit(PomodoroRunning(timer.duration));
-      } else if (timer.status == TimerStatus.paused) {
-        emit(PomodoroPaused(timer.duration));
-      }
-      // add more conditions for timer states
-    }
-  }
-
-
-  // void _mapStopPomodoroToState(StopPomodoro event, Emitter<PomodoroState> emit) async {
-  //   _timer?.cancel();
-  //
-  //   TimerModel? timer = await _prefsHelper.getTimer(event.timerId);
-  //   if (timer != null) {
-  //     timer.status = TimerStatus.stopped;
-  //     await _prefsHelper.saveTimer(timer);
-  //   }
-  //
-  //   emit(PomodoroStopped());
-  // }
-  void _mapStopPomodoroToState(StopPomodoro event, Emitter<PomodoroState> emit) async {
-    _timer?.cancel();
-
-    TimerModel? timer = await _prefsHelper.getTimer(event.timerId);
-    if (timer != null) {
-      timer.status = TimerStatus.stopped;
-      await _prefsHelper.saveTimer(timer);
-    }
-
-    // Clear the ID of the currently active timer
-    _activeTimerId = null;
-
-    emit(PomodoroStopped());
-  }
-
-  void _mapPausePomodoroToState(PausePomodoro event, Emitter<PomodoroState> emit) async {
-    if (state is PomodoroRunning) {
-      final secondsRemaining = (state as PomodoroRunning).secondsRemaining;
-      _timer?.cancel();
-
-      TimerModel? timer = await _prefsHelper.getTimer(event.timerId);
-      if (timer != null) {
-        timer.status = TimerStatus.paused;
-        timer.duration = secondsRemaining;
-        await _prefsHelper.saveTimer(timer);
-      }
-
-      emit(PomodoroPaused(secondsRemaining));
-    }
-  }
-
-  // void _mapResumePomodoroToState(ResumePomodoro event, Emitter<PomodoroState> emit) async {
-  //   if (state is PomodoroPaused) {
-  //     final secondsRemaining = (state as PomodoroPaused).secondsRemaining;
-  //
-  //     TimerModel? timer = await _prefsHelper.getTimer(event.timerId);
-  //     if (timer != null) {
-  //       timer.status = TimerStatus.running;
-  //       timer.startTime = DateTime.now();
-  //       await _prefsHelper.saveTimer(timer);
-  //     }
-  //
-  //     emit(PomodoroRunning(secondsRemaining));
-  //     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //       add(TickPomodoro(event.timerId));
-  //     });
-  //   }
-  // }
-  void _mapResumePomodoroToState(ResumePomodoro event, Emitter<PomodoroState> emit) async {
-    if (state is PomodoroPaused) {
-      final secondsRemaining = (state as PomodoroPaused).secondsRemaining;
-
-      TimerModel? timer = await _prefsHelper.getTimer(event.timerId);
-      if (timer != null) {
-        TimerModel newTimer = TimerModel(
-          timer.id,
-          timer.todoId,
-          DateTime.now(),
-          timer.duration,
-          TimerStatus.running,
-        );
-        await _prefsHelper.saveTimer(newTimer);
-
-        emit(PomodoroRunning(secondsRemaining));
-        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-          add(TickPomodoro(event.timerId));
+  void _mapStartPomodoroToStateOld(StartPomodoroEvent event, Emitter<PomodoroState> emit) async {
+    activePomodoros[event.todo.id]?.cancel();
+    Duration duration = const Duration(minutes: 25);
+    final timer = Timer.periodic(
+        const Duration(seconds: 1),
+            (timer) {
+          add(TickPomodoroEvent(event.todo.id, duration));
+          duration = duration - const Duration(seconds: 1);
         });
-      }
-    }
+
+    activePomodoros[event.todo.id] = timer;
+  }
+  void _mapStartPomodoroToState(StartPomodoroEvent event, Emitter<PomodoroState> emit) async {
+    activePomodoros[event.todo.id]?.cancel();
+    Duration duration = const Duration(minutes: 25);
+    final timer = Timer.periodic(
+        const Duration(seconds: 1),
+            (timer) {
+          add(TickPomodoroEvent(event.todo.id, duration));
+          duration = duration - const Duration(seconds: 1);
+        });
+
+    activePomodoros[event.todo.id] = timer;
+    event.todo.updateTaskActivity('Pomodoro');
   }
 
-  void _mapTickPomodoroToState(TickPomodoro event, Emitter<PomodoroState> emit) async {
-    if (state is PomodoroRunning) {
-      final secondsRemaining = (state as PomodoroRunning).secondsRemaining - 1;
+  void _mapStopPomodoroToStateOld(StopPomodoroEvent event, Emitter<PomodoroState> emit) {
+    final newActiveTodos = Map<int, Duration>.from(state.activeTodos);
+    newActiveTodos.remove(event.todoId);
+    emit(PomodoroInitial(activeTodos: newActiveTodos));
 
-      TimerModel? timer = await _prefsHelper.getTimer(event.timerId);
-      if (timer != null) {
-        timer.duration = secondsRemaining;
-        await _prefsHelper.saveTimer(timer);
-      }
-
-      if (secondsRemaining > 0) {
-        emit(PomodoroRunning(secondsRemaining));
-      } else {
-        _timer?.cancel();
-        add(PomodoroCompleted());
-      }
-    }
+    activePomodoros[event.todoId]?.cancel();
+    activePomodoros.remove(event.todoId);
+  }
+  void _mapStopPomodoroToState(StopPomodoroEvent event, Emitter<PomodoroState> emit) {
+    activePomodoros[event.todo.id]?.cancel();
+    activePomodoros.remove(event.todo.id);
+    final newActiveTodos = Map<int, Duration>.from(state.activeTodos);
+    newActiveTodos.remove(event.todo.id);
+    emit(PomodoroInitial(activeTodos: newActiveTodos));
+    event.todo.removeTaskActivity('Pomodoro');
   }
 
+  void _mapStopAllPomodorosToState(StopAllPomodorosEvent event, Emitter<PomodoroState> emit) {
+    emit(PomodoroInitial());
 
-  // void _mapResetPomodoroToState(ResetPomodoro event, Emitter<PomodoroState> emit) async {
-  //   _timer?.cancel();
-  //
-  //   TimerModel? timer = await _prefsHelper.getTimer(event.timerId);
-  //   if (timer != null) {
-  //     timer.status = TimerStatus.running;
-  //     timer.startTime = DateTime.now();
-  //     timer.duration = 25 * 60;
-  //     await _prefsHelper.saveTimer(timer);
-  //   }
-  //
-  //   emit(PomodoroRunning(25 * 60));
-  // }
-  void _mapResetPomodoroToState(ResetPomodoro event, Emitter<PomodoroState> emit) async {
-    _timer?.cancel();
-
-    TimerModel? timer = await _prefsHelper.getTimer(event.timerId);
-    if (timer != null) {
-      TimerModel newTimer = TimerModel(
-        timer.id,
-        timer.todoId,
-        DateTime.now(),
-        25 * 60,
-        TimerStatus.running,
-      );
-      await _prefsHelper.saveTimer(newTimer);
-
-      emit(PomodoroRunning(25 * 60));
-    }
-  }
-
-  void _mapPomodoroCompletedToState(PomodoroCompleted event, Emitter<PomodoroState> emit) {
-    emit(Break(5 * 60));
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if(state is Break) {
-        final remaining = (state as Break).secondsRemaining;
-        if (remaining > 0) {
-          emit(Break(remaining - 1));
-        } else {
-          _timer?.cancel();
-          emit(PomodoroInitial());
-        }
-      }
+    activePomodoros.forEach((key, value) {
+      value.cancel();
     });
+    activePomodoros.clear();
   }
 
-  void _mapTickBreakToState(TickBreak event, Emitter<PomodoroState> emit) {
-    if (state is Break) {
-      final secondsRemaining = (state as Break).secondsRemaining - 1;
-      if (secondsRemaining > 0) {
-        emit(Break(secondsRemaining));
-      } else {
-        _timer?.cancel();
-        emit(PomodoroInitial());
-      }
+  void _mapTickPomodoroToState(TickPomodoroEvent event, Emitter<PomodoroState> emit) {
+    if (event.duration.isNegative) {
+      activePomodoros[event.todoId]?.cancel();
+      activePomodoros.remove(event.todoId);
+      emit(PomodoroFinished(todoId: event.todoId));
+    } else {
+      final newActiveTodos = Map<int, Duration>.from(state.activeTodos);
+      newActiveTodos[event.todoId] = event.duration;
+      emit(PomodoroInProgress(todoId: event.todoId, remainingTime: event.duration, activeTodos: newActiveTodos));
+    }
+  }
+
+  void _mapPausePomodoroToStateOld(PausePomodoroEvent event, Emitter<PomodoroState> emit) {
+    activePomodoros[event.todoId]?.cancel();
+  }
+  void _mapPausePomodoroToState(PausePomodoroEvent event, Emitter<PomodoroState> emit) {
+    Timer? timer = activePomodoros[event.todoId];
+    timer?.cancel();
+
+    final currentDuration = state.activeTodos[event.todoId];
+    if (currentDuration != null) {
+      emit(PomodoroPaused(todoId: event.todoId, remainingTime: currentDuration));
+    }
+  }
+
+  void _mapResumePomodoroToStateOld(ResumePomodoroEvent event, Emitter<PomodoroState> emit) {
+    final duration = state.activeTodos[event.todoId];
+    if (duration != null) {
+      final timer = Timer.periodic(
+        const Duration(seconds: 1),
+            (timer) => add(TickPomodoroEvent(event.todoId, duration)),
+      );
+      activePomodoros[event.todoId] = timer;
+    }
+  }
+
+  void _mapResumePomodoroToState(ResumePomodoroEvent event, Emitter<PomodoroState> emit) {
+    Duration? remainingTime;
+    if (state is PomodoroPaused && (state as PomodoroPaused).todoId == event.todoId) {
+      remainingTime = (state as PomodoroPaused).remainingTime;
+    } else {
+      remainingTime = state.activeTodos[event.todoId];
+    }
+
+    if (remainingTime != null) {
+      final timer = Timer.periodic(
+        const Duration(seconds: 1),
+            (Timer timer) {
+          remainingTime = remainingTime! - Duration(seconds: 1);
+          if (remainingTime! <= Duration.zero) {
+            timer.cancel();
+            emit(PomodoroFinished(activeTodos: state.activeTodos..remove(event.todoId), todoId: event.todoId));
+          } else {
+            add(TickPomodoroEvent(event.todoId, remainingTime ?? Duration.zero));
+          }
+        },
+      );
+      activePomodoros[event.todoId] = timer;
+      emit(PomodoroInProgress(todoId: event.todoId, remainingTime: remainingTime ?? Duration.zero));
+    }
+  }
+
+
+  void _mapResetPomodoroToState(ResetPomodoroEvent event, Emitter<PomodoroState> emit) {
+    activePomodoros[event.todoId]?.cancel();
+    activePomodoros.remove(event.todoId);
+    final newActiveTodos = Map<int, Duration>.from(state.activeTodos);
+    newActiveTodos.remove(event.todoId);
+    emit(PomodoroInitial(activeTodos: newActiveTodos));
+  }
+
+
+  @override
+  PomodoroState? fromJson(Map<String, dynamic> json) {
+    if (json['type'] == 'PomodoroInProgress') {
+      return PomodoroInProgress(
+        todoId: json['todoId'],
+        remainingTime: Duration(seconds: json['remainingTime']),
+        activeTodos: Map<int, Duration>.from(
+          json['activeTodos'].map((key, value) => MapEntry(int.parse(key), Duration(seconds: value))),
+        ),
+      );
+    } else if (json['type'] == 'PomodoroFinished') {
+      return PomodoroFinished(
+        todoId: json['todoId'],
+        activeTodos: Map<int, Duration>.from(
+          json['activeTodos'].map((key, value) => MapEntry(int.parse(key), Duration(seconds: value))),
+        ),
+      );
+    } else {
+      return PomodoroInitial(
+        activeTodos: Map<int, Duration>.from(
+          json['activeTodos'].map((key, value) => MapEntry(int.parse(key), Duration(seconds: value))),
+        ),
+      );
+    }
+  }
+
+  @override
+  Map<String, dynamic>? toJson(PomodoroState state) {
+    if (state is PomodoroInProgress) {
+      return {
+        'type': 'PomodoroInProgress',
+        'todoId': state.todoId,
+        'remainingTime': state.remainingTime.inSeconds,
+        'activeTodos': state.activeTodos.map((key, value) => MapEntry(key.toString(), value.inSeconds)),
+      };
+    } else if (state is PomodoroFinished) {
+      return {
+        'type': 'PomodoroFinished',
+        'todoId': state.todoId,
+        'activeTodos': state.activeTodos.map((key, value) => MapEntry(key.toString(), value.inSeconds)),
+      };
+    } else {
+      return {
+        'type': 'PomodoroInitial',
+        'activeTodos': state.activeTodos.map((key, value) => MapEntry(key.toString(), value.inSeconds)),
+      };
     }
   }
 
   @override
   Future<void> close() {
-    _timer?.cancel();
+    for (var timer in activePomodoros.values) {
+      timer.cancel();
+    }
+    activePomodoros.clear();
     return super.close();
   }
 }
