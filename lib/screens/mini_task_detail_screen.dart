@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todoprocast_app/models/todo_models.dart';
 import 'package:todoprocast_app/constants.dart';
 
 class MiniTaskDetailScreen extends StatefulWidget {
@@ -42,22 +40,46 @@ class _MiniTaskDetailScreenState extends State<MiniTaskDetailScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: const Text('Mini Task Detail Screen'),
+        appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.6), BlendMode.dstATop),
+                image: AssetImage("assets/images/cloudbackground.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          title: const Text('Mini Task Detail Screen', style: TextStyle(color: Colors.white, fontSize: 25) ),
         backgroundColor: AppColors.blueTertiaryColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.navigate_before_rounded,
+            color: Colors.white,
+            size: 30,),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.settings,
+                color: Colors.white,
+                size: 30,),
+              onPressed: () {
+                // Code to open settings
+              },
+            ),
+          ],
         ),
         body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/cloudbackground.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),
+          // decoration: const BoxDecoration(
+          //   image: DecorationImage(
+          //     image: AssetImage("assets/images/cloudbackground.jpg"),
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
