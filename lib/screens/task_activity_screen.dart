@@ -3,11 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:like_button/like_button.dart';
 import 'package:todoprocast_app/constants.dart';
+import 'package:todoprocast_app/screens/task_activities/eat_that_frog/eatthatfrog_page.dart';
 import 'package:todoprocast_app/screens/task_activities/eat_that_frog/eatthatfrog_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/eisenhower/eisenhower_page.dart';
 import 'package:todoprocast_app/screens/task_activities/eisenhower/eisenhower_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/pareto_analysis/paretoanalysis_page.dart';
 import 'package:todoprocast_app/screens/task_activities/pareto_analysis/paretoanalysis_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/parkinsons_law/parkinsons_law_page.dart';
+import 'package:todoprocast_app/screens/task_activities/parkinsons_law/parkinsonslaw_page.dart';
 import 'package:todoprocast_app/screens/task_activities/parkinsons_law/parkinsonslaw_screen.dart';
 import 'package:todoprocast_app/screens/task_activities/pomodoro/pomodoro_screen.dart';
+import 'package:todoprocast_app/screens/task_activities/pomodoro/pomodoro_timer.dart';
+import 'package:todoprocast_app/screens/task_activities/time_blocking/timeblocking_page.dart';
 import 'package:todoprocast_app/screens/task_activities/time_blocking/timeblocking_screen.dart';
 import 'package:todoprocast_app/screens/todo_detail_screen.dart';
 
@@ -43,42 +50,6 @@ class _TaskActivityScreenState extends State<TaskActivityScreen>
     _animationController.dispose();
     super.dispose();
   }
-
-  // void _showTodoList(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return BlocBuilder<TodosBloc, TodosState>(
-  //         builder: (context, state) {
-  //           if (state is TodosLoaded) {
-  //             return SimpleDialog(
-  //               title: const Text('Select a todo'),
-  //               children: [
-  //                 Container(
-  //                   height: 300,
-  //                   width: 300,
-  //                   child: ListView.builder(
-  //                     itemCount: state.todos.length,
-  //                     itemBuilder: (context, index) {
-  //                       return ListTile(
-  //                         title: Text(state.todos[index].task),
-  //                         onTap: () {
-  //                           // Apply the time management method to the selected todo
-  //                         },
-  //                       );
-  //                     },
-  //                   ),
-  //                 ),
-  //               ],
-  //             );
-  //           } else {
-  //             return const CircularProgressIndicator();
-  //           }
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
 
   void _showTodoList(BuildContext context) {
     showDialog(
@@ -118,36 +89,54 @@ class _TaskActivityScreenState extends State<TaskActivityScreen>
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          flexibleSpace: Container(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(70.0),
+          child: Container(
+            child: SafeArea(
+              child: Center(
+                  child: ListTile(
+                    leading: IconButton(
+                      icon: const Icon(Icons.home, size: 30,),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.table_rows_rounded),
+                      onPressed: () {
+                      },
+                    ),
+                    title: Center(
+                      child: Text(
+                        'Task Activities',
+                        style: Theme.of(context).textTheme.headline5?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  )
+              ),),
+            height: 120,
             decoration: BoxDecoration(
               image: DecorationImage(
-                colorFilter: ColorFilter.mode(
-                    Colors.red.withOpacity(0.5), BlendMode.dstATop),
                 image: const AssetImage('assets/images/cloudbackground.jpg'),
+                colorFilter: ColorFilter.mode(
+                  Colors.red.withOpacity(0.7),
+                  BlendMode.srcATop,
+                ),
                 fit: BoxFit.cover,
               ),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
             ),
-          ),
-          centerTitle: true,
-          title:  Center(
-              child: Text('Task Activity Screen',
-                style: GoogleFonts.openSans(
-                    fontSize: 24,
-                    ),)),
-          backgroundColor: Colors.pinkAccent,
-          leading: IconButton(
-              icon:  Icon(Icons.home, color: Colors.red[400],),
-              onPressed: () {
-                Navigator.pop(context);
-              }
-          ),
+          ) ,
         ),
         body: Column(
               children: [
@@ -169,386 +158,17 @@ class _TaskActivityScreenState extends State<TaskActivityScreen>
                 GridView.count(
                   padding: const EdgeInsets.all(1),
                   primary: false,
-                  childAspectRatio: 1.1,
+                  childAspectRatio: 1.3,
                   shrinkWrap: true,
                   crossAxisSpacing: 1,
                   crossAxisCount: 2,
                   children: [
-                  Card(
-                  elevation: 5,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 500),
-                          pageBuilder: (context, animation, secondaryAnimation) =>
-                              const PomodoroScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var begin = const Offset(1.0, 0.0);
-                            var end = Offset.zero;
-                            var curve = Curves.ease;
-                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                            return SlideTransition(
-                              position: animation.drive(tween),
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    splashFactory: InkRipple.splashFactory,
-                    highlightColor: Colors.blue[900],
-                    splashColor: Colors.blue[900],
-                    child: Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: const AssetImage('assets/images/pomodoro.png'),
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                            Colors.green.withOpacity(0.5),
-                            BlendMode.darken,
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  'Pomodoro',
-                                  style: GoogleFonts.openSans(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                  Card(
-                  elevation: 5,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 500),
-                          pageBuilder: (context, animation, secondaryAnimation) =>
-                              const TimeBlockingScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var begin = const Offset(1.0, 0.0);
-                            var end = Offset.zero;
-                            var curve = Curves.ease;
-                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                            return SlideTransition(
-                              position: animation.drive(tween),
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    splashFactory: InkRipple.splashFactory,
-                    highlightColor: Colors.blue[900],
-                    splashColor: Colors.blue[900],
-                    child: Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: const AssetImage('assets/images/time_blocking.jpg'),
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                            Colors.purple.withOpacity(0.5),
-                            BlendMode.darken,
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.sticky_note_2_outlined,
-                              color: Colors.white,
-                              size: 40,
-                            ),
-                            SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                'Time blocking',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                  Card(
-                  elevation: 5,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 500),
-                          pageBuilder: (context, animation, secondaryAnimation) =>
-                              const EisenHowerScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var begin = const Offset(1.0, 0.0);
-                            var end = Offset.zero;
-                            var curve = Curves.ease;
-                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                            return SlideTransition(
-                              position: animation.drive(tween),
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    splashFactory: InkRipple.splashFactory,
-                    highlightColor: Colors.blue[900],
-                    splashColor: Colors.blue[900],
-                    child: Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: const AssetImage('assets/images/eisenhower.png'),
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                            Colors.yellow.withOpacity(0.5),
-                            BlendMode.darken,
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.sticky_note_2_outlined,
-                              color: Colors.white,
-                              size: 40,
-                            ),
-                            SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                'Eisenhower',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                  Card(
-                  elevation: 5,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 500),
-                          pageBuilder: (context, animation, secondaryAnimation) =>
-                              const EatThatFrogScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var begin = const Offset(1.0, 0.0);
-                            var end = Offset.zero;
-                            var curve = Curves.ease;
-                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                            return SlideTransition(
-                              position: animation.drive(tween),
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    splashFactory: InkRipple.splashFactory,
-                    highlightColor: Colors.blue[900],
-                    splashColor: Colors.blue[900],
-                    child: Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: const AssetImage('assets/images/eat-that-frog-2.png'),
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                            Colors.yellow.withOpacity(0.5),
-                            BlendMode.darken,
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.sticky_note_2_outlined,
-                              color: Colors.white,
-                              size: 40,
-                            ),
-                            SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                'Eat that frog',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                  Card(
-                  elevation: 5,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 500),
-                          pageBuilder: (context, animation, secondaryAnimation) =>
-                              const ParetoAnalysisScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var begin = const Offset(1.0, 0.0);
-                            var end = Offset.zero;
-                            var curve = Curves.ease;
-                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                            return SlideTransition(
-                              position: animation.drive(tween),
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    splashFactory: InkRipple.splashFactory,
-                    highlightColor: Colors.blue[900],
-                    splashColor: Colors.blue[900],
-                    child: Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: const AssetImage('assets/images/pareto_1.png'),
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                            Colors.orange.withOpacity(0.5),
-                            BlendMode.darken,
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.sticky_note_2_outlined,
-                              color: Colors.white,
-                              size: 40,
-                            ),
-                            SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                'Parero Analysis',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                  Card(
-                  elevation: 5,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 500),
-                          pageBuilder: (context, animation, secondaryAnimation) =>
-                              const ParkinsonsLawScreen(),
-                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                            var begin = const Offset(1.0, 0.0);
-                            var end = Offset.zero;
-                            var curve = Curves.ease;
-                            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                            return SlideTransition(
-                              position: animation.drive(tween),
-                              child: child,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    splashFactory: InkRipple.splashFactory,
-                    highlightColor: Colors.blue[900],
-                    splashColor: Colors.blue[900],
-                    child: Container(
-                      height: 100,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: const AssetImage('assets/images/Parkinsons-Law-min-1.jpg'),
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                            Colors.red.withOpacity(0.5),
-                            BlendMode.darken,
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.sticky_note_2_outlined,
-                              color: Colors.white,
-                              size: 40,
-                            ),
-                            SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                'Parkinsons Law',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                  _pomodoroCard(context),
+                  _timeBlockingCard(context),
+                  _eisenhowerCard(context),
+                  _eatThatFrogCard(context),
+                  _paretoAnalysisCard(context),
+                  _parkinsonsLawCard(context),
                   // Card(
                   //   elevation: 2,
                   //   child: InkWell(
@@ -772,396 +392,369 @@ class _TaskActivityScreenState extends State<TaskActivityScreen>
                   //   ),
                   // ),
                 ],),
-                const SizedBox(height: 30,),
               ],
             ),
         ),
     );
   }
 
-
-  Column _todo(List<Todo> todos, String status) {
-    return Column(
-      children: [
-        Container(
-          color: Colors.grey[300],
-          child: SizedBox(
-            height: 50,
-            child: Row(
-              children: [
-                Text(
-                  '$status Available Tasks: ${todos.length}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Spacer(),
-                Visibility(
-                  visible: todos.isNotEmpty,
-                  child: IconButton(
-                      onPressed: () {
-                        context.read<TodosBloc>().add(RemoveAllTodos());
-                      },
-                      icon: const Icon(Icons.delete_forever)),
-                ),
-              ],
-            ),
-          ),
-        ),
-        ListView.builder(
-          primary: false,
-          shrinkWrap: true,
-          itemCount: todos.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 2.0, left: 3.0, right: 3.0, top: 8.0),
-              child: _todosCard(
-                context,
-                todos[index],
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  // InkWell _todosCard(BuildContext context,
-  //     Todo todo,) {
-  //   return InkWell(
-  //     splashColor: Colors.blue.withAlpha(30),
-  //     onTap: () {
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => TodoDetailScreen(todo: todo),
-  //         ),
-  //       );
-  //     },
-  //     child: Card(
-  //       color: todo.taskCompleted == true ? Colors.orange : AppColors.blueSecondaryColor,
-  //       margin: const EdgeInsets.only(bottom: 5.0),
-  //       child: Padding(
-  //         padding: const EdgeInsets.all(8.0),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               '#${todo.id}: ${todo.task}',
-  //               style: const TextStyle(
-  //                 fontSize: 18,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //             ),
-  //             const Divider(
-  //               color: Colors.black,
-  //             ),
-  //             Text('Due date: ${todo.formattedDueDate}',
-  //               style: const TextStyle(
-  //                 fontSize: 18,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //             ),
-  //             BlocBuilder<TodosBloc, TodosState>(
-  //               builder: (context, state) {
-  //                 return Row(
-  //                   mainAxisAlignment: MainAxisAlignment.end,
-  //                   children: [
-  //                     IconButton(
-  //                       onPressed: () {
-  //                         context.read<TodosBloc>().add(
-  //                             MarkTodoAsFavOrUnFav(todo: todo));
-  //                       },
-  //                       icon: Icon(
-  //                           todo.isFavourite! ? Icons.star : Icons.star_border),
-  //                       color: Colors.yellow,
-  //                     ),
-  //                     InkWell(
-  //                       onTap: () {
-  //                         Navigator.pop(context);
-  //                       },
-  //                       child: IconButton(
-  //                         onPressed: () {
-  //                           final isCompleted = todo.taskCompleted ?? false;
-  //                           final updatedTodo = todo.copyWith(
-  //                               taskCompleted: !isCompleted);
-  //                           context.read<TodosBloc>().add(
-  //                             UpdateTodo(todo: updatedTodo),
-  //                           );
-  //                         },
-  //                         icon: Icon(todo.taskCompleted ?? false
-  //                             ? Icons.check_box
-  //                             : Icons.check_box_outline_blank),
-  //                       ),
-  //                     ),
-  //                     IconButton(
-  //                       onPressed: () {
-  //                         context.read<TodosBloc>().add(
-  //                           RemoveTodo(
-  //                             todo: todo.copyWith(taskCancelled: true),
-  //                           ),
-  //                         );
-  //                       },
-  //                       icon: const Icon(Icons.cancel),
-  //                     ),
-  //                   ],
-  //                 );
-  //               },
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  Dismissible _todosCard(
-      BuildContext context,
-      Todo todo,
-      ) {
-
-    return Dismissible(
-      key: UniqueKey(),
-      onDismissed: (direction) {
-        context.read<TodosBloc>().add(RemoveTodo(todo: todo.copyWith(taskCancelled: true),
-        ));
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("${todo.task} dismissed")),
-        );
-      },
-      background: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.red,
-        ),),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 1),
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.blue,
-          image: DecorationImage(
-            image: const AssetImage('assets/images/cloudbackground.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.2),
-              BlendMode.dstATop,
-            ),
-          ),
-        ),
-        child: Card(
-          // color: todo.taskCompleted == true ? Colors.blue[300] : AppColors.orangePrimaryColor,
-          color: AppColors.orangePrimaryColor,
-          // margin: const EdgeInsets.only(bottom: 5.0),
-          margin: const EdgeInsets.all(0.5),
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: const Duration(milliseconds: 500),
-                  pageBuilder: (context, animation, secondaryAnimation) =>
-                      TodoDetailScreen(todo: todo,),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    var begin = const Offset(1.0, 0.0);
-                    var end = Offset.zero;
-                    var curve = Curves.ease;
-                    var tween = Tween(begin: begin, end: end).chain(
-                        CurveTween(curve: curve));
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
+  Card _parkinsonsLawCard(BuildContext context) {
+    return Card(
+                elevation: 5,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const ParkinsonsLawCountDownPage(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(1.0, 0.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
                     );
                   },
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BlocBuilder<TodosBloc, TodosState>(
-                    builder: (context, state) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                  splashFactory: InkRipple.splashFactory,
+                  highlightColor: Colors.blue[900],
+                  splashColor: Colors.blue[900],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        opacity: 0.5,
+                        image: const AssetImage('assets/images/Parkinsons-Law-min-1.jpg'),
+                        colorFilter: ColorFilter.mode(
+                          Colors.red.withOpacity(0.2),
+                          BlendMode.srcATop,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
                         children: [
-                          // IconButton(
-                          //     onPressed: () {},
-                          //     icon: const Icon(Icons.arrow_drop_down_rounded)),
-                          Text(
-                            todo.task,
-                            style: GoogleFonts.openSans(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                          const Spacer(),
-                          LikeButton(
-                            isLiked: todo.isFavourite ?? false,
-                            onTap: (isLiked) {
-                              final updatedTodo = todo.copyWith(isFavourite: !isLiked);
-                              context.read<TodosBloc>().add(UpdateTodo(todo: updatedTodo));
-                              return Future.value(!isLiked);
-                            },
-                            size: 35,
-                            circleColor: const CircleColor(
-                              start: Colors.yellow,
-                              end: Colors.yellowAccent,
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                'Parkinsons Law',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
                             ),
-                            bubblesColor: const BubblesColor(
-                              dotPrimaryColor: Colors.yellow,
-                              dotSecondaryColor: Colors.yellow,
-                            ),
-                            likeBuilder: (bool isLiked) {
-                              return Icon(
-                                isLiked ? Icons.star : Icons.star_outline_rounded,
-                                color: isLiked ? Colors.yellow : Colors.white,
-                                size: 35,
-                              );
-                            },
-                          ),
-                          // LikeButton(
-                          //   isLiked: todo.isFavourite,
-                          //   onTap: (isLiked) {
-                          //     context.read<TodosBloc>().add(
-                          //       MarkTodoAsFavOrUnFav(todo: todo),
-                          //     );
-                          //     return Future.value(!isLiked);
-                          //   },
-                          //   size: 25,
-                          //   circleColor: const CircleColor(
-                          //     start: Color(0xff00ddff),
-                          //     end: Color(0xff0099cc),
-                          //   ),
-                          //   bubblesColor: const BubblesColor(
-                          //     dotPrimaryColor: Color(0xff33b5e5),
-                          //     dotSecondaryColor: Color(0xff0099cc),
-                          //   ),
-                          //   likeBuilder: (bool isLiked) {
-                          //     return Icon(
-                          //       isLiked ? Icons.star : Icons.star_border,
-                          //       color: Colors.yellow,
-                          //       size: 25,
-                          //     );
-                          //   },
-                          // ),
-                          LikeButton(
-                            isLiked: todo.taskCompleted ?? false,
-                            onTap: (isLiked) {
-                              final updatedTodo = todo.copyWith(taskCompleted: !isLiked);
-                              context.read<TodosBloc>().add(UpdateTodo(todo: updatedTodo));
-                              return Future.value(!isLiked);
-                            },
-                            size: 35,
-                            circleColor: const CircleColor(
-                              start: Colors.green,
-                              end: Colors.greenAccent,
-                            ),
-                            bubblesColor: const BubblesColor(
-                              dotPrimaryColor: Colors.green,
-                              dotSecondaryColor: Colors.lightGreen,
-                            ),
-                            likeBuilder: (bool isLiked) {
-                              return Icon(
-                                isLiked ? Icons.check_box : Icons.check_box_outline_blank,
-                                color: isLiked ? Colors.green : Colors.white,
-                                size: 35,
-                              );
-                            },
                           ),
                         ],
-                      );
-                    },
-                  ),
-                  const Divider(
-                    color: Colors.black,thickness: 2,
-                  ),
-                  Row(
-                    children: [
-                      const Icon(Icons.lightbulb_outline_rounded, color: Colors.grey,),
-                      Text('Due date: ${todo.formattedDueDate}',
-                        style: GoogleFonts.openSans(fontSize: 16, color: Colors.white),
                       ),
-                    ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+                ),
+              );
+  }
+
+  Card _paretoAnalysisCard(BuildContext context) {
+    return Card(
+                elevation: 5,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const ParetoAnalysisPage(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(1.0, 0.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  splashFactory: InkRipple.splashFactory,
+                  highlightColor: Colors.blue[900],
+                  splashColor: Colors.blue[900],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        opacity: 0.5,
+                        image: const AssetImage('assets/images/pareto-chart.png'),
+                        colorFilter: ColorFilter.mode(
+                          Colors.red.withOpacity(0.2),
+                          BlendMode.srcATop,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                'Pareto analysis',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+  }
+
+  Card _eatThatFrogCard(BuildContext context) {
+    return Card(
+                elevation: 5,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const EatThatFrogPage(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(1.0, 0.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  splashFactory: InkRipple.splashFactory,
+                  highlightColor: Colors.blue[900],
+                  splashColor: Colors.blue[900],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        opacity: 0.5,
+                        image: const AssetImage('assets/images/eat-that-frog-2.png'),
+                        colorFilter: ColorFilter.mode(
+                          Colors.red.withOpacity(0.2),
+                          BlendMode.srcATop,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                'Eat That Frog',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+  }
+
+  Card _eisenhowerCard(BuildContext context) {
+    return Card(
+                elevation: 5,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const EisenhowerPage(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(1.0, 0.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  splashFactory: InkRipple.splashFactory,
+                  highlightColor: Colors.blue[900],
+                  splashColor: Colors.blue[900],
+                  child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        opacity: 0.5,
+                        image: const AssetImage('assets/images/eisenhower2.png'),
+                        colorFilter: ColorFilter.mode(
+                          Colors.red.withOpacity(0.2),
+                          BlendMode.srcATop,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                'Eisenhower',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+  }
+
+  Card _timeBlockingCard(BuildContext context) {
+    return Card(
+                elevation: 5,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const TimeBlockingPage(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(1.0, 0.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  splashFactory: InkRipple.splashFactory,
+                  highlightColor: Colors.blue[900],
+                  splashColor: Colors.blue[900],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        opacity: 0.5,
+                        image: const AssetImage('assets/images/time_blocking.jpg'),
+                        colorFilter: ColorFilter.mode(
+                          Colors.orange.withOpacity(0.2),
+                          BlendMode.srcATop,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                'Time Blocking',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+  }
+
+  Card _pomodoroCard(BuildContext context) {
+    return Card(
+                elevation: 5,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const PomodoroTimer(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = const Offset(1.0, 0.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  splashFactory: InkRipple.splashFactory,
+                  highlightColor: Colors.blue[900],
+                  splashColor: Colors.blue[900],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        opacity: 0.5,
+                        image: const AssetImage('assets/images/pomodoro.png'),
+                        colorFilter: ColorFilter.mode(
+                          Colors.red.withOpacity(0.2),
+                          BlendMode.srcATop,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                'Pomodoro',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
   }
 }
-
-// GridView(
-//   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//       crossAxisCount: 3),
-//   scrollDirection: Axis.vertical,
-//   primary: false,
-//   shrinkWrap: true,
-//   children: [
-//     GestureDetector(
-//       onTap: () {
-//         _showTodoList(context);
-//       },
-//       child: Card(
-//         child: Container(
-//           decoration: const BoxDecoration(
-//             image: DecorationImage(
-//               image: AssetImage("assets/images/pomodoro.png"),
-//               fit: BoxFit.cover,
-//             ),
-//           ),
-//           child: Text("Pomodoro"),
-//         ),
-//       ),
-//     ),
-//     InkWell(
-//       onTap: () {},
-//       child: Card(
-//         child: Container(
-//           decoration: const BoxDecoration(
-//             image: DecorationImage(
-//               image: AssetImage("assets/images/time_blocking.jpg"),
-//               fit: BoxFit.cover,
-//             ),
-//           ),
-//           child: Text("Time blocking"),
-//         ),
-//       ),
-//     ),
-//     InkWell(
-//       onTap: () {},
-//       child: Card(
-//         child: Text("Monkey method"),
-//       ),
-//     ),
-//   ],
-// ),
-// BlocBuilder<TodosStatusBloc, TodosStatusState>(
-//   builder: (context, state) {
-//     if (state is TodosStatusLoading) {
-//       return const Center(
-//         child: CircularProgressIndicator(),
-//       );
-//     }
-//     if (state is TodosStatusLoaded) {
-//       return Expanded(
-//           child: ListView(
-//               children: [
-//                 _todo(
-//                   state.pendingTodos,
-//                   ' ',
-//                 )
-//               ]
-//           )
-//       );
-//     } else {
-//       return const Text('Something went wrong.');
-//     }
-//   },
-// ),
