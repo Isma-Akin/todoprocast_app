@@ -177,6 +177,7 @@ Dismissible todosCard(
       );
     },
     background: Container(
+      child: Icon(Icons.delete, color: Colors.white, size: 50,),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.red,
@@ -195,141 +196,150 @@ Dismissible todosCard(
           ),
         ),
       ),
-      child: Card(
-        // color: todo.taskCompleted == true ? Colors.blue[300] : AppColors.orangePrimaryColor,
-        color: AppColors.orangePrimaryColor,
-        // margin: const EdgeInsets.only(bottom: 5.0),
-        margin: const EdgeInsets.all(0.5),
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                transitionDuration: const Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    TodoDetailScreen(todo: todo,),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  var begin = const Offset(1.0, 0.0);
-                  var end = Offset.zero;
-                  var curve = Curves.ease;
-                  var tween = Tween(begin: begin, end: end).chain(
-                      CurveTween(curve: curve));
-                  return SlideTransition(
-                    position: animation.drive(tween),
-                    child: child,
-                  );
-                },
-              ),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BlocBuilder<TodosBloc, TodosState>(
-                  builder: (context, state) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          todo.task,
-                          style: GoogleFonts.openSans(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        const Spacer(),
-                      LikeButton(
-                        isLiked: todo.isFavourite ?? false,
-                          onTap: (isLiked) {
-                            final updatedTodo = todo.copyWith(isFavourite: !isLiked);
-                            context.read<TodosBloc>().add(UpdateTodo(todo: updatedTodo));
+      child: Hero(
+        tag: todo.id,
+        child: Card(
+          // color: todo.taskCompleted == true ? Colors.blue[300] : AppColors.orangePrimaryColor,
+          color: AppColors.orangePrimaryColor,
+          // margin: const EdgeInsets.only(bottom: 5.0),
+          margin: const EdgeInsets.all(0.5),
+          child: InkWell(
+            onTap: () {
+              // Navigator.push(
+              //   context,
+              //   PageRouteBuilder(
+              //     transitionDuration: const Duration(milliseconds: 500),
+              //     pageBuilder: (context, animation, secondaryAnimation) =>
+              //         TodoDetailScreen(todo: todo,),
+              //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              //       var begin = const Offset(1.0, 0.0);
+              //       var end = Offset.zero;
+              //       var curve = Curves.ease;
+              //       var tween = Tween(begin: begin, end: end).chain(
+              //           CurveTween(curve: curve));
+              //       return SlideTransition(
+              //         position: animation.drive(tween),
+              //         child: child,
+              //       );
+              //     },
+              //   ),
+              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TodoDetailScreen(todo: todo),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BlocBuilder<TodosBloc, TodosState>(
+                    builder: (context, state) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            todo.task,
+                            style: GoogleFonts.openSans(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          const Spacer(),
+                        LikeButton(
+                          isLiked: todo.isFavourite ?? false,
+                            onTap: (isLiked) {
+                              final updatedTodo = todo.copyWith(isFavourite: !isLiked);
+                              context.read<TodosBloc>().add(UpdateTodo(todo: updatedTodo));
+                                return Future.value(!isLiked);
+                                  },
+                              size: 35,
+                              circleColor: const CircleColor(
+                               start: Colors.yellow,
+                               end: Colors.yellowAccent,
+                                ),
+                               bubblesColor: const BubblesColor(
+                               dotPrimaryColor: Colors.yellow,
+                               dotSecondaryColor: Colors.yellow,
+                                ),
+                                 likeBuilder: (bool isLiked) {
+                                   return Icon(
+                                    isLiked ? Icons.star : Icons.star_outline_rounded,
+                                     color: isLiked ? Colors.yellow : Colors.white,
+                                      size: 35,
+                                    );
+                                   },
+                                 ),
+                          // LikeButton(
+                          //   isLiked: todo.isFavourite,
+                          //   onTap: (isLiked) {
+                          //     context.read<TodosBloc>().add(
+                          //       MarkTodoAsFavOrUnFav(todo: todo),
+                          //     );
+                          //     return Future.value(!isLiked);
+                          //   },
+                          //   size: 25,
+                          //   circleColor: const CircleColor(
+                          //     start: Color(0xff00ddff),
+                          //     end: Color(0xff0099cc),
+                          //   ),
+                          //   bubblesColor: const BubblesColor(
+                          //     dotPrimaryColor: Color(0xff33b5e5),
+                          //     dotSecondaryColor: Color(0xff0099cc),
+                          //   ),
+                          //   likeBuilder: (bool isLiked) {
+                          //     return Icon(
+                          //       isLiked ? Icons.star : Icons.star_border,
+                          //       color: Colors.yellow,
+                          //       size: 25,
+                          //     );
+                          //   },
+                          // ),
+                        LikeButton(
+                            isLiked: todo.taskCompleted ?? false,
+                            onTap: (isLiked) {
+                              final updatedTodo = todo.copyWith(taskCompleted: !isLiked);
+                              context.read<TodosBloc>().add(UpdateTodo(todo: updatedTodo));
                               return Future.value(!isLiked);
-                                },
+                            },
                             size: 35,
                             circleColor: const CircleColor(
-                             start: Colors.yellow,
-                             end: Colors.yellowAccent,
-                              ),
-                             bubblesColor: const BubblesColor(
-                             dotPrimaryColor: Colors.yellow,
-                             dotSecondaryColor: Colors.yellow,
-                              ),
-                               likeBuilder: (bool isLiked) {
-                                 return Icon(
-                                  isLiked ? Icons.star : Icons.star_outline_rounded,
-                                   color: isLiked ? Colors.yellow : Colors.white,
-                                    size: 35,
-                                  );
-                                 },
-                               ),
-                        // LikeButton(
-                        //   isLiked: todo.isFavourite,
-                        //   onTap: (isLiked) {
-                        //     context.read<TodosBloc>().add(
-                        //       MarkTodoAsFavOrUnFav(todo: todo),
-                        //     );
-                        //     return Future.value(!isLiked);
-                        //   },
-                        //   size: 25,
-                        //   circleColor: const CircleColor(
-                        //     start: Color(0xff00ddff),
-                        //     end: Color(0xff0099cc),
-                        //   ),
-                        //   bubblesColor: const BubblesColor(
-                        //     dotPrimaryColor: Color(0xff33b5e5),
-                        //     dotSecondaryColor: Color(0xff0099cc),
-                        //   ),
-                        //   likeBuilder: (bool isLiked) {
-                        //     return Icon(
-                        //       isLiked ? Icons.star : Icons.star_border,
-                        //       color: Colors.yellow,
-                        //       size: 25,
-                        //     );
-                        //   },
-                        // ),
-                      LikeButton(
-                          isLiked: todo.taskCompleted ?? false,
-                          onTap: (isLiked) {
-                            final updatedTodo = todo.copyWith(taskCompleted: !isLiked);
-                            context.read<TodosBloc>().add(UpdateTodo(todo: updatedTodo));
-                            return Future.value(!isLiked);
-                          },
-                          size: 35,
-                          circleColor: const CircleColor(
-                            start: Colors.green,
-                            end: Colors.greenAccent,
+                              start: Colors.green,
+                              end: Colors.greenAccent,
+                            ),
+                            bubblesColor: const BubblesColor(
+                              dotPrimaryColor: Colors.green,
+                              dotSecondaryColor: Colors.lightGreen,
+                            ),
+                            likeBuilder: (bool isLiked) {
+                              return Icon(
+                                isLiked ? Icons.check_box : Icons.check_box_outline_blank,
+                                color: isLiked ? Colors.green : Colors.white,
+                                size: 35,
+                              );
+                            },
                           ),
-                          bubblesColor: const BubblesColor(
-                            dotPrimaryColor: Colors.green,
-                            dotSecondaryColor: Colors.lightGreen,
-                          ),
-                          likeBuilder: (bool isLiked) {
-                            return Icon(
-                              isLiked ? Icons.check_box : Icons.check_box_outline_blank,
-                              color: isLiked ? Colors.green : Colors.white,
-                              size: 35,
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                ),
-                const Divider(
-                  color: Colors.black,thickness: 2,
-                ),
-                Row(
-                  children: [
-                    const Icon(Icons.lightbulb_outline_rounded, color: Colors.grey,),
-                    Text('Due date: ${todo.formattedDueDate}',
-                      style: GoogleFonts.openSans(fontSize: 16, color: Colors.white),
-                    ),
-                  ],
-                ),
-              ],
+                        ],
+                      );
+                    },
+                  ),
+                  const Divider(
+                    color: Colors.black,thickness: 2,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.lightbulb_outline_rounded, color: Colors.grey,),
+                      Text('Due date: ${todo.formattedDueDate}',
+                        style: GoogleFonts.openSans(fontSize: 16, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
