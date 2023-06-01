@@ -1,39 +1,58 @@
 part of 'pomodoro_bloc.dart';
 
-abstract class PomodoroState {}
+abstract class PomodoroState {
+  final Map<int, Duration> activeTodos;
 
-class PomodoroInitial extends PomodoroState {}
+  PomodoroState({this.activeTodos = const {}});
 
-class PomodoroRunning extends PomodoroState {
-  final int secondsRemaining;
+  @override
+  List<Object> get props => [activeTodos];
+}
 
-  PomodoroRunning(this.secondsRemaining);
+class PomodoroInitial extends PomodoroState {
+  PomodoroInitial({Map<int, Duration> activeTodos = const {}})
+      : super(activeTodos: activeTodos);
+}
+
+class PomodoroInProgress extends PomodoroState {
+  final int todoId;
+  final Duration remainingTime;
+
+  PomodoroInProgress({
+    required this.todoId,
+    required this.remainingTime,
+    Map<int, Duration> activeTodos = const {},
+  }) : super(activeTodos: activeTodos);
+
+  @override
+  List<Object> get props => super.props..addAll([todoId, remainingTime]);
 }
 
 class PomodoroPaused extends PomodoroState {
-  final int secondsRemaining;
+  final int todoId;
+  final Duration remainingTime;
 
-  PomodoroPaused(this.secondsRemaining, ) : super();
+  PomodoroPaused({
+    required this.todoId,
+    required this.remainingTime,
+    Map<int, Duration> activeTodos = const {},
+  }) : super(activeTodos: activeTodos);
 
   @override
-  List<Object> get props => [secondsRemaining];
+  List<Object> get props => super.props..addAll([todoId, remainingTime]);
 }
 
-class PomodoroStopped extends PomodoroState {
+class PomodoroFinished extends PomodoroState {
+  final int todoId;
 
-  PomodoroStopped() : super();
+  PomodoroFinished({
+    required this.todoId,
+    Map<int, Duration> activeTodos = const {},
+  }) : super(activeTodos: activeTodos);
+
+  @override
+  List<Object> get props => super.props..add(todoId);
 }
 
-class PomodoroNotStarted extends PomodoroState {
-
-  PomodoroNotStarted() : super();
-}
-
-
-class Break extends PomodoroState {
-  final int secondsRemaining;
-
-  Break(this.secondsRemaining);
-}
 
 
