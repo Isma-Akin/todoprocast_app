@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoprocast_app/constants.dart';
 import 'package:todoprocast_app/models/todo_models.dart';
 import 'package:intl/intl.dart';
+import 'package:file_picker/file_picker.dart';
 
 import '../blocs/todos/todos_bloc.dart';
 import 'task_planner_screen.dart';
@@ -334,6 +335,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> with TickerProvider
                   fontWeight: FontWeight.bold,
                   fontSize: 28,
                   color: Colors.black)),
+          centerTitle: true,
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -347,60 +349,63 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> with TickerProvider
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Divider(color: Colors.grey, thickness: 1,),
-                    Card(
-                      elevation: 2,
-                      child: GestureDetector(
-                        onTap: _toggleExpandedState,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                          width: MediaQuery.of(context).size.width,
-                          // height: _isExpanded ? MediaQuery.of(context).size.height : 150,
-                          height: _isExpanded ? 200 : 90,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Colors.transparent,
-                              width: 1,
+                    Hero(
+                      tag: widget.todo.id,
+                      child: Card(
+                        elevation: 2,
+                        child: GestureDetector(
+                          onTap: _toggleExpandedState,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                            width: MediaQuery.of(context).size.width,
+                            // height: _isExpanded ? MediaQuery.of(context).size.height : 150,
+                            height: _isExpanded ? 200 : 90,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Colors.transparent,
+                                width: 1,
+                              ),
                             ),
+                            child: _isExpanded
+                                ? Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: TextField(
+                                onChanged: _updateTodoDescription,
+                                controller: _descriptionController,
+                                decoration: InputDecoration(
+                                  hintText: 'Press here to add a description',
+                                  hintStyle:
+                                  GoogleFonts.openSans(
+                                      fontSize: 18,
+                                      color: Colors.white),
+                                  focusedBorder: InputBorder.none,
+                                ),
+                                autofocus: true,
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
+                                textInputAction: TextInputAction.done,
+                                textAlignVertical: TextAlignVertical.top,
+                                onEditingComplete: () {
+                                  _toggleExpandedState();
+                                },
+                                onSubmitted: (value) {
+                                  final updatedTodo =
+                                  widget.todo.copyWith(description: value);
+                                  context.read<TodosBloc>().add(UpdateTodo(todo: updatedTodo));
+                                  _toggleExpandedState();
+                                },
+                              ),
+                            )
+                                : Text(
+                                  widget.todo.description.isNotEmpty
+                                      ? widget.todo.description
+                                      : 'Press here to add a description',
+                                  style: GoogleFonts.openSans(
+                                      fontSize: 18, color: Colors.black),
+                                ),
                           ),
-                          child: _isExpanded
-                              ? Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: TextField(
-                              onChanged: _updateTodoDescription,
-                              controller: _descriptionController,
-                              decoration: InputDecoration(
-                                hintText: 'Press here to add a description',
-                                hintStyle:
-                                GoogleFonts.openSans(
-                                    fontSize: 18,
-                                    color: Colors.white),
-                                focusedBorder: InputBorder.none,
-                              ),
-                              autofocus: true,
-                              maxLines: null,
-                              keyboardType: TextInputType.multiline,
-                              textInputAction: TextInputAction.done,
-                              textAlignVertical: TextAlignVertical.top,
-                              onEditingComplete: () {
-                                _toggleExpandedState();
-                              },
-                              onSubmitted: (value) {
-                                final updatedTodo =
-                                widget.todo.copyWith(description: value);
-                                context.read<TodosBloc>().add(UpdateTodo(todo: updatedTodo));
-                                _toggleExpandedState();
-                              },
-                            ),
-                          )
-                              : Text(
-                                widget.todo.description.isNotEmpty
-                                    ? widget.todo.description
-                                    : 'Press here to add a description',
-                                style: GoogleFonts.openSans(
-                                    fontSize: 18, color: Colors.black),
-                              ),
                         ),
                       ),
                     ),
@@ -461,39 +466,78 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> with TickerProvider
                     ),
                     Card(
                       elevation: 2,
-                      child: InkWell(
-                        highlightColor: Colors.blue[900],
-                        customBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        onTap: () {},
-                        splashColor: Colors.blue[900],
-                        child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 50,
-                            margin: EdgeInsets.zero,
-                            child: Row(
-                              children:  [
-                                Icon(Icons.airplay, color: Colors.blue[900],),
-                                const SizedBox(width: 10,),
-                                BlocBuilder<TodosBloc, TodosState>(
-                                builder: (context, state) {
-                                  if (state is TodosLoaded) {
-                                    final todo = state.todos.firstWhere((
-                                        todo) => todo.id == widget.todo.id);
-                                    return Text(
-                                        'Task activity: ${todo.taskActivity
-                                            .isNotEmpty
-                                            ? todo.taskActivity
-                                            : 'No task activity'}',
-                                        style: GoogleFonts.openSans(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold)
+                      child: BlocBuilder<TodosBloc, TodosState>(
+                        builder: (context, state) {
+                          if (state is TodosLoaded) {
+                            return InkWell(
+                              highlightColor: Colors.blue[900],
+                              customBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    final todo = state.todos.firstWhere((todo) => todo.id == widget.todo.id);
+                                    return SimpleDialog(
+                                      title: const Text('Task activities'),
+                                      children: todo.getTaskActivities().map((activity) {
+                                        return SimpleDialogOption(
+                                          child: Text(activity),
+                                          onPressed: () {
+                                            Navigator.pop(context, activity);
+                                          },
+                                        );
+                                      }).toList(),
                                     );
-                                  } else { return const Text(''); }
-                            },
-                          ),],)
-                        ),
+                                  },
+                                );
+
+                              },
+                              splashColor: Colors.blue[900],
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 50,
+                                  margin: EdgeInsets.zero,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.airplay,
+                                        color: Colors.blue[900],
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      BlocBuilder<TodosBloc, TodosState>(
+                                        builder: (context, state) {
+                                          if (state is TodosLoaded) {
+                                            final todo = state.todos.firstWhere((todo) => todo.id == widget.todo.id);
+
+                                            List<String> taskActivities = todo.getTaskActivities();
+                                            String displayText;
+                                            if (taskActivities.isEmpty) {
+                                              displayText = 'No task activity';
+                                            } else {
+                                              displayText = taskActivities.join(', ');
+                                            }
+
+                                            return Text(
+                                                'Task activity: $displayText',
+                                                style: GoogleFonts.openSans(fontSize: 18, fontWeight: FontWeight.bold)
+                                            );
+                                          } else {
+                                            return const Text('');
+                                          }
+                                        },
+                                      )
+                                      ,
+                                    ],
+                                  )),
+                            );
+                          } else {
+                            return const Text('');
+                          }
+                        },
                       ),
                     ),
                     Card(
@@ -503,7 +547,20 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> with TickerProvider
                         customBorder: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        onTap: () {},
+                        onTap: () async {
+                          FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+                          if(result != null) {
+                            PlatformFile file = result.files.first;
+
+                            print("File name: " + file.name);
+                            print("File size: " + file.size.toString());
+                            // print("File path: " + file.path);
+
+                          } else {
+                            // User canceled the picker
+                          }
+                        },
                         splashColor: Colors.blue[900],
                         child: Container(
                             width: MediaQuery.of(context).size.width,
