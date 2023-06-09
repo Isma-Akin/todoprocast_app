@@ -70,8 +70,8 @@ class _CalendarPageState extends State<CalendarPage> {
                       ),
                       title: Center(
                         child: Text(
-                          'Calendar Page',
-                          style: Theme.of(context).textTheme.headline5?.copyWith(
+                          'Your Day',
+                          style: Theme.of(context).textTheme.headline4?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
                         ),
