@@ -1,6 +1,6 @@
 # todoprocast_app
 
-Final year project; To-do app for people with procrastination
+To-do app for people with procrastination
 
 ## Getting Started
 
