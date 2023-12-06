@@ -8,3 +8,5 @@ Utilizes:
 - Task monitoring via Calendar features
 - Time management method application per task
 - And many more!
+
+More features to come.
